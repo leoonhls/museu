@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "titulo": "Visita guiada: Van Gogh e a Luz do Sul",
+    "descricao": "Percurso comentado pela curadoria da exposição.",
+    "data_hora": "2026-11-07T15:00:00",
+    "capacidade": 25,
+    "preco": 40,
+    "imagem_url": "/assets/img/exposicoes/2.jpg",
+    "exposicao_id": 2
+  },
+  {
+    "id": 2,
+    "titulo": "Oficina de xilogravura",
+    "descricao": "Introdução prática à técnica da gravura em madeira.",
+    "data_hora": "2026-11-21T10:00:00",
+    "capacidade": 12,
+    "preco": 60,
+    "imagem_url": "/assets/img/exposicoes/1.jpg",
+    "exposicao_id": null
+  }
+]

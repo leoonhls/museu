@@ -1,0 +1,12 @@
+/* base.css — variáveis, reset e grid. Responsável: M2 */
+:root {
+  --cor-fundo: #faf8f5;
+  --cor-texto: #1f1d1a;
+  --cor-destaque: #8b2e1f;
+  --fonte-base: system-ui, sans-serif;
+  --espaco: 1rem;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-family: var(--fonte-base); background: var(--cor-fundo); color: var(--cor-texto); }
+img { max-width: 100%; display: block; }

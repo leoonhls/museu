@@ -1,0 +1,41 @@
+[
+  {
+    "id": 1,
+    "titulo": "A Noite Estrelada",
+    "ano": 1889,
+    "tecnica": "Óleo sobre tela",
+    "dimensoes": "73,7 × 92,1 cm",
+    "descricao": "Vista noturna a partir da janela do quarto do asilo de Saint-Rémy-de-Provence.",
+    "imagem_url": "/assets/img/obras/1.jpg",
+    "em_exibicao": true,
+    "artista_id": 1,
+    "categoria_id": 1,
+    "criado_em": "2026-10-13T00:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "titulo": "Girassóis",
+    "ano": 1888,
+    "tecnica": "Óleo sobre tela",
+    "dimensoes": "92,1 × 73 cm",
+    "descricao": "Uma das séries de naturezas-mortas com girassóis pintadas em Arles.",
+    "imagem_url": "/assets/img/obras/2.jpg",
+    "em_exibicao": true,
+    "artista_id": 1,
+    "categoria_id": 1,
+    "criado_em": "2026-10-13T00:00:00.000Z"
+  },
+  {
+    "id": 3,
+    "titulo": "A Grande Onda de Kanagawa",
+    "ano": 1831,
+    "tecnica": "Xilogravura policromada",
+    "dimensoes": "25,7 × 37,9 cm",
+    "descricao": "Primeira estampa da série Trinta e Seis Vistas do Monte Fuji.",
+    "imagem_url": "/assets/img/obras/3.jpg",
+    "em_exibicao": false,
+    "artista_id": 2,
+    "categoria_id": 4,
+    "criado_em": "2026-10-13T00:00:00.000Z"
+  }
+]

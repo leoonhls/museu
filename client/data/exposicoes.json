@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "titulo": "Ukiyo-e: Imagens do Mundo Flutuante",
+    "descricao": "Gravuras japonesas do período Edo.",
+    "data_inicio": "2026-03-01",
+    "data_fim": "2026-06-30",
+    "imagem_url": "/assets/img/exposicoes/1.jpg",
+    "sala": "Sala 2",
+    "obra_ids": [3]
+  },
+  {
+    "id": 2,
+    "titulo": "Van Gogh e a Luz do Sul",
+    "descricao": "Os anos de Arles e Saint-Rémy.",
+    "data_inicio": "2026-09-01",
+    "data_fim": "2026-12-20",
+    "imagem_url": "/assets/img/exposicoes/2.jpg",
+    "sala": "Sala 1",
+    "obra_ids": [1, 2]
+  },
+  {
+    "id": 3,
+    "titulo": "Paisagens do Oriente e do Ocidente",
+    "descricao": "Diálogo entre a gravura japonesa e o pós-impressionismo.",
+    "data_inicio": "2027-02-01",
+    "data_fim": "2027-05-31",
+    "imagem_url": "/assets/img/exposicoes/3.jpg",
+    "sala": "Sala 3",
+    "obra_ids": [1, 3]
+  }
+]
