@@ -1,11 +1,16 @@
-// pages/ingressos.html — responsável: M6
-import * as api from '/js/api.js';
-import { exigirLogin } from '/js/auth.js';
-import { montarHeader } from '/js/components/header.js';
-import { montarFooter } from '/js/components/footer.js';
+// Responsável: M6 — veja a seção "M6 — Ingressos" no Guia da Entrega 1
+import { montarHeader } from '../components/header.js';
+import { montarFooter } from '../components/footer.js';
+import { exigirLogin } from '../auth.js';
 
-await exigirLogin();
-await montarHeader(document.getElementById('header'));
-montarFooter(document.getElementById('footer'));
+montarHeader();
+montarFooter();
 
-// TODO (M6): implementar a página usando só funções do api.js.
+const usuario = exigirLogin();
+if (usuario) {
+  // TODO (M6):
+  // - formulário em 3 etapas
+  // - validações
+  // - criarReserva
+  // - ir para o comprovante
+}

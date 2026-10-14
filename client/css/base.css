@@ -1,12 +1,44 @@
-/* base.css — variáveis, reset e grid. Responsável: M2 */
+/* Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 */
+/* Versão provisória: o M2 reescreve os valores, mas os nomes das variáveis são definitivos. */
 :root {
-  --cor-fundo: #faf8f5;
+  --cor-fundo: #faf7f2;
+  --cor-superficie: #ffffff;
   --cor-texto: #1f1d1a;
-  --cor-destaque: #8b2e1f;
-  --fonte-base: system-ui, sans-serif;
-  --espaco: 1rem;
+  --cor-texto-suave: #5c564e;
+  --cor-destaque: #8c2f1b;
+  --cor-borda: #e4ddd2;
+  --cor-sucesso: #2e7d32;
+  --cor-erro: #c62828;
+
+  --fonte-titulo: Georgia, serif;
+  --fonte-texto: system-ui, sans-serif;
+
+  --espaco-1: 0.5rem;
+  --espaco-2: 1rem;
+  --espaco-3: 1.5rem;
+  --espaco-4: 2.5rem;
+
+  --raio: 8px;
+  --largura-max: 1200px;
 }
 
-*, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; font-family: var(--fonte-base); background: var(--cor-fundo); color: var(--cor-texto); }
-img { max-width: 100%; display: block; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  width: min(100% - 2rem, var(--largura-max));
+  margin-inline: auto;
+}
+
+.em-construcao {
+  color: var(--cor-texto-suave);
+  font-style: italic;
+}

@@ -1,9 +1,11 @@
-// pages/login.html — responsável: M7
-import * as api from '/js/api.js';
-import { montarHeader } from '/js/components/header.js';
-import { montarFooter } from '/js/components/footer.js';
+// Responsável: M7 — veja a seção "M7 — Login e favoritos" no Guia da Entrega 1
+import { montarHeader } from '../components/header.js';
+import { montarFooter } from '../components/footer.js';
 
-await montarHeader(document.getElementById('header'));
-montarFooter(document.getElementById('footer'));
+montarHeader();
+montarFooter();
 
-// TODO (M7): implementar a página usando só funções do api.js.
+// TODO (M7):
+// - abas Entrar e Criar conta
+// - entrar / cadastrar
+// - redirecionar para ?voltar

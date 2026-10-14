@@ -1,94 +1,41 @@
 # Museu de Artes
 
-Site de um museu de artes com galeria filtrável, páginas de obra e artista, exposições, agenda de eventos, reserva de ingressos, login de visitante com favoritos e área administrativa.
+Projeto acadêmico: site de um museu de artes, feito em três entregas.
 
-O projeto é feito em três entregas. O site funciona por completo em todas elas; o que muda é onde os dados ficam:
-
-| Entrega | Dados | Tag |
+| Entrega | Conteúdo | Estado |
 | --- | --- | --- |
-| 1 — Front-end | JSON em `client/data/` + `localStorage` | `entrega-1` |
-| 2 — Backend | Express + JSON em `server/data/` | `entrega-2` |
-| 3 — Banco | PostgreSQL | `entrega-3` |
+| 1 | Front-end com HTML, CSS e JavaScript; dados em `client/data/` e `localStorage` | em andamento |
+| 2 | Backend com Node.js e Express | — |
+| 3 | Banco de dados PostgreSQL | — |
 
 ## Como rodar (Entrega 1)
 
-Requisitos: VS Code com a extensão **Live Server** (o VS Code sugere a instalação ao abrir a pasta).
+1. Abra a pasta do projeto no VS Code e aceite instalar as extensões recomendadas.
+2. Clique com o botão direito em `client/index.html` → **Open with Live Server**.
+3. O site abre em `http://127.0.0.1:5500/`.
 
-1. Clone o repositório e abra a pasta no VS Code.
-2. Clique em **Go Live** na barra de status. O projeto já vem configurado para servir a pasta `client/` (veja `.vscode/settings.json`).
-3. O site abre em `http://127.0.0.1:5500`.
+Não abra o HTML com dois cliques: o navegador bloqueia os módulos JavaScript em endereços `file://`.
 
-Abrir o HTML direto pelo arquivo (`file://`) **não funciona**: o navegador bloqueia o `fetch` dos JSONs e os módulos ES.
+## Usuário administrador de teste
 
-Sem VS Code, qualquer servidor estático na pasta `client/` serve, por exemplo `npx serve client` ou `python3 -m http.server -d client 5500`.
+- E-mail: `admin@museu.com`
+- Senha: `admin123`
 
-### Contas de teste
+Na Entrega 1 o login é simulado no navegador e **não é seguro**. Ele será substituído por autenticação no servidor na Entrega 2.
 
-| Papel | E-mail | Senha |
-| --- | --- | --- |
-| Admin | `admin@museu.com` | `admin123` |
+## Zerar os dados de teste
 
-Visitantes podem se cadastrar pela página de login.
-
-> **Atenção:** na Entrega 1 o login é simulado. Usuários, favoritos, reservas e obras criadas pelo admin ficam no `localStorage` do navegador, e a senha é guardada apenas com um hash SHA-256 sem sal. **Isso não é seguro.** Na Entrega 2 será substituído por autenticação no servidor com `bcrypt` e sessão em cookie `httpOnly`.
->
-> Para zerar os dados locais, rode no console do navegador: `Object.keys(localStorage).filter(k => k.startsWith('museu:')).forEach(k => localStorage.removeItem(k))`.
+No Console do navegador (`F12`), rode `import('/js/api.js').then(api => api.resetarDados())` e recarregue a página. Isso apaga usuários, favoritos, reservas e obras criadas no admin.
 
 ## Estrutura
 
-```
-client/
-├── index.html
-├── pages/          uma página por funcionalidade (admin/ para a área administrativa)
-├── css/            base.css, components.css, pages/*.css
-├── js/
-│   ├── api.js      ÚNICO ponto de acesso a dados
-│   ├── auth.js     sessão no front: exigirLogin(), exigirAdmin()
-│   ├── components/ header, footer, card-obra, modal, toast
-│   └── pages/      um script por página
-├── data/           JSONs (só na Entrega 1)
-└── assets/img/     obras/, artistas/, exposicoes/
-docs/               contrato da API e decisões
-```
+- `client/data/` — dados do acervo (obras, artistas, exposições, eventos)
+- `client/js/api.js` — único ponto de acesso a dados
+- `client/js/components/` — componentes reutilizáveis
+- `client/js/pages/` — um script por página
+- `client/pages/` — páginas do site
+- `docs/` — equipe e créditos das imagens
 
-## Regra principal
+## Equipe e contribuição
 
-**Nenhuma página acessa dados diretamente.** Tudo passa por `client/js/api.js`: nada de `fetch('/data/...')` nem `localStorage` fora dele. Assim, na Entrega 2 só o `api.js` muda e nenhuma página precisa ser reescrita. PRs que quebram essa regra não são aprovados.
-
-```js
-import * as api from '/js/api.js';
-import { exigirLogin } from '/js/auth.js';
-
-const usuario = await exigirLogin();            // redireciona para o login se precisar
-const { dados, total } = await api.listarObras({ categoria: 2, pagina: 1 });
-
-try {
-  await api.favoritar(5);
-} catch (erro) {
-  // erro.status: 400, 401, 403, 404 ou 409; erro.message: texto para o usuário
-}
-```
-
-As funções, parâmetros e formatos de resposta estão em [docs/contrato-api.md](docs/contrato-api.md).
-
-## Como contribuir
-
-- `main` é protegida. Cada tarefa tem uma issue e uma branch `feat/<area>-<descricao>` (ex.: `feat/galeria-filtro-ano`).
-- Merge só por Pull Request com 1 aprovação. Preencha o checklist do template.
-- Commits: `feat:`, `fix:`, `refactor:`, `style:`, `docs:`.
-- Campos de dados em português e `snake_case` (`data_inicio`); variáveis e funções em `camelCase`.
-- Mova a issue no quadro do GitHub Projects: A fazer → Fazendo → Em revisão → Feito.
-- Imagens de obras em domínio público (Wikimedia Commons, Rijksmuseum, Met Open Access), com até 300 KB, salvas como `assets/img/obras/<id>.jpg`.
-
-## Time
-
-| Membro | Área |
-| --- | --- |
-| M1 | Líder técnico e integração |
-| M2 | Layout e design system |
-| M3 | Galeria e filtros |
-| M4 | Obra, artista e categorias |
-| M5 | Exposições e eventos |
-| M6 | Reserva de ingressos |
-| M7 | Login e favoritos |
-| M8 | Área admin |
+Veja `docs/equipe.md` e `CONTRIBUTING.md`.

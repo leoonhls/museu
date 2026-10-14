@@ -1,11 +1,15 @@
-// pages/admin/obras.html — responsável: M8
-import * as api from '/js/api.js';
-import { exigirAdmin } from '/js/auth.js';
-import { montarHeader } from '/js/components/header.js';
-import { montarFooter } from '/js/components/footer.js';
+// Responsável: M8 — veja a seção "M8 — Área administrativa" no Guia da Entrega 1
+import { montarHeader } from '../components/header.js';
+import { montarFooter } from '../components/footer.js';
+import { exigirAdmin } from '../auth.js';
 
-await exigirAdmin();
-await montarHeader(document.getElementById('header'));
-montarFooter(document.getElementById('footer'));
+montarHeader();
+montarFooter();
 
-// TODO (M8): implementar a página usando só funções do api.js.
+const usuario = exigirAdmin();
+if (usuario) {
+  // TODO (M8):
+  // - tabela com busca e paginação
+  // - editar
+  // - excluir com confirmar()
+}

@@ -1,9 +1,11 @@
-// index.html — responsável: M2
-import * as api from '/js/api.js';
-import { montarHeader } from '/js/components/header.js';
-import { montarFooter } from '/js/components/footer.js';
+// Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1
+import { montarHeader } from '../components/header.js';
+import { montarFooter } from '../components/footer.js';
 
-await montarHeader(document.getElementById('header'));
-montarFooter(document.getElementById('footer'));
+montarHeader();
+montarFooter();
 
-// TODO (M2): implementar a página usando só funções do api.js.
+// TODO (M2):
+// - banner da exposição atual
+// - 6 obras em destaque com criarCardObra
+// - 3 próximos eventos

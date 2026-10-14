@@ -1,1 +1,75 @@
-/* components.css — header, footer, cards, modal, toast. Responsável: M2 */
+/* Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 */
+/* Versão provisória dos componentes compartilhados. */
+
+.botao {
+  padding: var(--espaco-1) var(--espaco-2);
+  border: 1px solid var(--cor-destaque);
+  border-radius: var(--raio);
+  background: var(--cor-destaque);
+  color: #fff;
+  cursor: pointer;
+}
+
+.botao--secundario {
+  background: transparent;
+  color: var(--cor-destaque);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  margin-bottom: var(--espaco-2);
+}
+
+.card {
+  padding: var(--espaco-2);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--espaco-3);
+}
+
+.tag {
+  padding: 0 var(--espaco-1);
+  border-radius: var(--raio);
+  background: var(--cor-borda);
+}
+
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--espaco-2);
+  padding-block: var(--espaco-2);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.footer {
+  margin-top: var(--espaco-4);
+  padding-block: var(--espaco-3);
+  border-top: 1px solid var(--cor-borda);
+  color: var(--cor-texto-suave);
+}
+
+.toast {
+  position: fixed;
+  right: var(--espaco-2);
+  bottom: var(--espaco-2);
+  padding: var(--espaco-1) var(--espaco-2);
+  border-radius: var(--raio);
+  color: #fff;
+}
+
+.toast--sucesso {
+  background: var(--cor-sucesso);
+}
+
+.toast--erro {
+  background: var(--cor-erro);
+}

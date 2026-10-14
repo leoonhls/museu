@@ -1,19 +1,25 @@
-## O que muda
+## O que este PR faz
 
-<!-- Uma ou duas frases. -->
+<!-- Descreva em uma ou duas frases. -->
 
-Fecha #
+Closes #
 
 ## Como testar
 
 1.
-2.
+
+## Print da tela
+
+<!-- Cole a imagem aqui. -->
 
 ## Checklist
 
-- [ ] Nenhuma página ou componente lê JSON, chama `fetch` para dados ou usa `localStorage` direto: tudo passa pelo `client/js/api.js`
-- [ ] Formato dos dados igual ao contrato em `docs/contrato-api.md` (mudança de contrato só com aprovação de M1 e M4)
-- [ ] Testado em 360 px, 768 px e 1280 px
-- [ ] Nenhum erro no console
-- [ ] Imagens com `alt` e até 300 KB
-- [ ] Commits no padrão `feat:`, `fix:`, `refactor:`, `style:`, `docs:`
+- [ ] A página abre pelo Live Server sem nenhum erro vermelho no Console (F12)
+- [ ] Testei no tamanho de celular (360 px)
+- [ ] Nenhum import de client/data/ nem localStorage fora do api.js
+- [ ] Usei as variáveis do base.css para cores e espaçamentos
+- [ ] Toda imagem tem alt com descrição
+- [ ] Tratei erros com try/catch e mostrei mensagem ao usuário
+- [ ] Tratei o estado “nenhum resultado”
+- [ ] Apaguei console.log de teste e código comentado que não serve mais
+- [ ] Mesclei a main na minha branch antes de enviar e o site continuou funcionando

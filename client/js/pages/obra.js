@@ -1,9 +1,15 @@
-// pages/obra.html — responsável: M4
-import * as api from '/js/api.js';
-import { montarHeader } from '/js/components/header.js';
-import { montarFooter } from '/js/components/footer.js';
+// Responsável: M4 — veja a seção "M4 — Obra, artista e dados reais" no Guia da Entrega 1
+import { montarHeader } from '../components/header.js';
+import { montarFooter } from '../components/footer.js';
 
-await montarHeader(document.getElementById('header'));
-montarFooter(document.getElementById('footer'));
+montarHeader();
+montarFooter();
 
-// TODO (M4): implementar a página usando só funções do api.js.
+// TODO (M4):
+// - ler ?id da URL
+// - buscarObra(id)
+// - tratar obra não encontrada
+// - ficha técnica
+// - imagem ampliada em <dialog>
+// - exposições
+// - mais obras do artista

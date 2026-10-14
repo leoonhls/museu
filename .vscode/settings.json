@@ -1,6 +1,8 @@
 {
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "files.eol": "\n",
   "liveServer.settings.root": "/client",
   "liveServer.settings.port": 5500,
-  "editor.tabSize": 2,
-  "files.eol": "\n"
+  "git.confirmSync": false
 }

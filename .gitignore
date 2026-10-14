@@ -1,6 +1,19 @@
-node_modules/
-.env
-*.log
+# Sistema
 .DS_Store
 Thumbs.db
-server/uploads/tmp/
+desktop.ini
+
+# Editores (mantém as configs compartilhadas do VS Code)
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# Node (a partir da Entrega 2)
+node_modules/
+.env
+npm-debug.log*
+
+# Temporários
+*.log
+*.tmp

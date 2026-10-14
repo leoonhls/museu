@@ -1,9 +1,11 @@
-// pages/eventos.html — responsável: M5
-import * as api from '/js/api.js';
-import { montarHeader } from '/js/components/header.js';
-import { montarFooter } from '/js/components/footer.js';
+// Responsável: M5 — veja a seção "M5 — Exposições e eventos" no Guia da Entrega 1
+import { montarHeader } from '../components/header.js';
+import { montarFooter } from '../components/footer.js';
 
-await montarHeader(document.getElementById('header'));
-montarFooter(document.getElementById('footer'));
+montarHeader();
+montarFooter();
 
-// TODO (M5): implementar a página usando só funções do api.js.
+// TODO (M5):
+// - agenda agrupada por mês
+// - vagas restantes e “Esgotado”
+// - botão para ingressos.html?evento=ID
