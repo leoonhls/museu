@@ -1,6 +1,165 @@
 /* Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 */
 /* Versão provisória dos componentes compartilhados. */
 
+
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaco-1) var(--espaco-2);
+  border: 1px solid var(--cor-destaque);
+  border-radius: var(--raio);
+  background: var(--cor-destaque);
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--fonte-texto);
+  font-weight: 600;
+  text-decoration: none;
+  transition: filter 0.2s ease;
+}
+
+.botao:hover {
+  filter: brightness(0.9);
+}
+
+.botao--secundario {
+  background: transparent;
+  color: var(--cor-destaque);
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  margin-bottom: var(--espaco-2);
+}
+
+.campo label {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.campo input, .campo select, .campo textarea {
+  padding: 0.75rem var(--espaco-1);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  font-family: var(--fonte-texto);
+}
+
+.card {
+  padding: var(--espaco-2);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+}
+
+.grid {
+  display: grid;
+  gap: var(--espaco-3);
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+.tag {
+  padding: 0.2rem var(--espaco-1);
+  border-radius: var(--raio);
+  background: var(--cor-borda);
+  font-size: 0.85rem;
+  width: fit-content;
+}
+
+/* Header padrão exigido */
+.header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--espaco-2);
+  padding: var(--espaco-2) var(--espaco-3);
+  background: var(--cor-superficie);
+  border-bottom: 1px solid var(--cor-borda);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.header__logo {
+  font-family: var(--fonte-titulo);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--cor-texto);
+  text-decoration: none;
+}
+
+.header__menu-botao {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.header__nav {
+  display: flex;
+  gap: var(--espaco-3);
+  align-items: center;
+}
+
+.header__nav a {
+  color: var(--cor-texto-suave);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.header__nav a:hover,
+.header__nav a.ativo {
+  color: var(--cor-destaque);
+}
+
+/* Responsividade do Menu Mobile */
+@media (max-width: 768px) {
+  .header__menu-botao {
+    display: block;
+  }
+  .header__nav {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: var(--espaco-2);
+    padding-top: var(--espaco-2);
+  }
+  .header__nav.ativo {
+    display: flex;
+  }
+}
+
+.footer {
+  margin-top: var(--espaco-4);
+  padding: var(--espaco-3) 0;
+  background-color: var(--cor-superficie);
+  border-top: 1px solid var(--cor-borda);
+  color: var(--cor-texto-suave);
+  text-align: center;
+  font-size: 0.95rem;
+}
+
+.footer .container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  align-items: center;
+}
+
+
+
+
+
+/*
+
 .botao {
   padding: var(--espaco-1) var(--espaco-2);
   border: 1px solid var(--cor-destaque);
