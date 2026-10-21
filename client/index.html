@@ -1,21 +1,163 @@
 <!-- Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Início — Museu</title>
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages/home.css">
-</head>
-<body>
-  <div id="header"></div>
-  <main class="container">
-    <h1>Início</h1>
-    <p class="em-construcao">Página em construção — responsável: M2.</p>
-  </main>
-  <div id="footer"></div>
-  <script type="module" src="js/pages/home.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Início — Museu de Tecnologia</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages/home.css" />
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <main class="container" style="padding-block: var(--espaco-4)">
+      <section
+        style="
+          margin-bottom: var(--espaco-4);
+          text-align: center;
+          max-width: 800px;
+          margin-inline: auto;
+        "
+      >
+        <span class="tag" style="margin-bottom: var(--espaco-1); display: inline-block"
+          >Inovação & Conhecimento</span
+        >
+        <h1
+          style="
+            font-family: var(--fonte-titulo);
+            font-size: 2.75rem;
+            margin-bottom: var(--espaco-2);
+            letter-spacing: -0.5px;
+          "
+        >
+          Museu de Tecnologia Universitário
+        </h1>
+        <p
+          style="
+            color: var(--cor-texto-suave);
+            font-size: 1.15rem;
+            line-height: 1.6;
+            margin-bottom: var(--espaco-3);
+          "
+        >
+          MEMÓRIA - TECNOLOGIA - CONHECIMENTO
+         </p> A história da computação também é a nossa história. </p>
+          Explore equipamentos, midias e ideias que transformaram a forma como vivemos e nos
+          conectamos.
+        </p>
+        <div style="display: flex; gap: var(--espaco-2); justify-content: center; flex-wrap: wrap">
+          <a href="exposicoes.html" class="botao">Ver Exposições</a>
+          <a href="galeria.html" class="botao botao--secundario">Explorar Acervo</a>
+        </div>
+      </section>
+
+      <!-- Seção de Exposições e Áreas Tecnológicas -->
+      <section>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: var(--espaco-3);
+          "
+        >
+          <h2 style="font-family: var(--fonte-titulo); font-size: 1.75rem">
+            Exposições em Destaque
+          </h2>
+          <a
+            href="exposicoes.html"
+            style="
+              color: var(--cor-destaque);
+              text-decoration: none;
+              font-weight: 500;
+              font-size: 0.95rem;
+            "
+            >Ver todas &rarr;</a
+          >
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <span class="tag" style="width: fit-content; margin-bottom: var(--espaco-1)"
+              >História</span
+            >
+            <h3
+              style="
+                font-family: var(--fonte-titulo);
+                font-size: 1.25rem;
+                margin-bottom: var(--espaco-1);
+              "
+            >
+              Evolução do Hardware
+            </h3>
+            <p
+              style="
+                color: var(--cor-texto-suave);
+                font-size: 0.95rem;
+                margin-bottom: var(--espaco-2);
+              "
+            >
+              Da válvula aos microchips modernos: a trajetória física do processamento de dados.
+            </p>
+            <button class="botao botao--secundario" style="width: 100%">Explorar Exposição</button>
+          </article>
+
+          <article class="card">
+            <span class="tag" style="width: fit-content; margin-bottom: var(--espaco-1)"
+              >Inteligência Artificial</span
+            >
+            <h3
+              style="
+                font-family: var(--fonte-titulo);
+                font-size: 1.25rem;
+                margin-bottom: var(--espaco-1);
+              "
+            >
+              Algoritmos e Sociedade
+            </h3>
+            <p
+              style="
+                color: var(--cor-texto-suave);
+                font-size: 0.95rem;
+                margin-bottom: var(--espaco-2);
+              "
+            >
+              Como a IA e a ciência de dados transformaram a tomada de decisões no século XXI.
+            </p>
+            <button class="botao botao--secundario" style="width: 100%">Explorar Exposição</button>
+          </article>
+
+          <article class="card">
+            <span class="tag" style="width: fit-content; margin-bottom: var(--espaco-1)"
+              >Inovação Acadêmica</span
+            >
+            <h3
+              style="
+                font-family: var(--fonte-titulo);
+                font-size: 1.25rem;
+                margin-bottom: var(--espaco-1);
+              "
+            >
+              Projetos de Pesquisa
+            </h3>
+            <p
+              style="
+                color: var(--cor-texto-suave);
+                font-size: 0.95rem;
+                margin-bottom: var(--espaco-2);
+              "
+            >
+              Protótipos, softwares e inovações desenvolvidas nos laboratórios da universidade.
+            </p>
+            <button class="botao botao--secundario" style="width: 100%">Explorar Exposição</button>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+    <script type="module" src="js/pages/home.js"></script>
+  </body>
 </html>

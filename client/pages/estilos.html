@@ -1,5 +1,139 @@
 <!-- Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 -->
-<!DOCTYPE html>
+
+<!-- Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 -->
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Catálogo de estilos — Museu</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <main class="container" style="padding-block: var(--espaco-4)">
+      <h1 style="margin-bottom: var(--espaco-1)">Catálogo de Estilos e Componentes</h1>
+      <p style="color: var(--cor-texto-suave); margin-bottom: var(--espaco-4)">
+        Guia de referência visual para utilização das classes compartilhadas do Design System da M2.
+      </p>
+
+      <!-- Seção de Botões -->
+      <section style="margin-bottom: var(--espaco-4)">
+        <h2>Botões</h2>
+        <p style="color: var(--cor-texto-suave); margin-bottom: var(--espaco-2)">
+          Classes: <code>.botao</code> e <code>.botao--secundario</code>
+        </p>
+        <div style="display: flex; gap: var(--espaco-2); flex-wrap: wrap; align-items: center">
+          <button type="button" class="botao">Botão Primário</button>
+          <button type="button" class="botao botao--secundario">Botão Secundário</button>
+          <a href="#" class="botao">Link como Botão</a>
+        </div>
+      </section>
+
+      <!-- Seção de Campos de Formulário -->
+      <section style="margin-bottom: var(--espaco-4)">
+        <h2>Campos de Entrada</h2>
+        <p style="color: var(--cor-texto-suave); margin-bottom: var(--espaco-2)">
+          Classe: <code>.campo</code>
+        </p>
+        <div style="max-width: 400px">
+          <div class="campo">
+            <label for="input-texto">Campo de Texto</label>
+            <input type="text" id="input-texto" placeholder="Digite algo..." />
+          </div>
+          <div class="campo">
+            <label for="select-opcao">Campo Select</label>
+            <select id="select-opcao">
+              <option>Selecione uma opção</option>
+              <option>Opção 1</option>
+              <option>Opção 2</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Seção de Tags e Etiquetas -->
+      <section style="margin-bottom: var(--espaco-4)">
+        <h2>Tags / Etiquetas</h2>
+        <p style="color: var(--cor-texto-suave); margin-bottom: var(--espaco-2)">
+          Classe: <code>.tag</code>
+        </p>
+        <div style="display: flex; gap: var(--espaco-1)">
+          <span class="tag">Pintura</span>
+          <span class="tag">Histórico</span>
+          <span class="tag">Exposição Atual</span>
+        </div>
+      </section>
+
+      <!-- Seção de Cards e Grid -->
+      <section style="margin-bottom: var(--espaco-4)">
+        <h2>Cards e Grade Responsiva</h2>
+        <p style="color: var(--cor-texto-suave); margin-bottom: var(--espaco-2)">
+          Classes: <code>.grid</code> e <code>.card</code>
+        </p>
+
+        <div class="grid">
+          <article class="card">
+            <span class="tag">Acervo</span>
+            <h3 style="font-size: 1.25rem">Título do Card 1</h3>
+            <p style="color: var(--cor-texto-suave); font-size: 0.95rem">
+              Exemplo de descrição curta contida dentro de um card padrão do sistema.
+            </p>
+            <button type="button" class="botao botao--secundario">Ação</button>
+          </article>
+
+          <article class="card">
+            <span class="tag">Exposição</span>
+            <h3 style="font-size: 1.25rem">Título do Card 2</h3>
+            <p style="color: var(--cor-texto-suave); font-size: 0.95rem">
+              Os cards se adaptam automaticamente utilizando a classe de grade (<code>.grid</code>).
+            </p>
+            <button type="button" class="botao botao--secundario">Ação</button>
+          </article>
+
+          <article class="card">
+            <span class="tag">Evento</span>
+            <h3 style="font-size: 1.25rem">Título do Card 3</h3>
+            <p style="color: var(--cor-texto-suave); font-size: 0.95rem">
+              Ideal para listagens de obras, eventos, ingressos e galerias em geral.
+            </p>
+            <button type="button" class="botao botao--secundario">Ação</button>
+          </article>
+        </div>
+      </section>
+
+      <!-- Seção de Toasts e Alertas visuais -->
+      <section style="margin-bottom: var(--espaco-4)">
+        <h2>Toasts (Mensagens flutuantes)</h2>
+        <p style="color: var(--cor-texto-suave); margin-bottom: var(--espaco-2)">
+          Classes: <code>.toast</code>, <code>.toast--sucesso</code> e <code>.toast--erro</code>
+        </p>
+        <div style="display: flex; gap: var(--espaco-2)">
+          <div class="toast toast--sucesso" style="position: static; display: inline-block">
+            Toast de Sucesso
+          </div>
+          <div class="toast toast--erro" style="position: static; display: inline-block">
+            Toast de Erro
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+
+    <script type="module">
+      import { montarHeader } from '../js/components/header.js';
+      import { montarFooter } from '../js/components/footer.js';
+
+      montarHeader();
+      montarFooter();
+    </script>
+  </body>
+</html>
+
+<!-- <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
@@ -16,4 +150,4 @@
   </main>
   <div id="footer"></div>
 </body>
-</html>
+</html> -->

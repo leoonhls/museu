@@ -1,1 +1,43 @@
 /* Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 */
+
+/* Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 */
+/* Estilos específicos da Página Inicial (Home) */
+
+.home-hero {
+  background-color: var(--cor-texto);
+  color: var(--cor-superficie);
+  padding-block: 4rem;
+  border-radius: var(--raio);
+  margin-block: var(--espaco-3);
+  overflow: hidden;
+}
+
+.home-hero__conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  max-width: 700px;
+}
+
+.home-secao {
+  margin-block: var(--espaco-4);
+}
+
+.home-secao__cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--espaco-3);
+}
+
+.home-secao__titulo {
+  font-family: var(--fonte-titulo);
+  font-size: 1.75rem;
+}
+
+/* Responsividade específica da Home */
+@media (min-width: 768px) {
+  .home-hero {
+    padding: 5rem;
+  }
+}
