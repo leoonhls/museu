@@ -1,21 +1,39 @@
 <!-- Responsável: M6 — veja a seção "M6 — Ingressos" no Guia da Entrega 1 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Comprovante — Museu</title>
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/pages/ingressos.css">
-</head>
-<body>
-  <div id="header"></div>
-  <main class="container">
-    <h1>Comprovante</h1>
-    <p class="em-construcao">Página em construção — responsável: M6.</p>
-  </main>
-  <div id="footer"></div>
-  <script type="module" src="../js/pages/reserva.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Comprovante — Museu</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/pages/ingressos.css" />
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <main class="container">
+      <section id="comprovante">
+        <h1>Comprovante de reserva</h1>
+        <p id="mensagem-comprovante" role="status" aria-live="polite">Carregando comprovante...</p>
+
+        <div id="dados-comprovante" hidden>
+          <p><strong>Código da reserva:</strong> <span id="codigo"></span></p>
+          <p><strong>Visita:</strong> <span id="tipo-visita"></span></p>
+          <p><strong>Data:</strong> <span id="data-visita"></span></p>
+          <p><strong>Ingressos inteiros:</strong> <span id="qtd-inteira"></span></p>
+          <p><strong>Meias-entradas:</strong> <span id="qtd-meia"></span></p>
+          <p><strong>Valor total:</strong> <span id="valor-total"></span></p>
+          <p><strong>Status:</strong> <span id="status-reserva"></span></p>
+
+          <button type="button" id="imprimir-comprovante">Imprimir comprovante</button>
+        </div>
+
+        <a href="ingressos.html">Voltar para ingressos</a>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+    <script type="module" src="../js/pages/reserva.js"></script>
+  </body>
 </html>
