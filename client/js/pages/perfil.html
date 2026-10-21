@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca UFU - Meu Perfil</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <header>
+        <h1>Biblioteca UFU</h1>
+        <nav>
+            <a href="index.html">Acervo</a>
+            <button id="btnSair" style="width: auto; padding: 5px 10px; margin-left: 15px;">Sair</button>
+        </nav>
+    </header>
+
+    <main>
+        <h2>Meu Perfil</h2>
+
+        <section class="painel-secao">
+            <h3>Dados do Visitante</h3>
+            <p><strong>Usuário:</strong> <span id="nomeUsuario">---</span></p>
+        </section>
+
+        <section class="painel-secao">
+            <h3>Minhas Obras Favoritas ❤️</h3>
+            <ul id="listaFavoritos">
+                <!-- Inserido dinamicamente -->
+            </ul>
+        </section>
+
+        <section class="painel-secao">
+            <h3>Minhas Reservas 📚</h3>
+            <ul id="listaReservas">
+                <!-- Inserido dinamicamente -->
+            </ul>
+        </section>
+    </main>
+
+    <script src="js/auth.js"></script>
+    <script src="js/perfil.js"></script>
+</body>
+</html>

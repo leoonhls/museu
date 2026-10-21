@@ -11,9 +11,103 @@
 </head>
 <body>
   <div id="header"></div>
-  <main class="container">
+  <main class="container perfil">
     <h1>Meu perfil</h1>
-    <p class="em-construcao">Página em construção — responsável: M7.</p>
+    <div class="perfil__abas" role="tablist" aria-label="Seções do perfil">
+      <button class="perfil__aba" id="abaDados" type="button" role="tab" aria-controls="painelDados" data-aba="dados">Meus dados</button>
+      <button class="perfil__aba" id="abaFavoritos" type="button" role="tab" aria-controls="painelFavoritos" data-aba="favoritos">Favoritos</button>
+      <button class="perfil__aba" id="abaReservas" type="button" role="tab" aria-controls="painelReservas" data-aba="reservas">Minhas reservas</button>
+    </div>
+
+    <section class="perfil__painel" id="painelDados" role="tabpanel" aria-labelledby="abaDados">
+      <h2>Meus dados</h2>
+      <dl class="perfil__dados">
+        <div><dt>Nome</dt><dd id="perfilNome"></dd></div>
+        <div><dt>E-mail</dt><dd id="perfilEmail"></dd></div>
+        <div><dt>Data de cadastro</dt><dd id="perfilDataCadastro"></dd></div>
+      </dl>
+
+      <form class="perfil__formulario" id="formPerfil">
+        <h3>Foto de perfil</h3>
+        <div class="perfil__avatar">
+          <img id="perfilAvatar" alt="Foto de perfil" hidden>
+          <span id="perfilAvatarVazio" aria-hidden="true">Sem foto</span>
+        </div>
+        <div class="campo">
+          <label for="arquivoAvatar">Escolher foto (PNG, JPEG ou WebP, até 1 MB)</label>
+          <input id="arquivoAvatar" name="avatar" type="file" accept="image/png,image/jpeg,image/webp">
+          <button class="botao botao--secundario" id="removerAvatar" type="button">Remover foto</button>
+        </div>
+
+        <h3>Sobre você</h3>
+        <div class="campo">
+          <label for="biografiaPerfil">Biografia</label>
+          <textarea id="biografiaPerfil" name="biografia" maxlength="500" rows="4"></textarea>
+          <small>Conte um pouco sobre você (até 500 caracteres).</small>
+        </div>
+        <div class="campo">
+          <label for="interessesPerfil">Interesses culturais</label>
+          <textarea id="interessesPerfil" name="interesses" maxlength="500" rows="3" placeholder="Ex.: pintura, fotografia, arte moderna"></textarea>
+        </div>
+
+        <h3>Contato</h3>
+        <div class="campo">
+          <label for="telefonePerfil">Telefone (opcional)</label>
+          <input id="telefonePerfil" name="telefone" type="tel" autocomplete="tel" maxlength="30">
+        </div>
+        <div class="campo">
+          <label for="sitePerfil">Site ou portfólio (opcional)</label>
+          <input id="sitePerfil" name="site" type="url" autocomplete="url" maxlength="200" placeholder="https://">
+        </div>
+
+        <h3>Preferências</h3>
+        <div class="campo">
+          <label for="idiomaPerfil">Idioma do sistema</label>
+          <select id="idiomaPerfil" name="idioma">
+            <option value="pt-BR">Português (Brasil)</option>
+            <option value="en">English</option>
+            <option value="es">Español</option>
+          </select>
+          <small>A preferência fica salva para uso nas próximas versões; a interface atual continua em português.</small>
+        </div>
+        <label class="perfil__opcao">
+          <input id="newsletterPerfil" name="newsletter" type="checkbox">
+          Quero receber novidades e programação cultural do museu.
+        </label>
+        <small>A opção fica salva neste navegador. O site ainda não envia newsletter.</small>
+        <fieldset class="perfil__acessibilidade">
+          <legend>Acessibilidade</legend>
+          <label class="perfil__opcao">
+            <input id="altoContrastePerfil" name="altoContraste" type="checkbox">
+            Usar cores de alto contraste neste dispositivo
+          </label>
+          <label class="perfil__opcao">
+            <input id="reduzirAnimacoesPerfil" name="reduzirAnimacoes" type="checkbox">
+            Reduzir animações
+          </label>
+        </fieldset>
+
+        <button class="botao" type="submit">Salvar alterações</button>
+        <p class="mensagem" id="mensagemPerfil" role="status" aria-live="polite"></p>
+      </form>
+
+      <section class="perfil__historico" aria-labelledby="tituloHistorico">
+        <h3 id="tituloHistorico">Histórico da conta</h3>
+        <p>Atividades registradas neste navegador. Esses dados não são sincronizados com outros dispositivos.</p>
+        <ol id="listaHistoricoConta"></ol>
+      </section>
+      <button class="botao" id="botaoSairPerfil" type="button">Sair</button>
+    </section>
+
+    <section class="perfil__painel" id="painelFavoritos" role="tabpanel" aria-labelledby="abaFavoritos" hidden>
+      <h2>Obras favoritas</h2>
+      <div id="conteudoFavoritos"></div>
+    </section>
+
+    <section class="perfil__painel" id="painelReservas" role="tabpanel" aria-labelledby="abaReservas" hidden>
+      <h2>Minhas reservas</h2>
+      <div id="conteudoReservas"></div>
+    </section>
   </main>
   <div id="footer"></div>
   <script type="module" src="../js/pages/perfil.js"></script>

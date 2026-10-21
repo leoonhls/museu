@@ -124,6 +124,30 @@ function semSenha(usuario) {
   return resto;
 }
 
+function perfilPadrao() {
+  return {
+    avatar: '',
+    biografia: '',
+    interesses: '',
+    telefone: '',
+    site: '',
+    idioma: 'pt-BR',
+    newsletter: false,
+    acessibilidade: {
+      altoContraste: false,
+      reduzirAnimacoes: false,
+    },
+  };
+}
+
+function registrarHistoricoConta(usuarioId, tipo, descricao) {
+  const historico = ler('historico_conta', []);
+  gravar('historico_conta', [
+    ...historico,
+    { usuario_id: usuarioId, tipo, descricao, data_hora: new Date().toISOString() },
+  ].slice(-1000));
+}
+
 // Obras do arquivo com as edições aplicadas, mais as criadas, menos as excluídas.
 function obrasVisiveis() {
   const editadas = ler('obras_editadas', {});
@@ -294,15 +318,18 @@ export function listarEventos({ de, ate } = {}) {
 // Conta
 // ---------------------------------------------------------------------------
 
-export function cadastrar({ nome, email, senha } = {}) {
+export function cadastrar({ nome, email, senha, tipoCadastro = 'visitante' } = {}) {
   const nomeLimpo = String(nome ?? '').trim();
   const emailLimpo = String(email ?? '')
     .trim()
     .toLowerCase();
   const senhaTexto = String(senha ?? '');
+  const tiposCadastro = ['estudante', 'pesquisador', 'administrador', 'visitante'];
+  const tipoCadastroLimpo = String(tipoCadastro ?? '');
 
   if (nomeLimpo.length < 3) throw new Error('O nome deve ter pelo menos 3 caracteres.');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLimpo)) throw new Error('Informe um e-mail válido.');
+  if (!tiposCadastro.includes(tipoCadastroLimpo)) throw new Error('Selecione um tipo de cadastro válido.');
   if (senhaTexto.length < 8 || !/[a-zA-Z]/.test(senhaTexto) || !/\d/.test(senhaTexto)) {
     throw new Error('A senha deve ter pelo menos 8 caracteres, com letras e números.');
   }
@@ -315,11 +342,14 @@ export function cadastrar({ nome, email, senha } = {}) {
     nome: nomeLimpo,
     email: emailLimpo,
     senha: senhaTexto,
+    tipo_cadastro: tipoCadastroLimpo,
     papel: 'visitante',
     criado_em: textoData(hoje()),
+    perfil: perfilPadrao(),
   };
   gravar('usuarios', [...lista, usuario]);
   gravar('sessao', usuario.id);
+  registrarHistoricoConta(usuario.id, 'cadastro', 'Conta criada.');
   return semSenha(usuario);
 }
 
@@ -330,10 +360,34 @@ export function entrar(email, senha) {
   const usuario = usuarios().find((u) => u.email === emailLimpo && u.senha === String(senha ?? ''));
   if (!usuario) throw new Error('E-mail ou senha incorretos.');
   gravar('sessao', usuario.id);
+  registrarHistoricoConta(usuario.id, 'login', 'Entrada na conta.');
   return semSenha(usuario);
 }
 
+export function redefinirSenha(email, novaSenha) {
+  const emailLimpo = String(email ?? '')
+    .trim()
+    .toLowerCase();
+  const senhaTexto = String(novaSenha ?? '');
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLimpo)) throw new Error('Informe um e-mail válido.');
+  if (senhaTexto.length < 8 || !/[a-zA-Z]/.test(senhaTexto) || !/\d/.test(senhaTexto)) {
+    throw new Error('A senha deve ter pelo menos 8 caracteres, com letras e números.');
+  }
+
+  const lista = usuarios();
+  const indice = lista.findIndex((usuario) => usuario.email === emailLimpo);
+  if (indice === -1) throw new Error('Não encontramos uma conta com esse e-mail.');
+
+  const atualizados = [...lista];
+  atualizados[indice] = { ...atualizados[indice], senha: senhaTexto };
+  gravar('usuarios', atualizados);
+  registrarHistoricoConta(atualizados[indice].id, 'senha', 'Senha redefinida.');
+}
+
 export function sair() {
+  const usuario = usuarioAtual();
+  if (usuario) registrarHistoricoConta(usuario.id, 'logout', 'Saída da conta.');
   remover('sessao');
 }
 
@@ -342,6 +396,89 @@ export function usuarioAtual() {
   if (id === null) return null;
   const usuario = usuarios().find((u) => u.id === id);
   return usuario ? semSenha(usuario) : null;
+}
+
+export function obterPerfilUsuario() {
+  const usuario = exigirUsuario();
+  return { ...perfilPadrao(), ...(usuario.perfil ?? {}), acessibilidade: {
+    ...perfilPadrao().acessibilidade,
+    ...(usuario.perfil?.acessibilidade ?? {}),
+  } };
+}
+
+export function atualizarPerfil(dados = {}) {
+  const usuario = exigirUsuario();
+  const perfilAtual = obterPerfilUsuario();
+  const biografia = String(dados.biografia ?? '').trim();
+  const interesses = String(dados.interesses ?? '').trim();
+  const telefone = String(dados.telefone ?? '').trim();
+  const site = String(dados.site ?? '').trim();
+  const idioma = String(dados.idioma ?? perfilAtual.idioma);
+  const idiomasPermitidos = ['pt-BR', 'en', 'es'];
+
+  if (biografia.length > 500) throw new Error('A biografia deve ter no máximo 500 caracteres.');
+  if (interesses.length > 500) throw new Error('Os interesses devem ter no máximo 500 caracteres.');
+  if (telefone.length > 30) throw new Error('O telefone deve ter no máximo 30 caracteres.');
+  if (site.length > 200) throw new Error('O endereço do site deve ter no máximo 200 caracteres.');
+  if (site) {
+    let url;
+    try {
+      url = new URL(site);
+    } catch {
+      throw new Error('Informe um endereço de site válido, começando com https://.');
+    }
+    if (!['http:', 'https:'].includes(url.protocol)) {
+      throw new Error('O endereço do site deve começar com http:// ou https://.');
+    }
+  }
+  if (!idiomasPermitidos.includes(idioma)) throw new Error('Selecione um idioma válido.');
+
+  const avatar = dados.avatar === undefined ? perfilAtual.avatar : String(dados.avatar);
+  if (
+    avatar &&
+    (avatar.length > 1_400_000 ||
+      !/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(avatar))
+  ) {
+    throw new Error('A foto deve ser PNG, JPEG ou WebP e ter no máximo 1 MB.');
+  }
+
+  const perfil = {
+    avatar,
+    biografia,
+    interesses,
+    telefone,
+    site,
+    idioma,
+    newsletter: dados.newsletter === true,
+    acessibilidade: {
+      altoContraste: dados.altoContraste === true,
+      reduzirAnimacoes: dados.reduzirAnimacoes === true,
+    },
+  };
+  const lista = usuarios();
+  const indice = lista.findIndex((item) => item.id === usuario.id);
+  if (indice === -1) throw new Error('Não encontramos a conta conectada.');
+  const atualizados = [...lista];
+  atualizados[indice] = { ...atualizados[indice], perfil };
+  gravar('usuarios', atualizados);
+  registrarHistoricoConta(usuario.id, 'perfil', 'Perfil atualizado.');
+  return { ...perfil, acessibilidade: { ...perfil.acessibilidade } };
+}
+
+export function listarHistoricoConta() {
+  const usuario = exigirUsuario();
+  return ler('historico_conta', [])
+    .filter((item) => item.usuario_id === usuario.id)
+    .sort((a, b) => b.data_hora.localeCompare(a.data_hora))
+    .slice(0, 50)
+    .map(({ tipo, descricao, data_hora }) => ({ tipo, descricao, data_hora }));
+}
+
+export function aplicarPreferenciasAcessibilidade() {
+  const usuario = usuarioAtual();
+  const acessibilidade = usuario?.perfil?.acessibilidade ?? perfilPadrao().acessibilidade;
+  document.documentElement.dataset.altoContraste = String(Boolean(acessibilidade.altoContraste));
+  document.documentElement.dataset.reduzirAnimacoes = String(Boolean(acessibilidade.reduzirAnimacoes));
 }
 
 // ---------------------------------------------------------------------------
@@ -375,6 +512,8 @@ export function favoritar(obraId) {
     ...favoritos,
     { usuario_id: usuario.id, obra_id: id, criado_em: new Date().toISOString() },
   ]);
+  const obra = obrasVisiveis().find((item) => item.id === id);
+  registrarHistoricoConta(usuario.id, 'favorito', `Obra adicionada aos favoritos: ${obra.titulo}.`);
 }
 
 export function desfavoritar(obraId) {
@@ -385,6 +524,8 @@ export function desfavoritar(obraId) {
     'favoritos',
     favoritos.filter((f) => !(f.usuario_id === usuario.id && f.obra_id === id)),
   );
+  const obra = obrasVisiveis().find((item) => item.id === id);
+  registrarHistoricoConta(usuario.id, 'favorito', `Obra removida dos favoritos: ${obra.titulo}.`);
 }
 
 // ---------------------------------------------------------------------------
@@ -466,6 +607,7 @@ export function criarReserva({ evento_id, data_visita, qtd_inteira, qtd_meia } =
     criado_em: new Date().toISOString(),
   };
   gravar('reservas', [...reservas, reserva]);
+  registrarHistoricoConta(usuario.id, 'reserva', `Reserva ${reserva.codigo} criada.`);
   return { ...reserva };
 }
 
@@ -495,6 +637,7 @@ export function cancelarReserva(id) {
 
   reserva.status = 'cancelada';
   gravar('reservas', reservas);
+  registrarHistoricoConta(usuario.id, 'reserva', `Reserva ${reserva.codigo} cancelada.`);
 }
 
 // ---------------------------------------------------------------------------
