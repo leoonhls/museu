@@ -10,13 +10,7 @@ export function montarFooter() {
   const projeto = document.createElement('p');
   projeto.style.fontWeight = '600';
   projeto.style.color = 'var(--cor-texto)';
-  projeto.textContent = 'Museu de Artes · Projeto acadêmico';
-
-  const horario = document.createElement('p');
-  horario.textContent = 'Terça a domingo, 10h–18h';
-
-  conteudo.append(projeto, horario);
-  footer.append(conteudo);
+  projeto.textContent = ' Projeto acadêmico';
 
   const alvo = document.getElementById('footer');
   if (alvo) {

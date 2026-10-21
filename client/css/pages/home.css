@@ -1,43 +1,129 @@
-/* Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 */
+/* Responsável: M2 — veja a seção "M2 — Layout e design system" */
 
-/* Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 */
-/* Estilos específicos da Página Inicial (Home) */
-
-.home-hero {
-  background-color: var(--cor-texto);
-  color: var(--cor-superficie);
-  padding-block: 4rem;
-  border-radius: var(--raio);
-  margin-block: var(--espaco-3);
-  overflow: hidden;
-}
-
-.home-hero__conteudo {
+/* Layout Principal da Home */
+.home-main {
   display: flex;
   flex-direction: column;
-  gap: var(--espaco-2);
-  max-width: 700px;
-}
-
-.home-secao {
+  gap: var(--espaco-5);
   margin-block: var(--espaco-4);
 }
 
-.home-secao__cabecalho {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+/* Cada seção ganha um degradê sutil de fundo que se integra à página */
+.home-secao {
+  border-bottom: 1px solid var(--cor-borda);
+  padding: var(--espaco-4);
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.6) 100%);
   margin-bottom: var(--espaco-3);
 }
 
-.home-secao__titulo {
-  font-family: var(--fonte-titulo);
-  font-size: 1.75rem;
+/* Cards com degradê próprio acompanhando o bloco */
+.card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.8) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+  padding: var(--espaco-3);
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-/* Responsividade específica da Home */
-@media (min-width: 768px) {
-  .home-hero {
-    padding: 5rem;
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--cor-primaria), var(--cor-destaque));
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.card:hover {
+  border-color: var(--cor-destaque);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 210, 255, 0.15);
+}
+
+/* Seção específica da Linha do Tempo com destaque em degradê */
+.timeline-secao {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.7) 0%, rgba(30, 58, 138, 0.2) 100%);
+}
+
+/* Linha do tempo linear horizontal com degradê */
+.timeline-linear {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  margin-top: var(--espaco-4);
+  gap: var(--espaco-2);
+  overflow-x: auto;
+  padding-bottom: var(--espaco-2);
+}
+
+.timeline-linear::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  left: 40px;
+  right: 40px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--cor-primaria), var(--cor-destaque));
+  z-index: 1;
+  border-radius: 2px;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-width: 140px;
+}
+
+.timeline-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 2px solid var(--cor-destaque);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: var(--espaco-2);
+  box-shadow: 0 4px 16px rgba(0, 210, 255, 0.2);
+}
+
+.timeline-ano {
+  font-family: var(--fonte-titulo);
+  font-weight: 700;
+  color: var(--cor-destaque);
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.timeline-texto {
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+  .timeline-linear {
+    justify-content: flex-start;
+    padding-left: var(--espaco-1);
+  }
+  .timeline-linear::before {
+    display: none;
   }
 }

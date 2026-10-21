@@ -1,61 +1,36 @@
 /* Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 */
 /* Versão provisória: o M2 reescreve os valores, mas os nomes das variáveis são definitivos. */
 
-/* Responsável: M2 — Guia da Entrega 1 */
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Inter:wght@400;600&display=swap');
 
 :root {
-  --cor-fundo: #faf7f2;
-  --cor-superficie: #ffffff;
-  --cor-texto: #1f1d1a;
-  --cor-texto-suave: #6b665e;
-  --cor-destaque: #8c2f1b;
-  --cor-borda: #e4ddd2;
-  --cor-sucesso: #2e7d32;
-  --cor-erro: #c62828;
+  /* Cores Principais - Tema Tecnologia */
+  --cor-primaria: #0066cc;       /* Azul tecnológico vibrante */
+  --cor-primaria-hover: #004fb3;  /* Azul mais escuro para hover */
+  --cor-destaque: #00d2ff;       /* Ciano brilhante para links e destaques */
 
-  --fonte-titulo: 'Playfair Display', Georgia, serif;
-  --fonte-texto: 'Inter', system-ui, sans-serif;
+  /* Cores de Fundo e Texto */
+  --cor-fundo: #0f172a;          /* Azul escuro profundo (Dark Mode institucional) */
+  --cor-fundo-card: #1e293b;     /* Cinza/Azul escuro para os cards */
+  --cor-texto: #f8fafc;          /* Branco suave para textos principais */
+  --cor-texto-suave: #94a3b8;    /* Cinza claro para descrições */
+  --cor-borda: #334155;          /* Cor para linhas e divisores */
 
+  /* Tipografia e Espaçamentos */
+  --fonte-titulo: 'Inter', sans-serif;
   --espaco-1: 0.5rem;
   --espaco-2: 1rem;
   --espaco-3: 1.5rem;
-  --espaco-4: 2.5rem;
-
-  --raio: 8px;
-  --largura-max: 1200px;
-}
-
-*, *::before, *::after {
-  box-sizing: border-box;
+  --espaco-4: 2rem;
+  --espaco-5: 3rem;
 }
 
 body {
-  margin: 0;
-  background: var(--cor-fundo);
+  background-color: var(--cor-fundo);
   color: var(--cor-texto);
-  font-family: var(--fonte-texto);
-  line-height: 1.6;
-}
-
-h1, h2, h3 {
-  font-family: var(--fonte-titulo);
-  line-height: 1.2;
-}
-
-img {
-  max-width: 100%;
-  display: block;
-}
-
-.container {
-  width: min(100% - 2rem, var(--largura-max));
-  margin-inline: auto;
-}
-
-.em-construcao {
-  color: var(--cor-texto-suave);
-  font-style: italic;
+  font-family: system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 /*

@@ -4,7 +4,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Início — Museu de Tecnologia</title>
+    <title>Início — Museu da Computação</title>
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/components.css" />
     <link rel="stylesheet" href="css/pages/home.css" />
@@ -13,16 +13,17 @@
     <div id="header"></div>
 
     <main class="container" style="padding-block: var(--espaco-4)">
+      <!-- Seção Hero / Banner Principal -->
       <section
         style="
-          margin-bottom: var(--espaco-4);
+          margin-bottom: var(--espaco-5);
           text-align: center;
           max-width: 800px;
           margin-inline: auto;
         "
       >
         <span class="tag" style="margin-bottom: var(--espaco-1); display: inline-block"
-          >Inovação & Conhecimento</span
+          >Memória • Tecnologia • Conhecimento</span
         >
         <h1
           style="
@@ -32,7 +33,7 @@
             letter-spacing: -0.5px;
           "
         >
-          Museu de Tecnologia Universitário
+          A história da computação também é a nossa história.
         </h1>
         <p
           style="
@@ -42,19 +43,136 @@
             margin-bottom: var(--espaco-3);
           "
         >
-          MEMÓRIA - TECNOLOGIA - CONHECIMENTO
-         </p> A história da computação também é a nossa história. </p>
-          Explore equipamentos, midias e ideias que transformaram a forma como vivemos e nos
+          Explore equipamentos, mídias e ideias que transformaram a forma como vivemos e nos
           conectamos.
         </p>
-        <div style="display: flex; gap: var(--espaco-2); justify-content: center; flex-wrap: wrap">
-          <a href="exposicoes.html" class="botao">Ver Exposições</a>
-          <a href="galeria.html" class="botao botao--secundario">Explorar Acervo</a>
+        <div
+          style="display: flex; gap: var(--espaco-2); justify-content: center; flex-wrap: wrap"
+        ></div>
+      </section>
+
+      <!-- PARTE 1: Explore o Acervo -->
+      <section class="home-secao" style="margin-bottom: var(--espaco-5)">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: var(--espaco-3);
+          "
+        >
+          <h2 style="font-family: var(--fonte-titulo); font-size: 1.75rem">Explore o acervo</h2>
+          <a
+            href="galeria.html"
+            style="
+              color: var(--cor-destaque);
+              text-decoration: none;
+              font-weight: 500;
+              font-size: 0.95rem;
+            "
+            >Ver todo o acervo &rarr;</a
+          >
+        </div>
+        <div class="grid" id="acervo-destaque">
+          <article class="card">
+            <h3
+              style="
+                font-family: var(--fonte-titulo);
+                font-size: 1.25rem;
+                margin-bottom: var(--espaco-1);
+              "
+            >
+              Hardware
+            </h3>
+            <p
+              style="
+                color: var(--cor-texto-suave);
+                font-size: 0.95rem;
+                margin-bottom: var(--espaco-2);
+              "
+            >
+              Processadores, placas, periféricos e os primeiros computadores.
+            </p>
+            <a
+              href="galeria.html"
+              style="
+                color: var(--cor-primaria);
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.9rem;
+              "
+              >Ver itens &rarr;</a
+            >
+          </article>
         </div>
       </section>
 
-      <!-- Seção de Exposições e Áreas Tecnológicas -->
-      <section>
+      <!-- PARTE 2: Linha do Tempo (Linear Horizontal) -->
+      <section class="home-secao" style="margin-bottom: var(--espaco-5)">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: var(--espaco-3);
+          "
+        >
+          <div>
+            <h2
+              style="font-family: var(--fonte-titulo); font-size: 1.75rem; margin-bottom: 0.25rem"
+            >
+              Linha do tempo
+            </h2>
+            <p style="color: var(--cor-texto-suave); font-size: 0.95rem">
+              Uma jornada de mais de 70 anos de inovações que construíram a computação moderna.
+            </p>
+          </div>
+          <a
+            href="linha-do-tempo.html"
+            style="
+              color: var(--cor-destaque);
+              text-decoration: none;
+              font-weight: 500;
+              font-size: 0.95rem;
+            "
+          ></a>
+        </div>
+
+        <div class="timeline-linear">
+          <div class="timeline-step">
+            <div class="timeline-icon">💡</div>
+            <span class="timeline-ano">1940-1950</span>
+            <p class="timeline-texto">Válvulas e primeiros computadores</p>
+          </div>
+
+          <div class="timeline-step">
+            <div class="timeline-icon">🖥️</div>
+            <span class="timeline-ano">1960-1970</span>
+            <p class="timeline-texto">Transistores e minicomputadores</p>
+          </div>
+
+          <div class="timeline-step">
+            <div class="timeline-icon">💻</div>
+            <span class="timeline-ano">1980-1990</span>
+            <p class="timeline-texto">Microcomputadores e redes</p>
+          </div>
+
+          <div class="timeline-step">
+            <div class="timeline-icon">🌐</div>
+            <span class="timeline-ano">2000-2010</span>
+            <p class="timeline-texto">Internet e mobilidade</p>
+          </div>
+
+          <div class="timeline-step">
+            <div class="timeline-icon">☁️</div>
+            <span class="timeline-ano">2010-atual</span>
+            <p class="timeline-texto">Nuvens, dados e inteligência artificial</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PARTE 3: Exposições em Destaque -->
+      <section class="home-secao" style="margin-bottom: var(--espaco-5)">
         <div
           style="
             display: flex;
@@ -64,7 +182,7 @@
           "
         >
           <h2 style="font-family: var(--fonte-titulo); font-size: 1.75rem">
-            Exposições em Destaque
+            Exposições em destaque
           </h2>
           <a
             href="exposicoes.html"
@@ -74,14 +192,14 @@
               font-weight: 500;
               font-size: 0.95rem;
             "
-            >Ver todas &rarr;</a
+            >Ver todas as exposições &rarr;</a
           >
         </div>
 
         <div class="grid">
           <article class="card">
             <span class="tag" style="width: fit-content; margin-bottom: var(--espaco-1)"
-              >História</span
+              >Em cartaz</span
             >
             <h3
               style="
@@ -90,7 +208,7 @@
                 margin-bottom: var(--espaco-1);
               "
             >
-              Evolução do Hardware
+              Da sala de aula ao mundo
             </h3>
             <p
               style="
@@ -99,14 +217,39 @@
                 margin-bottom: var(--espaco-2);
               "
             >
-              Da válvula aos microchips modernos: a trajetória física do processamento de dados.
+              A evolução dos computadores na UFU[cite: 1].
             </p>
-            <button class="botao botao--secundario" style="width: 100%">Explorar Exposição</button>
+            <button class="botao" style="width: 100%">Saiba mais</button>
           </article>
+        </div>
+      </section>
 
+      <!-- PARTE 4: Próximos Eventos -->
+      <section class="home-secao">
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: var(--espaco-3);
+          "
+        >
+          <h2 style="font-family: var(--fonte-titulo); font-size: 1.75rem">Próximos eventos</h2>
+          <a
+            href="eventos.html"
+            style="
+              color: var(--cor-destaque);
+              text-decoration: none;
+              font-weight: 500;
+              font-size: 0.95rem;
+            "
+            >Ver todos os eventos &rarr;</a
+          >
+        </div>
+        <div class="grid" id="eventos-lista">
           <article class="card">
             <span class="tag" style="width: fit-content; margin-bottom: var(--espaco-1)"
-              >Inteligência Artificial</span
+              >22 ABR</span
             >
             <h3
               style="
@@ -115,7 +258,7 @@
                 margin-bottom: var(--espaco-1);
               "
             >
-              Algoritmos e Sociedade
+              Visita guiada ao acervo
             </h3>
             <p
               style="
@@ -124,34 +267,8 @@
                 margin-bottom: var(--espaco-2);
               "
             >
-              Como a IA e a ciência de dados transformaram a tomada de decisões no século XXI.
+              Conheça de perto os equipamentos históricos do museu.
             </p>
-            <button class="botao botao--secundario" style="width: 100%">Explorar Exposição</button>
-          </article>
-
-          <article class="card">
-            <span class="tag" style="width: fit-content; margin-bottom: var(--espaco-1)"
-              >Inovação Acadêmica</span
-            >
-            <h3
-              style="
-                font-family: var(--fonte-titulo);
-                font-size: 1.25rem;
-                margin-bottom: var(--espaco-1);
-              "
-            >
-              Projetos de Pesquisa
-            </h3>
-            <p
-              style="
-                color: var(--cor-texto-suave);
-                font-size: 0.95rem;
-                margin-bottom: var(--espaco-2);
-              "
-            >
-              Protótipos, softwares e inovações desenvolvidas nos laboratórios da universidade.
-            </p>
-            <button class="botao botao--secundario" style="width: 100%">Explorar Exposição</button>
           </article>
         </div>
       </section>
