@@ -1,1 +1,146 @@
 /* Responsável: M8 — veja a seção "M8 — Área administrativa" no Guia da Entrega 1 */
+
+/* M8 — Gerenciamento de obras */
+
+/* Barra de pesquisa e botão Nova obra */
+.admin-acoes {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+/* Área da tabela */
+.admin-tabela {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Tabela de obras */
+.admin-tabela table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-tabela th,
+.admin-tabela td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  vertical-align: middle;
+}
+
+.admin-tabela th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.admin-tabela tbody tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Imagens das obras */
+.admin-tabela img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Paginação */
+.admin-paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+/* Formulário de cadastro e edição de obras */
+#form-obra {
+  max-width: 650px;
+  margin: 24px 0;
+}
+
+#form-obra > div {
+  margin-bottom: 18px;
+}
+
+#form-obra label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+#form-obra input:not([type="checkbox"]),
+#form-obra select,
+#form-obra textarea {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font: inherit;
+}
+
+#form-obra textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+#form-obra input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+#preview-imagem:not([hidden]) {
+  display: block;
+  max-width: 150px;
+  height: auto;
+  margin-top: 12px;
+  border-radius: 5px;
+}
+
+.admin-botoes {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* Ocultar a prévia quando não houver imagem */
+#preview-imagem[hidden] {
+  display: none;
+}
+
+/* Botões Salvar e Cancelar */
+.admin-botoes button,
+.admin-botoes a {
+  display: inline-block;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.admin-botoes button {
+  background-color: #2563eb;
+  color: white;
+  border: 1px solid #2563eb;
+}
+
+.admin-botoes a {
+  background-color: #f3f4f6;
+  color: #333;
+  border: 1px solid #ccc;
+}
+
+.admin-botoes button:hover {
+  background-color: #1d4ed8;
+}
+
+.admin-botoes a:hover {
+  background-color: #e5e7eb;
+}
