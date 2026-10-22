@@ -1,21 +1,141 @@
-<!-- Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Início — Museu</title>
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages/home.css">
-</head>
-<body>
-  <div id="header"></div>
-  <main class="container">
-    <h1>Início</h1>
-    <p class="em-construcao">Página em construção — responsável: M2.</p>
-  </main>
-  <div id="footer"></div>
-  <script type="module" src="js/pages/home.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Início — Museu de Artes</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages/home.css" />
+  </head>
+  <body>
+    <!-- Cabeçalho injetado pelo header.js -->
+    <div id="header"></div>
+
+    <main class="container" style="padding-block: var(--espaco-5)">
+      <!-- Seção Hero / Banner Principal -->
+      <section class="hero-section">
+        <span class="tag" style="margin-bottom: var(--espaco-1); display: inline-block"
+          >Expressão • História • Cultura</span
+        >
+        <h1 class="hero-titulo">A arte que transforma e perpetua o olhar humano.</h1>
+        <p class="hero-descricao">
+          Explore coleções, galerias e movimentos artísticos que moldaram a sensibilidade e a
+          estética através dos séculos.
+        </p>
+        <div style="display: flex; gap: var(--espaco-2); justify-content: center; flex-wrap: wrap">
+          <a href="pages/galeria.html" class="botao">Explorar o acervo &rarr;</a>
+        </div>
+      </section>
+
+      <!-- PARTE 1: Galerias em Destaque (Acervo) -->
+      <section class="home-secao">
+        <div class="secao-cabecalho">
+          <h2 class="secao-titulo">Coleções e Galerias</h2>
+          <a href="pages/galeria.html" class="secao-link">Ver todo o acervo &rarr;</a>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <h3 class="card-titulo">Pintura Clássica</h3>
+            <p class="card-texto">Obras-primas dos grandes mestres da Renascença ao Romantismo.</p>
+            <a href="pages/galeria.html" class="card-link">Ver obras &rarr;</a>
+          </article>
+          <article class="card">
+            <h3 class="card-titulo">Arte Contemporânea</h3>
+            <p class="card-texto">
+              Instalações, novas mídias e expressões artísticas do nosso tempo.
+            </p>
+            <a href="pages/galeria.html" class="card-link">Ver obras &rarr;</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- PARTE 2: Linha do Tempo (Movimentos Artísticos) -->
+      <section class="home-secao">
+        <div class="secao-cabecalho">
+          <div>
+            <h2 class="secao-titulo">Linha do tempo</h2>
+            <p class="secao-subtitulo">
+              Uma jornada pelos grandes movimentos que redefiniram a arte.
+            </p>
+          </div>
+          <a href="pages/linha-do-tempo.html" class="secao-link">História da arte &rarr;</a>
+        </div>
+
+        <div class="timeline-linear">
+          <div class="timeline-step">
+            <div class="timeline-icon">🏛️</div>
+            <span class="timeline-ano">Renascimento</span>
+            <p class="timeline-texto">Retorno ao classicismo e perspectiva</p>
+          </div>
+
+          <div class="timeline-step">
+            <div class="timeline-icon">🎨</div>
+            <span class="timeline-ano">Impressionismo</span>
+            <p class="timeline-texto">A luz e o instante ao ar livre</p>
+          </div>
+
+          <div class="timeline-step">
+            <div class="timeline-icon">🌀</div>
+            <span class="timeline-ano">Modernismo</span>
+            <p class="timeline-texto">Ruptura com as formas tradicionais</p>
+          </div>
+
+          <div class="timeline-step">
+            <div class="timeline-icon">✨</div>
+            <span class="timeline-ano">Contemporâneo</span>
+            <p class="timeline-texto">Diversidade de suportes e conceitos</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- PARTE 3: Exposições Temporárias -->
+      <section class="home-secao">
+        <div class="secao-cabecalho">
+          <h2 class="secao-titulo">Exposições em destaque</h2>
+          <a href="pages/exposicoes.html" class="secao-link">Ver todas &rarr;</a>
+        </div>
+
+        <div class="grid">
+          <article class="card">
+            <span class="tag" style="width: fit-content; margin-bottom: var(--espaco-1)"
+              >Em cartaz</span
+            >
+            <h3 class="card-titulo">Cores da Alma</h3>
+            <p class="card-texto">Uma retrosspetiva imersiva sobre o uso da cor na arte moderna.</p>
+            <button class="botao" style="width: 100%; margin-top: auto">Reservar bilhete</button>
+          </article>
+        </div>
+      </section>
+
+      <!-- PARTE 4: Próximos Eventos e Oficinas -->
+      <section class="home-secao" style="border-bottom: none">
+        <div class="secao-cabecalho">
+          <h2 class="secao-titulo">Agenda cultural</h2>
+          <a href="pages/eventos.html" class="secao-link">Ver agenda &rarr;</a>
+        </div>
+        <div class="grid">
+          <article class="card">
+            <span class="tag" style="width: fit-content; margin-bottom: var(--espaco-1)"
+              >15 MAI</span
+            >
+            <h3 class="card-titulo">Oficina de Pintura ao Ar Livre</h3>
+            <p class="card-texto">Práticas de aquisição de luz e sombra nos jardins do museu.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <!-- Rodapé injetado pelo footer.js -->
+    <div id="footer"></div>
+
+    <!-- Scripts para carregar dinamicamente o header e o footer -->
+    <script type="module">
+      import { montarHeader } from './js/components/header.js';
+      import { montarFooter } from './js/components/footer.js';
+
+      montarHeader();
+      montarFooter();
+    </script>
+  </body>
 </html>

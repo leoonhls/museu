@@ -1,1 +1,256 @@
 /* Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 */
+
+.hero-section {
+  margin-block: var(--espaco-5);
+  text-align: center;
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+.hero-titulo {
+  font-size: 3rem;
+  margin-bottom: var(--espaco-2);
+  letter-spacing: -0.5px;
+}
+
+.hero-descricao {
+  color: var(--cor-texto-suave);
+  font-size: 1.15rem;
+  line-height: 1.6;
+  margin-bottom: var(--espaco-3);
+}
+
+.home-secao {
+  border-bottom: 1px solid var(--cor-borda);
+  padding-bottom: var(--espaco-4);
+  margin-bottom: var(--espaco-5);
+}
+
+.secao-cabecalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: var(--espaco-3);
+}
+
+.secao-titulo {
+  font-size: 1.75rem;
+}
+
+.secao-link {
+  color: var(--cor-destaque);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.secao-link:hover {
+  text-decoration: underline;
+}
+
+/* Linha do Tempo Linear Horizontal */
+.timeline-linear {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  margin-top: var(--espaco-4);
+  gap: var(--espaco-2);
+  overflow-x: auto;
+  padding-bottom: var(--espaco-2);
+}
+
+.timeline-linear::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  left: 40px;
+  right: 40px;
+  height: 1px;
+  background-color: var(--cor-destaque);
+  z-index: 1;
+  opacity: 0.4;
+}
+
+.timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-width: 140px;
+}
+
+.timeline-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: var(--cor-superficie);
+  border: 1px solid var(--cor-destaque);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  margin-bottom: var(--espaco-2);
+}
+
+.timeline-ano {
+  font-family: var(--fonte-titulo);
+  font-weight: 600;
+  color: var(--cor-destaque);
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+
+.timeline-texto {
+  color: var(--cor-texto-suave);
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .timeline-linear {
+    justify-content: flex-start;
+  }
+  .timeline-linear::before {
+    display: none;
+  }
+}
+
+/* Torna a seção hero o contexto de posicionamento do fundo */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--espaco-5);
+}
+
+/* Torna a seção hero o contexto de posicionamento do fundo */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--espaco-5);
+}
+
+/* Insere a verdadeira espiral áurea de Fibonacci ao fundo */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 500px;
+  /* SVG detalhado com os arcos da proporção áurea e tom dourado suave */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23d4af37' stroke-width='1.5' opacity='0.18'%3E%3Cpath d='M250,250 A50,50 0 0,1 200,250 A50,50 0 0,1 150,200 A100,100 0 0,1 250,100 A150,150 0 0,1 400,250 A250,250 0 0,1 150,500'/%3E%3Crect x='200' y='200' width='50' height='50' stroke-dasharray='3,3'/%3E%3Crect x='150' y='200' width='100' height='100' stroke-dasharray='3,3'/%3E%3Crect x='150' y='100' width='150' height='150' stroke-dasharray='3,3'/%3E%3Crect x='150' y='100' width='250' height='250' stroke-dasharray='3,3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Garante que os textos e botões fiquem acima da espiral */
+.hero-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Responsividade automática para a seção Hero */
+@media (max-width: 768px) {
+  .hero-titulo {
+    font-size: 2rem !important; /* Reduz o título em celulares */
+  }
+
+  .hero-descricao {
+    font-size: 1rem !important;
+  }
+
+  .hero-section::before {
+    width: 300px;
+    height: 300px;
+    opacity: 0.9; /* Deixa a espiral mais suave em telas pequenas */
+  }
+
+  /* Responsividade do Header e Menu Sanduíche */
+  @media (max-width: 768px) {
+    #menu-toggle {
+      display: block !important;
+    }
+
+    #nav-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: var(--cor-superficie);
+      flex-direction: column;
+      padding: var(--espaco-3);
+      border-bottom: 1px solid var(--cor-borda);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      z-index: 99;
+    }
+  }
+
+  @media (min-width: 769px) {
+    #nav-menu {
+      display: flex !important;
+    }
+  }
+}
+/* Seção Hero otimizada para exibir a espiral e manter proporções em qualquer tela */
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--espaco-4);
+  margin-bottom: var(--espaco-5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh; /* Garante altura proporcional em celulares e desktops */
+}
+
+/* Espiral de Fibonacci ajustada para aparecer visível em telas pequenas */
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 420px;
+  height: 420px;
+  /* SVG da proporção áurea com opacidade mais destacada para aparecer bem no fundo escuro */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg' fill='none' stroke='%23d4af37' stroke-width='2' opacity='0.28'%3E%3Cpath d='M250,250 A50,50 0 0,1 200,250 A50,50 0 0,1 150,200 A100,100 0 0,1 250,100 A150,150 0 0,1 400,250 A250,250 0 0,1 150,500'/%3E%3Crect x='200' y='200' width='50' height='50' stroke-dasharray='3,3'/%3E%3Crect x='150' y='200' width='100' height='100' stroke-dasharray='3,3'/%3E%3Crect x='150' y='100' width='150' height='150' stroke-dasharray='3,3'/%3E%3Crect x='150' y='100' width='250' height='250' stroke-dasharray='3,3'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Garante que os elementos internos fiquem acima da espiral */
+.hero-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-titulo {
+  font-size: 2.25rem;
+  margin-bottom: var(--espaco-2);
+  letter-spacing: -0.5px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.hero-descricao {
+  color: var(--cor-texto-suave);
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin-bottom: var(--espaco-3);
+  text-align: center;
+  max-width: 600px;
+}

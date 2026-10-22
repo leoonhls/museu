@@ -1,24 +1,24 @@
 /* Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 */
-/* Versão provisória: o M2 reescreve os valores, mas os nomes das variáveis são definitivos. */
-:root {
-  --cor-fundo: #faf7f2;
-  --cor-superficie: #ffffff;
-  --cor-texto: #1f1d1a;
-  --cor-texto-suave: #5c564e;
-  --cor-destaque: #8c2f1b;
-  --cor-borda: #e4ddd2;
-  --cor-sucesso: #2e7d32;
-  --cor-erro: #c62828;
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap');
 
-  --fonte-titulo: Georgia, serif;
-  --fonte-texto: system-ui, sans-serif;
+:root {
+  --cor-fundo: #0d0d0d; /* Fundo preto elegante de galeria */
+  --cor-superficie: #171717; /* Tom de superfície para cards e blocos */
+  --cor-texto: #f5f5f5; /* Texto claro principal */
+  --cor-texto-suave: #a3a3a3; /* Texto secundário / descrições */
+  --cor-destaque: #d4af37; /* Dourado / Ocre sofisticado para arte */
+  --cor-borda: #262626; /* Linhas e divisores discretos */
+
+  --fonte-titulo: 'Playfair Display', Georgia, serif;
+  --fonte-texto: 'Inter', system-ui, -apple-system, sans-serif;
 
   --espaco-1: 0.5rem;
   --espaco-2: 1rem;
   --espaco-3: 1.5rem;
   --espaco-4: 2.5rem;
+  --espaco-5: 4rem;
 
-  --raio: 8px;
+  --raio: 6px;
   --largura-max: 1200px;
 }
 
@@ -26,6 +26,24 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: var(--cor-fundo);
+  color: var(--cor-texto);
+  font-family: var(--fonte-texto);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--fonte-titulo);
+  line-height: 1.2;
+  font-weight: 400;
 }
 
 img {
@@ -38,7 +56,13 @@ img {
   margin-inline: auto;
 }
 
-.em-construcao {
-  color: var(--cor-texto-suave);
-  font-style: italic;
+/* Garante que elementos respeitem os limites de qualquer tela */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+body {
+  overflow-x: hidden;
 }
