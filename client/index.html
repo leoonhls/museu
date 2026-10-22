@@ -1,199 +1,99 @@
-<!-- Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 -->
 <!doctype html>
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Início — Museu da Computação</title>
+    <title>Início — Museu de Artes</title>
     <link rel="stylesheet" href="css/base.css" />
     <link rel="stylesheet" href="css/components.css" />
     <link rel="stylesheet" href="css/pages/home.css" />
   </head>
   <body>
+    <!-- Cabeçalho injetado pelo header.js -->
     <div id="header"></div>
 
-    <main class="container" style="padding-block: var(--espaco-4)">
+    <main class="container" style="padding-block: var(--espaco-5)">
       <!-- Seção Hero / Banner Principal -->
-      <section
-        style="
-          margin-bottom: var(--espaco-5);
-          text-align: center;
-          max-width: 800px;
-          margin-inline: auto;
-        "
-      >
+      <section class="hero-section">
         <span class="tag" style="margin-bottom: var(--espaco-1); display: inline-block"
-          >Memória • Tecnologia • Conhecimento</span
+          >Expressão • História • Cultura</span
         >
-        <h1
-          style="
-            font-family: var(--fonte-titulo);
-            font-size: 2.75rem;
-            margin-bottom: var(--espaco-2);
-            letter-spacing: -0.5px;
-          "
-        >
-          A história da computação também é a nossa história.
-        </h1>
-        <p
-          style="
-            color: var(--cor-texto-suave);
-            font-size: 1.15rem;
-            line-height: 1.6;
-            margin-bottom: var(--espaco-3);
-          "
-        >
-          Explore equipamentos, mídias e ideias que transformaram a forma como vivemos e nos
-          conectamos.
+        <h1 class="hero-titulo">A arte que transforma e perpetua o olhar humano.</h1>
+        <p class="hero-descricao">
+          Explore coleções, galerias e movimentos artísticos que moldaram a sensibilidade e a
+          estética através dos séculos.
         </p>
-        <div
-          style="display: flex; gap: var(--espaco-2); justify-content: center; flex-wrap: wrap"
-        ></div>
+        <div style="display: flex; gap: var(--espaco-2); justify-content: center; flex-wrap: wrap">
+          <a href="pages/galeria.html" class="botao">Explorar o acervo &rarr;</a>
+        </div>
       </section>
 
-      <!-- PARTE 1: Explore o Acervo -->
-      <section class="home-secao" style="margin-bottom: var(--espaco-5)">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: var(--espaco-3);
-          "
-        >
-          <h2 style="font-family: var(--fonte-titulo); font-size: 1.75rem">Explore o acervo</h2>
-          <a
-            href="galeria.html"
-            style="
-              color: var(--cor-destaque);
-              text-decoration: none;
-              font-weight: 500;
-              font-size: 0.95rem;
-            "
-            >Ver todo o acervo &rarr;</a
-          >
+      <!-- PARTE 1: Galerias em Destaque (Acervo) -->
+      <section class="home-secao">
+        <div class="secao-cabecalho">
+          <h2 class="secao-titulo">Coleções e Galerias</h2>
+          <a href="pages/galeria.html" class="secao-link">Ver todo o acervo &rarr;</a>
         </div>
-        <div class="grid" id="acervo-destaque">
+        <div class="grid">
           <article class="card">
-            <h3
-              style="
-                font-family: var(--fonte-titulo);
-                font-size: 1.25rem;
-                margin-bottom: var(--espaco-1);
-              "
-            >
-              Hardware
-            </h3>
-            <p
-              style="
-                color: var(--cor-texto-suave);
-                font-size: 0.95rem;
-                margin-bottom: var(--espaco-2);
-              "
-            >
-              Processadores, placas, periféricos e os primeiros computadores.
+            <h3 class="card-titulo">Pintura Clássica</h3>
+            <p class="card-texto">Obras-primas dos grandes mestres da Renascença ao Romantismo.</p>
+            <a href="pages/galeria.html" class="card-link">Ver obras &rarr;</a>
+          </article>
+          <article class="card">
+            <h3 class="card-titulo">Arte Contemporânea</h3>
+            <p class="card-texto">
+              Instalações, novas mídias e expressões artísticas do nosso tempo.
             </p>
-            <a
-              href="galeria.html"
-              style="
-                color: var(--cor-primaria);
-                text-decoration: none;
-                font-weight: 600;
-                font-size: 0.9rem;
-              "
-              >Ver itens &rarr;</a
-            >
+            <a href="pages/galeria.html" class="card-link">Ver obras &rarr;</a>
           </article>
         </div>
       </section>
 
-      <!-- PARTE 2: Linha do Tempo (Linear Horizontal) -->
-      <section class="home-secao" style="margin-bottom: var(--espaco-5)">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: var(--espaco-3);
-          "
-        >
+      <!-- PARTE 2: Linha do Tempo (Movimentos Artísticos) -->
+      <section class="home-secao">
+        <div class="secao-cabecalho">
           <div>
-            <h2
-              style="font-family: var(--fonte-titulo); font-size: 1.75rem; margin-bottom: 0.25rem"
-            >
-              Linha do tempo
-            </h2>
-            <p style="color: var(--cor-texto-suave); font-size: 0.95rem">
-              Uma jornada de mais de 70 anos de inovações que construíram a computação moderna.
+            <h2 class="secao-titulo">Linha do tempo</h2>
+            <p class="secao-subtitulo">
+              Uma jornada pelos grandes movimentos que redefiniram a arte.
             </p>
           </div>
-          <a
-            href="linha-do-tempo.html"
-            style="
-              color: var(--cor-destaque);
-              text-decoration: none;
-              font-weight: 500;
-              font-size: 0.95rem;
-            "
-          ></a>
+          <a href="pages/linha-do-tempo.html" class="secao-link">História da arte &rarr;</a>
         </div>
 
         <div class="timeline-linear">
           <div class="timeline-step">
-            <div class="timeline-icon">💡</div>
-            <span class="timeline-ano">1940-1950</span>
-            <p class="timeline-texto">Válvulas e primeiros computadores</p>
+            <div class="timeline-icon">🏛️</div>
+            <span class="timeline-ano">Renascimento</span>
+            <p class="timeline-texto">Retorno ao classicismo e perspectiva</p>
           </div>
 
           <div class="timeline-step">
-            <div class="timeline-icon">🖥️</div>
-            <span class="timeline-ano">1960-1970</span>
-            <p class="timeline-texto">Transistores e minicomputadores</p>
+            <div class="timeline-icon">🎨</div>
+            <span class="timeline-ano">Impressionismo</span>
+            <p class="timeline-texto">A luz e o instante ao ar livre</p>
           </div>
 
           <div class="timeline-step">
-            <div class="timeline-icon">💻</div>
-            <span class="timeline-ano">1980-1990</span>
-            <p class="timeline-texto">Microcomputadores e redes</p>
+            <div class="timeline-icon">🌀</div>
+            <span class="timeline-ano">Modernismo</span>
+            <p class="timeline-texto">Ruptura com as formas tradicionais</p>
           </div>
 
           <div class="timeline-step">
-            <div class="timeline-icon">🌐</div>
-            <span class="timeline-ano">2000-2010</span>
-            <p class="timeline-texto">Internet e mobilidade</p>
-          </div>
-
-          <div class="timeline-step">
-            <div class="timeline-icon">☁️</div>
-            <span class="timeline-ano">2010-atual</span>
-            <p class="timeline-texto">Nuvens, dados e inteligência artificial</p>
+            <div class="timeline-icon">✨</div>
+            <span class="timeline-ano">Contemporâneo</span>
+            <p class="timeline-texto">Diversidade de suportes e conceitos</p>
           </div>
         </div>
       </section>
 
-      <!-- PARTE 3: Exposições em Destaque -->
-      <section class="home-secao" style="margin-bottom: var(--espaco-5)">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: var(--espaco-3);
-          "
-        >
-          <h2 style="font-family: var(--fonte-titulo); font-size: 1.75rem">
-            Exposições em destaque
-          </h2>
-          <a
-            href="exposicoes.html"
-            style="
-              color: var(--cor-destaque);
-              text-decoration: none;
-              font-weight: 500;
-              font-size: 0.95rem;
-            "
-            >Ver todas as exposições &rarr;</a
-          >
+      <!-- PARTE 3: Exposições Temporárias -->
+      <section class="home-secao">
+        <div class="secao-cabecalho">
+          <h2 class="secao-titulo">Exposições em destaque</h2>
+          <a href="pages/exposicoes.html" class="secao-link">Ver todas &rarr;</a>
         </div>
 
         <div class="grid">
@@ -201,80 +101,41 @@
             <span class="tag" style="width: fit-content; margin-bottom: var(--espaco-1)"
               >Em cartaz</span
             >
-            <h3
-              style="
-                font-family: var(--fonte-titulo);
-                font-size: 1.25rem;
-                margin-bottom: var(--espaco-1);
-              "
-            >
-              Da sala de aula ao mundo
-            </h3>
-            <p
-              style="
-                color: var(--cor-texto-suave);
-                font-size: 0.95rem;
-                margin-bottom: var(--espaco-2);
-              "
-            >
-              A evolução dos computadores na UFU[cite: 1].
-            </p>
-            <button class="botao" style="width: 100%">Saiba mais</button>
+            <h3 class="card-titulo">Cores da Alma</h3>
+            <p class="card-texto">Uma retrosspetiva imersiva sobre o uso da cor na arte moderna.</p>
+            <button class="botao" style="width: 100%; margin-top: auto">Reservar bilhete</button>
           </article>
         </div>
       </section>
 
-      <!-- PARTE 4: Próximos Eventos -->
-      <section class="home-secao">
-        <div
-          style="
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-bottom: var(--espaco-3);
-          "
-        >
-          <h2 style="font-family: var(--fonte-titulo); font-size: 1.75rem">Próximos eventos</h2>
-          <a
-            href="eventos.html"
-            style="
-              color: var(--cor-destaque);
-              text-decoration: none;
-              font-weight: 500;
-              font-size: 0.95rem;
-            "
-            >Ver todos os eventos &rarr;</a
-          >
+      <!-- PARTE 4: Próximos Eventos e Oficinas -->
+      <section class="home-secao" style="border-bottom: none">
+        <div class="secao-cabecalho">
+          <h2 class="secao-titulo">Agenda cultural</h2>
+          <a href="pages/eventos.html" class="secao-link">Ver agenda &rarr;</a>
         </div>
-        <div class="grid" id="eventos-lista">
+        <div class="grid">
           <article class="card">
             <span class="tag" style="width: fit-content; margin-bottom: var(--espaco-1)"
-              >22 ABR</span
+              >15 MAI</span
             >
-            <h3
-              style="
-                font-family: var(--fonte-titulo);
-                font-size: 1.25rem;
-                margin-bottom: var(--espaco-1);
-              "
-            >
-              Visita guiada ao acervo
-            </h3>
-            <p
-              style="
-                color: var(--cor-texto-suave);
-                font-size: 0.95rem;
-                margin-bottom: var(--espaco-2);
-              "
-            >
-              Conheça de perto os equipamentos históricos do museu.
-            </p>
+            <h3 class="card-titulo">Oficina de Pintura ao Ar Livre</h3>
+            <p class="card-texto">Práticas de aquisição de luz e sombra nos jardins do museu.</p>
           </article>
         </div>
       </section>
     </main>
 
+    <!-- Rodapé injetado pelo footer.js -->
     <div id="footer"></div>
-    <script type="module" src="js/pages/home.js"></script>
+
+    <!-- Scripts para carregar dinamicamente o header e o footer -->
+    <script type="module">
+      import { montarHeader } from './js/components/header.js';
+      import { montarFooter } from './js/components/footer.js';
+
+      montarHeader();
+      montarFooter();
+    </script>
   </body>
 </html>
