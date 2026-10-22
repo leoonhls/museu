@@ -11,9 +11,57 @@
 </head>
 <body>
   <div id="header"></div>
-  <main class="container">
-    <h1>Acervo</h1>
-    <p class="em-construcao">Página em construção — responsável: M3.</p>
+  <main class="container galeria">
+    <h1 class="galeria__titulo">Acervo</h1>
+
+    <button type="button" class="botao botao--secundario galeria__abrir-filtros"
+      aria-expanded="false" aria-controls="filtros">Filtrar</button>
+
+    <form id="filtros" class="galeria__filtros" role="search">
+      <div class="campo">
+        <label for="busca">Buscar</label>
+        <input type="search" id="busca" name="busca" placeholder="Título ou artista">
+      </div>
+
+      <div class="campo">
+        <label for="categoria">Categoria</label>
+        <select id="categoria" name="categoria"></select>
+      </div>
+
+      <div class="campo">
+        <label for="artista">Artista</label>
+        <select id="artista" name="artista"></select>
+      </div>
+
+      <fieldset class="galeria__periodo">
+        <legend>Período</legend>
+        <div class="campo">
+          <label for="anoMin">De</label>
+          <input type="number" id="anoMin" name="anoMin" min="1" step="1" placeholder="1500">
+        </div>
+        <div class="campo">
+          <label for="anoMax">Até</label>
+          <input type="number" id="anoMax" name="anoMax" min="1" step="1" placeholder="1950">
+        </div>
+      </fieldset>
+
+      <div class="campo">
+        <label for="ordem">Ordenar por</label>
+        <select id="ordem" name="ordem">
+          <option value="">Título A–Z</option>
+          <option value="antigas">Mais antigas</option>
+          <option value="recentes">Mais recentes</option>
+        </select>
+      </div>
+
+      <button type="button" id="limpar-filtros" class="botao botao--secundario">Limpar filtros</button>
+    </form>
+
+    <section class="galeria__resultados" aria-labelledby="contador">
+      <p id="contador" aria-live="polite"></p>
+      <div id="grid-obras" class="grid"></div>
+      <nav id="paginacao" class="galeria__paginacao" aria-label="Páginas do acervo"></nav>
+    </section>
   </main>
   <div id="footer"></div>
   <script type="module" src="../js/pages/galeria.js"></script>
