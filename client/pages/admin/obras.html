@@ -13,7 +13,54 @@
   <div id="header"></div>
   <main class="container">
     <h1>Gerenciar acervo</h1>
-    <p class="em-construcao">Página em construção — responsável: M8.</p>
+    
+<div class="admin-acoes">
+  <label for="busca-obras">Pesquisar obras</label>
+
+  <input
+    type="search"
+    id="busca-obras"
+    placeholder="Digite o título ou artista"
+  >
+
+  <a href="obra-form.html" class="btn">
+    + Nova obra
+  </a>
+</div>
+
+<div class="admin-tabela">
+  <table>
+    <thead>
+      <tr>
+        <th>Imagem</th>
+        <th>Título</th>
+        <th>Artista</th>
+        <th>Categoria</th>
+        <th>Ano</th>
+        <th>Em exibição</th>
+        <th>Ações</th>
+      </tr>
+    </thead>
+
+    <tbody id="lista-obras">
+      <!-- O JavaScript preencherá as obras aqui -->
+    </tbody>
+  </table>
+</div>
+
+<div class="admin-paginacao">
+  <button type="button" id="pagina-anterior">
+    Anterior
+  </button>
+
+  <span id="info-pagina"></span>
+
+  <button type="button" id="proxima-pagina">
+    Próxima
+  </button>
+</div>
+
+
   </main>
   <div id="footer"></div>
   <script type="module" src="../../js/pages/admin-obras.js"></script>

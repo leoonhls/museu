@@ -13,7 +13,74 @@
   <div id="header"></div>
   <main class="container">
     <h1>Obra — Admin</h1>
-    <p class="em-construcao">Página em construção — responsável: M8.</p>
+    
+<form id="form-obra">
+  <div>
+    <label for="titulo">Título da obra *</label>
+    <input type="text" id="titulo" name="titulo"
+           maxlength="150" required>
+  </div>
+
+  <div>
+    <label for="artista">Artista *</label>
+    <select id="artista" name="artista_id" required>
+      <option value="">Selecione um artista</option>
+    </select>
+  </div>
+
+  <div>
+    <label for="categoria">Categoria *</label>
+    <select id="categoria" name="categoria_id" required>
+      <option value="">Selecione uma categoria</option>
+    </select>
+  </div>
+  
+<div>
+  <label for="ano">Ano da obra *</label>
+  <input type="number" id="ano" name="ano"
+         min="1" required>
+</div>
+
+<div>
+  <label for="tecnica">Técnica *</label>
+  <input type="text" id="tecnica" name="tecnica" required>
+</div>
+
+<div>
+  <label for="dimensoes">Dimensões</label>
+  <input type="text" id="dimensoes" name="dimensoes">
+</div>
+
+<div>
+  <label for="descricao">Descrição *</label>
+  <textarea id="descricao" name="descricao"
+            minlength="20" maxlength="2000"
+            required></textarea>
+</div>
+
+<div>
+  <label for="imagem_url">URL da imagem *</label>
+  <input type="text" id="imagem_url"
+         name="imagem_url" required>
+  <img id="preview-imagem" alt="Prévia da obra"
+       width="150" hidden>
+</div>
+
+<div>
+  <label>
+    <input type="checkbox" id="em_exibicao"
+           name="em_exibicao">
+    Obra em exibição
+  </label>
+</div>
+
+<div class="admin-botoes">
+  <button type="submit">Salvar obra</button>
+  <a href="obras.html" id="cancelar">Cancelar</a>
+</div>
+
+</form>
+
   </main>
   <div id="footer"></div>
   <script type="module" src="../../js/pages/admin-obra-form.js"></script>
