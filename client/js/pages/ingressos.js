@@ -3,7 +3,7 @@ import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { exigirLogin } from '../auth.js';
 import { listarEventos, criarReserva } from '../api.js';
-import { PRECO_INTEIRA, MAX_INGRESSOS, DIAS_ANTECEDENCIA_MAX } from '../config.js';
+import { PRECO_INTEIRA, MAX_INGRESSOS, DIAS_ANTECEDENCIA_MAX, DIA_FECHADO } from '../config.js';
 import { mostrarToast } from '../components/toast.js';
 
 montarHeader();
@@ -23,6 +23,7 @@ if (usuario) {
   const precoTotal = document.querySelector('#preco-total');
   const avisoData = document.querySelector('#aviso-data');
   const mensagem = document.querySelector('#mensagem-reserva');
+  const indicadorEtapa = document.querySelector('#indicador-etapa');
   const etapa1 = formulario;
   const etapa2 = document.querySelector('#etapa-2');
   const etapa3 = document.querySelector('#etapa-3');
@@ -194,7 +195,7 @@ if (usuario) {
         );
       }
 
-      if (dataEscolhida.getDay() === 1) {
+      if (dataEscolhida.getDay() === DIA_FECHADO) {
         throw new Error('O museu fecha às segundas-feiras.');
       }
     }
@@ -242,6 +243,7 @@ if (usuario) {
       mostrarResumo();
       etapa1.hidden = true;
       etapa2.hidden = false;
+      indicadorEtapa.textContent = 'Etapa 2 de 3 — Confira os dados';
       mensagem.textContent = '';
     } catch (erro) {
       mensagem.textContent = erro.message;
@@ -265,6 +267,8 @@ if (usuario) {
 
       etapa2.hidden = true;
       etapa3.hidden = false;
+      indicadorEtapa.textContent = 'Etapa 3 de 3 — Reserva confirmada';
+      mensagem.textContent = '';
 
       mostrarToast('Reserva confirmada com sucesso!');
     } catch (erro) {
@@ -278,6 +282,8 @@ if (usuario) {
   document.querySelector('#voltar-etapa-1').addEventListener('click', () => {
     etapa2.hidden = true;
     etapa1.hidden = false;
+    indicadorEtapa.textContent = 'Etapa 1 de 3 — Escolha da visita';
+    mensagem.textContent = '';
   });
 
   document.querySelector('#confirmar-reserva').addEventListener('click', confirmarReserva);
@@ -286,6 +292,9 @@ if (usuario) {
   seletorEvento.addEventListener('change', atualizarPreco);
   qtdInteira.addEventListener('input', atualizarPreco);
   qtdMeia.addEventListener('input', atualizarPreco);
+
+  qtdInteira.max = MAX_INGRESSOS;
+  qtdMeia.max = MAX_INGRESSOS;
 
   eventosDisponiveis = listarEventos();
   atualizarEventos();

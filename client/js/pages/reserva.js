@@ -26,12 +26,18 @@ if (usuario) {
   const parametros = new URLSearchParams(location.search);
   const codigoProcurado = parametros.get('codigo');
 
-  const reservas = minhasReservas();
-
-  const reserva = codigoProcurado ? reservas.find((item) => item.codigo === codigoProcurado) : null;
+  let reserva = null;
+  mensagem.textContent = '';
+  try {
+    reserva = codigoProcurado
+      ? minhasReservas().find((item) => item.codigo === codigoProcurado)
+      : null;
+  } catch (erro) {
+    mensagem.textContent = erro.message;
+  }
 
   if (!reserva) {
-    mensagem.textContent = 'Não encontramos essa reserva. Confira o link ou faça uma nova reserva.';
+    mensagem.textContent ||= 'Não encontramos essa reserva. Confira o link ou faça uma nova reserva.';
   } else {
     mensagem.textContent = 'Sua reserva foi encontrada!';
     dados.hidden = false;

@@ -18,8 +18,10 @@
 
       <section id="area-reserva" aria-label="Reserva de ingressos">
         <div class="etapas-reserva">
-          <p>Etapa 1 de 3 — Escolha da visita</p>
+          <p id="indicador-etapa">Etapa 1 de 3 — Escolha da visita</p>
         </div>
+
+        <p id="mensagem-reserva" role="status" aria-live="polite"></p>
 
         <form id="form-reserva">
           <div class="campo-reserva">
@@ -72,8 +74,6 @@
           <p id="resumo-quantidade" aria-live="polite">Total de ingressos: 1</p>
 
           <p id="preco-total" aria-live="polite">Valor estimado: R$ 30,00</p>
-
-          <p id="mensagem-reserva" role="status" aria-live="polite"></p>
 
           <button type="button" id="proxima-etapa">Continuar</button>
         </form>
