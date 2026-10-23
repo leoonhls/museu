@@ -1,4 +1,4 @@
-// Responsável: M4 — dados de exemplo; substituir pelo acervo real
+// Responsável: M4 — categorias do acervo do museu
 export const categorias = [
   { id: 1, nome: 'Pintura' },
   { id: 2, nome: 'Escultura' },
