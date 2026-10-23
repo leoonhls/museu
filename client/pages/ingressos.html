@@ -1,21 +1,102 @@
 <!-- Responsável: M6 — veja a seção "M6 — Ingressos" no Guia da Entrega 1 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ingressos — Museu</title>
-  <link rel="stylesheet" href="../css/base.css">
-  <link rel="stylesheet" href="../css/components.css">
-  <link rel="stylesheet" href="../css/pages/ingressos.css">
-</head>
-<body>
-  <div id="header"></div>
-  <main class="container">
-    <h1>Ingressos</h1>
-    <p class="em-construcao">Página em construção — responsável: M6.</p>
-  </main>
-  <div id="footer"></div>
-  <script type="module" src="../js/pages/ingressos.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ingressos — Museu</title>
+    <link rel="stylesheet" href="../css/base.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    <link rel="stylesheet" href="../css/pages/ingressos.css" />
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <main class="container">
+      <h1>Ingressos</h1>
+      <p>Escolha sua visita ao museu e reserve seus ingressos.</p>
+
+      <section id="area-reserva" aria-label="Reserva de ingressos">
+        <div class="etapas-reserva">
+          <p>Etapa 1 de 3 — Escolha da visita</p>
+        </div>
+
+        <form id="form-reserva">
+          <div class="campo-reserva">
+            <label for="tipo-visita">Tipo de visita</label>
+            <select id="tipo-visita" name="tipo-visita" required>
+              <option value="normal">Visita ao museu</option>
+              <option value="evento">Evento</option>
+            </select>
+          </div>
+
+          <div class="campo-reserva" id="campo-evento" hidden>
+            <label for="evento">Evento</label>
+            <select id="evento" name="evento">
+              <option value="">Selecione um evento</option>
+            </select>
+          </div>
+
+          <div class="campo-reserva">
+            <label for="data-visita">Data da visita</label>
+            <input type="date" id="data-visita" name="data-visita" required />
+            <small id="aviso-data"></small>
+          </div>
+
+          <div class="campo-reserva">
+            <label for="qtd-inteira">Ingressos inteiros</label>
+            <input
+              type="number"
+              id="qtd-inteira"
+              name="qtd-inteira"
+              min="0"
+              max="10"
+              value="1"
+              required
+            />
+          </div>
+
+          <div class="campo-reserva">
+            <label for="qtd-meia">Ingressos meia-entrada</label>
+            <input
+              type="number"
+              id="qtd-meia"
+              name="qtd-meia"
+              min="0"
+              max="10"
+              value="0"
+              required
+            />
+          </div>
+
+          <p id="resumo-quantidade" aria-live="polite">Total de ingressos: 1</p>
+
+          <p id="preco-total" aria-live="polite">Valor estimado: R$ 30,00</p>
+
+          <p id="mensagem-reserva" role="status" aria-live="polite"></p>
+
+          <button type="button" id="proxima-etapa">Continuar</button>
+        </form>
+
+        <div id="etapa-2" hidden>
+          <h2>Etapa 2 de 3 — Confira os dados</h2>
+          <div id="resumo-reserva"></div>
+
+          <button type="button" id="voltar-etapa-1">Voltar e editar</button>
+          <button type="button" id="confirmar-reserva">Confirmar reserva</button>
+        </div>
+
+        <div id="etapa-3" hidden>
+          <h2>Etapa 3 de 3 — Reserva confirmada</h2>
+          <p>Sua reserva foi registrada.</p>
+          <p id="codigo-reserva"></p>
+          <a id="link-comprovante" href="reserva.html"> Ver comprovante </a>
+        </div>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+
+    <script type="module" src="../js/pages/ingressos.js"></script>
+  </body>
 </html>
