@@ -1,1 +1,81 @@
 /* Responsável: M3 — veja a seção "M3 — Galeria" no Guia da Entrega 1 */
+.galeria {
+  padding-block: var(--espaco-4);
+}
+
+.galeria h1 {
+  margin-bottom: var(--espaco-1);
+  font-family: var(--fonte-titulo);
+}
+
+.galeria__introducao,
+.galeria__resumo {
+  color: var(--cor-texto-suave);
+}
+
+.galeria__resumo {
+  margin-top: var(--espaco-3);
+}
+
+.galeria__erro {
+  color: var(--cor-erro);
+}
+
+.galeria__grade {
+  margin-top: var(--espaco-2);
+}
+
+.galeria__grade .card {
+  position: relative;
+  overflow: hidden;
+}
+
+.galeria__grade .card > a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.galeria__grade .card img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: var(--espaco-2);
+  border-radius: var(--raio);
+  background: var(--cor-borda);
+  object-fit: cover;
+}
+
+.galeria__grade .card h3 {
+  margin-bottom: var(--espaco-1);
+  font-family: var(--fonte-titulo);
+}
+
+.galeria__grade .card p {
+  color: var(--cor-texto-suave);
+}
+
+.botao-favorito {
+  position: absolute;
+  top: var(--espaco-2);
+  right: var(--espaco-2);
+  display: grid;
+  width: 2.75rem;
+  height: 2.75rem;
+  place-items: center;
+  border: 1px solid var(--cor-borda);
+  border-radius: 50%;
+  background: var(--cor-superficie);
+  color: var(--cor-texto-suave);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.botao-favorito:hover,
+.botao-favorito.favorito {
+  color: var(--cor-erro);
+}
+
+.botao-favorito:focus-visible {
+  outline: 3px solid var(--cor-destaque);
+  outline-offset: 2px;
+}

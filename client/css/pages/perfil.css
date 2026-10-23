@@ -1,1 +1,168 @@
 /* Responsável: M7 — veja a seção "M7 — Login e favoritos" no Guia da Entrega 1 */
+.perfil {
+  padding-block: var(--espaco-4);
+}
+
+.perfil > h1,
+.perfil__painel h2 {
+  font-family: var(--fonte-titulo);
+}
+
+.perfil__abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--espaco-1);
+  margin-block: var(--espaco-3);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.perfil__aba {
+  padding: var(--espaco-1) var(--espaco-2);
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: transparent;
+  color: var(--cor-texto);
+  font: inherit;
+  cursor: pointer;
+}
+
+.perfil__aba[aria-selected='true'] {
+  border-bottom-color: var(--cor-destaque);
+  color: var(--cor-destaque);
+  font-weight: 700;
+}
+
+.perfil__aba:focus-visible,
+.perfil__painel a:focus-visible,
+.perfil__painel button:focus-visible {
+  outline: 3px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+.perfil__painel {
+  padding-block: var(--espaco-2);
+}
+
+.perfil__dados {
+  display: grid;
+  gap: var(--espaco-2);
+  margin-block: var(--espaco-3);
+}
+
+.perfil__dados dt {
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.perfil__dados dd {
+  font-weight: 600;
+}
+
+.perfil__formulario {
+  display: grid;
+  gap: var(--espaco-2);
+  max-width: 48rem;
+  padding: var(--espaco-3);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.perfil__formulario h3,
+.perfil__historico h3 {
+  margin-block: var(--espaco-2) 0;
+  font-family: var(--fonte-titulo);
+}
+
+.perfil__formulario .campo {
+  display: grid;
+  gap: var(--espaco-1);
+}
+
+.perfil__formulario input:not([type='file']):not([type='checkbox']),
+.perfil__formulario select,
+.perfil__formulario textarea {
+  width: 100%;
+  padding: var(--espaco-1);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  font: inherit;
+}
+
+.perfil__formulario textarea {
+  resize: vertical;
+}
+
+.perfil__avatar {
+  display: grid;
+  width: 8rem;
+  aspect-ratio: 1;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--cor-borda);
+  border-radius: 50%;
+  background: var(--cor-fundo);
+  color: var(--cor-texto-suave);
+}
+
+.perfil__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.perfil__avatar img[hidden] {
+  display: none;
+}
+
+.perfil__opcao {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--espaco-1);
+}
+
+.perfil__opcao input {
+  width: auto;
+  margin-top: 0.25em;
+}
+
+.perfil__acessibilidade {
+  display: grid;
+  gap: var(--espaco-1);
+  padding: var(--espaco-2);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+}
+
+.perfil__historico {
+  max-width: 48rem;
+  margin-block: var(--espaco-4);
+}
+
+.perfil__historico ol {
+  display: grid;
+  gap: var(--espaco-1);
+  padding-left: 1.5rem;
+}
+
+.perfil__historico li {
+  padding: var(--espaco-1);
+}
+
+.perfil__historico time {
+  display: block;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.perfil__favoritos {
+  margin-top: var(--espaco-2);
+}
+
+@media (max-width: 40rem) {
+  .perfil__formulario {
+    padding: var(--espaco-2);
+  }
+}

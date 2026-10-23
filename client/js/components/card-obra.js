@@ -1,5 +1,6 @@
 // Responsável: M3 — veja a seção "M3 — Galeria" no Guia da Entrega 1
 import { criarBotaoFavorito } from './botao-favorito.js';
+import { urlApp } from '../utils/rotas.js';
 
 // obra: item de listarObras() (precisa de artista_nome)
 export function criarCardObra(obra) {
@@ -7,10 +8,10 @@ export function criarCardObra(obra) {
   card.className = 'card';
 
   const link = document.createElement('a');
-  link.href = `/pages/obra.html?id=${obra.id}`;
+  link.href = urlApp(`pages/obra.html?id=${obra.id}`);
 
   const imagem = document.createElement('img');
-  imagem.src = obra.imagem_url;
+  imagem.src = urlApp(obra.imagem_url);
   imagem.alt = `${obra.titulo}, de ${obra.artista_nome}`;
   imagem.loading = 'lazy';
 
