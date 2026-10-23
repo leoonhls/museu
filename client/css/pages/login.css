@@ -4,8 +4,27 @@
   padding-block: var(--espaco-4);
 }
 
-.login--recuperacao {
-  max-width: 32rem;
+.login__abas {
+  display: flex;
+  gap: var(--espaco-1);
+  margin-bottom: var(--espaco-2);
+}
+
+.login__aba {
+  flex: 1;
+  padding: var(--espaco-1);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  font: inherit;
+  cursor: pointer;
+}
+
+.login__aba[aria-selected='true'] {
+  border-color: var(--cor-destaque);
+  background: var(--cor-destaque);
+  color: var(--cor-superficie);
 }
 
 .login__painel h1 {

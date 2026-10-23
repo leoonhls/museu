@@ -324,7 +324,7 @@ export function cadastrar({ nome, email, senha, tipoCadastro = 'visitante' } = {
     .trim()
     .toLowerCase();
   const senhaTexto = String(senha ?? '');
-  const tiposCadastro = ['estudante', 'pesquisador', 'administrador', 'visitante'];
+  const tiposCadastro = ['visitante', 'estudante', 'pesquisador'];
   const tipoCadastroLimpo = String(tipoCadastro ?? '');
 
   if (nomeLimpo.length < 3) throw new Error('O nome deve ter pelo menos 3 caracteres.');
@@ -362,27 +362,6 @@ export function entrar(email, senha) {
   gravar('sessao', usuario.id);
   registrarHistoricoConta(usuario.id, 'login', 'Entrada na conta.');
   return semSenha(usuario);
-}
-
-export function redefinirSenha(email, novaSenha) {
-  const emailLimpo = String(email ?? '')
-    .trim()
-    .toLowerCase();
-  const senhaTexto = String(novaSenha ?? '');
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailLimpo)) throw new Error('Informe um e-mail válido.');
-  if (senhaTexto.length < 8 || !/[a-zA-Z]/.test(senhaTexto) || !/\d/.test(senhaTexto)) {
-    throw new Error('A senha deve ter pelo menos 8 caracteres, com letras e números.');
-  }
-
-  const lista = usuarios();
-  const indice = lista.findIndex((usuario) => usuario.email === emailLimpo);
-  if (indice === -1) throw new Error('Não encontramos uma conta com esse e-mail.');
-
-  const atualizados = [...lista];
-  atualizados[indice] = { ...atualizados[indice], senha: senhaTexto };
-  gravar('usuarios', atualizados);
-  registrarHistoricoConta(atualizados[indice].id, 'senha', 'Senha redefinida.');
 }
 
 export function sair() {
@@ -436,10 +415,10 @@ export function atualizarPerfil(dados = {}) {
   const avatar = dados.avatar === undefined ? perfilAtual.avatar : String(dados.avatar);
   if (
     avatar &&
-    (avatar.length > 1_400_000 ||
+    (avatar.length > 300_000 ||
       !/^data:image\/(?:png|jpeg|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(avatar))
   ) {
-    throw new Error('A foto deve ser PNG, JPEG ou WebP e ter no máximo 1 MB.');
+    throw new Error('A foto deve ser PNG, JPEG ou WebP e ter no máximo 200 KB.');
   }
 
   const perfil = {
@@ -520,10 +499,9 @@ export function desfavoritar(obraId) {
   const usuario = exigirUsuario();
   const id = exigirObraExistente(obraId);
   const favoritos = ler('favoritos', []);
-  gravar(
-    'favoritos',
-    favoritos.filter((f) => !(f.usuario_id === usuario.id && f.obra_id === id)),
-  );
+  const restantes = favoritos.filter((f) => !(f.usuario_id === usuario.id && f.obra_id === id));
+  if (restantes.length === favoritos.length) return;
+  gravar('favoritos', restantes);
   const obra = obrasVisiveis().find((item) => item.id === id);
   registrarHistoricoConta(usuario.id, 'favorito', `Obra removida dos favoritos: ${obra.titulo}.`);
 }
