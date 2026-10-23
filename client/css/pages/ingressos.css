@@ -1,1 +1,136 @@
 /* Responsável: M6 — veja a seção "M6 — Ingressos" no Guia da Entrega 1 */
+
+#area-reserva {
+  max-width: 760px;
+  margin: var(--espaco-3) auto;
+  padding: var(--espaco-3);
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+}
+
+#area-reserva h2 {
+  font-family: var(--fonte-titulo);
+  color: var(--cor-destaque);
+}
+
+.etapas-reserva {
+  margin-bottom: var(--espaco-3);
+  padding: var(--espaco-2);
+  background: var(--cor-fundo);
+  border-radius: var(--raio);
+  color: var(--cor-texto-suave);
+  font-weight: 600;
+}
+
+.campo-reserva {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  margin-bottom: var(--espaco-2);
+}
+
+.campo-reserva label {
+  color: var(--cor-texto);
+  font-weight: 600;
+}
+
+.campo-reserva input,
+.campo-reserva select {
+  width: 100%;
+  min-height: 42px;
+  padding: var(--espaco-1) var(--espaco-2);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  font: inherit;
+}
+
+.campo-reserva input:focus,
+.campo-reserva select:focus {
+  outline: 2px solid var(--cor-destaque);
+  outline-offset: 2px;
+}
+
+#resumo-quantidade,
+#preco-total {
+  margin: var(--espaco-2) 0;
+  color: var(--cor-texto);
+}
+
+#preco-total {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--cor-destaque);
+}
+
+#aviso-data,
+#mensagem-reserva {
+  color: var(--cor-texto-suave);
+}
+
+#mensagem-reserva {
+  margin: var(--espaco-2) 0;
+}
+
+#proxima-etapa,
+#voltar-etapa-1,
+#confirmar-reserva {
+  min-height: 42px;
+  margin: var(--espaco-1) var(--espaco-1) var(--espaco-1) 0;
+  padding: var(--espaco-1) var(--espaco-2);
+  border: 1px solid var(--cor-destaque);
+  border-radius: var(--raio);
+  background: var(--cor-destaque);
+  color: var(--cor-superficie);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#voltar-etapa-1 {
+  background: var(--cor-superficie);
+  color: var(--cor-destaque);
+}
+
+#proxima-etapa:hover,
+#confirmar-reserva:hover {
+  opacity: 0.9;
+}
+
+#etapa-2,
+#etapa-3 {
+  margin-top: var(--espaco-3);
+  padding-top: var(--espaco-2);
+  border-top: 1px solid var(--cor-borda);
+}
+
+#resumo-reserva p {
+  margin: var(--espaco-2) 0;
+  color: var(--cor-texto);
+}
+
+#link-comprovante {
+  display: inline-block;
+  margin-top: var(--espaco-2);
+  color: var(--cor-destaque);
+  font-weight: 600;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+@media (max-width: 600px) {
+  #area-reserva {
+    padding: var(--espaco-2);
+  }
+
+  #proxima-etapa,
+  #voltar-etapa-1,
+  #confirmar-reserva {
+    width: 100%;
+    margin-right: 0;
+  }
+}
