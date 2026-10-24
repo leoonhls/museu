@@ -18,4 +18,22 @@ export const exposicoes = [
     sala: 'Galeria 1',
     imagem_url: '/assets/img/placeholder.svg',
   },
+  {
+    id: 3,
+    titulo: 'Novos Olhares',
+    descricao: 'Uma exposição de exemplo.',
+    data_inicio: '2025-12-01',
+    data_fim: '2026-03-31',
+    sala: 'Galeria 3',
+    imagem_url: '/assets/img/placeholder.svg',
+  },
+  {
+    id: 4,
+    titulo: 'artes modernas',
+    descricao: 'Uma exposição de exemplo.',
+    data_inicio: '2026-07-01',
+    data_fim: '2026-12-31',
+    sala: 'Galeria 4',
+    imagem_url: '/assets/img/placeholder.svg',
+  },
 ];
