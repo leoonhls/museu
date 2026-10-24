@@ -3,6 +3,7 @@ import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { listarExposicoes } from '../api.js';
 import { formatarData } from '../utils/datas.js';
+import { urlApp } from '../utils/rotas.js';
 
 montarHeader();
 montarFooter();
@@ -17,11 +18,11 @@ function criarCardExposicao(exposicao) {
 
   const link = document.createElement('a');
   link.className = 'exposicao-card__link';
-  link.href = `/pages/exposicao.html?id=${exposicao.id}`;
+  link.href = urlApp(`pages/exposicao.html?id=${exposicao.id}`);
 
   const imagem = document.createElement('img');
   imagem.className = 'exposicao-card__imagem';
-  imagem.src = exposicao.imagem_url;
+  imagem.src = urlApp(exposicao.imagem_url);
   imagem.alt = '';
   imagem.loading = 'lazy';
 
