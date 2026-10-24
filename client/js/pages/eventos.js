@@ -3,6 +3,7 @@ import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { listarEventos } from '../api.js';
 import { formatarDataHora } from '../utils/datas.js';
+import { urlApp } from '../utils/rotas.js';
 
 montarHeader();
 montarFooter();
@@ -17,7 +18,7 @@ function criarCardEvento(evento) {
 
   const imagem = document.createElement('img');
   imagem.className = 'evento-card__imagem';
-  imagem.src = evento.imagem_url;
+  imagem.src = urlApp(evento.imagem_url);
   imagem.alt = '';
   imagem.loading = 'lazy';
 
@@ -53,7 +54,7 @@ function criarCardEvento(evento) {
     acao.disabled = true;
     acao.textContent = 'Esgotado';
   } else {
-    acao.href = `/pages/ingressos.html?evento=${encodeURIComponent(evento.id)}`;
+    acao.href = urlApp(`pages/ingressos.html?evento=${encodeURIComponent(evento.id)}`);
     acao.textContent = 'Reservar ingressos';
   }
 
