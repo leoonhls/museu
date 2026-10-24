@@ -68,6 +68,15 @@
   color: var(--cor-texto-suave);
 }
 
+.exposicoes-erro {
+  grid-column: 1 / -1;
+  color: var(--cor-erro);
+}
+
+.exposicao-erro {
+  color: var(--cor-erro);
+}
+
 .detalhe-exposicao {
   display: grid;
   gap: var(--espaco-4);
