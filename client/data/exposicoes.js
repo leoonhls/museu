@@ -32,7 +32,7 @@ export const exposicoes = [
     titulo: 'artes modernas',
     descricao: 'Uma exposição de exemplo.',
     data_inicio: '2026-07-01',
-    data_fim: '2026-12-31',
+    data_fim: '2027-03-31',
     sala: 'Galeria 4',
     imagem_url: '/assets/img/placeholder.svg',
   },
