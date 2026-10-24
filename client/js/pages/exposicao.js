@@ -4,6 +4,7 @@ import { montarFooter } from '../components/footer.js';
 import { buscarExposicao } from '../api.js';
 import { criarCardObra } from '../components/card-obra.js';
 import { formatarData, formatarDataHora } from '../utils/datas.js';
+import { urlApp } from '../utils/rotas.js';
 
 montarHeader();
 montarFooter();
@@ -55,7 +56,7 @@ function criarCardEvento(evento) {
 
   const link = document.createElement('a');
   link.className = 'botao';
-  link.href = `/pages/ingressos.html?evento=${encodeURIComponent(evento.id)}`;
+  link.href = urlApp(`pages/ingressos.html?evento=${encodeURIComponent(evento.id)}`);
   link.textContent = 'Ingressos';
 
   card.append(titulo, descricao, data, link);
@@ -77,7 +78,7 @@ function renderizarExposicao() {
 
   const imagem = document.createElement('img');
   imagem.className = 'exposicao-banner__imagem';
-  imagem.src = exposicao.imagem_url;
+  imagem.src = urlApp(exposicao.imagem_url);
   imagem.alt = '';
 
   const conteudo = document.createElement('div');
