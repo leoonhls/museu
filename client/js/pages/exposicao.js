@@ -11,7 +11,14 @@ montarFooter();
 
 const detalhe = document.querySelector('#detalhe-exposicao');
 const id = new URLSearchParams(window.location.search).get('id');
-const exposicao = id && /^\d+$/.test(id) ? buscarExposicao(id) : null;
+let exposicao = null;
+let erroAoBuscarExposicao = false;
+try {
+  exposicao = id && /^\d+$/.test(id) ? buscarExposicao(id) : null;
+} catch (erro) {
+  console.error('Erro ao carregar exposição:', erro);
+  erroAoBuscarExposicao = true;
+}
 
 function criarMensagem(texto) {
   const mensagem = document.createElement('p');
@@ -65,6 +72,14 @@ function criarCardEvento(evento) {
 
 function renderizarExposicao() {
   if (!detalhe) return;
+  if (erroAoBuscarExposicao) {
+    document.title = 'Erro ao carregar exposição — Museu';
+    const mensagem = criarMensagem('Não foi possível carregar esta exposição. Tente novamente.');
+    mensagem.classList.add('exposicao-erro');
+    mensagem.setAttribute('role', 'alert');
+    detalhe.replaceChildren(mensagem);
+    return;
+  }
   if (!exposicao) {
     document.title = 'Exposição não encontrada — Museu';
     detalhe.replaceChildren(criarMensagem('Exposição não encontrada.'));
