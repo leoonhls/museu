@@ -9,15 +9,12 @@
 }
 
 .exposicoes-aba {
-  flex: 1 1 auto;
-  min-height: 44px;
   padding: var(--espaco-1) var(--espaco-2);
   border: 0;
   border-bottom: 3px solid transparent;
   background: transparent;
   color: var(--cor-texto-suave);
   font: inherit;
-  white-space: nowrap;
   cursor: pointer;
 }
 
@@ -35,7 +32,6 @@
 
 .exposicoes-lista {
   align-items: stretch;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
 }
 
 .exposicao-card {
@@ -60,13 +56,11 @@
   margin: 0;
   color: var(--cor-destaque);
   font-family: var(--fonte-titulo);
-  overflow-wrap: anywhere;
 }
 
 .exposicao-card__datas,
 .exposicao-card__sala {
   color: var(--cor-texto-suave);
-  overflow-wrap: anywhere;
 }
 
 .exposicoes-vazio {
@@ -152,14 +146,6 @@
 }
 
 @media (max-width: 640px) {
-  .exposicoes-abas {
-    gap: 0.25rem;
-  }
-
-  .exposicoes-aba {
-    padding-inline: var(--espaco-1);
-  }
-
   .exposicao-banner {
     grid-template-columns: 1fr;
   }
