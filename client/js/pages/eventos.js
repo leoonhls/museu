@@ -65,40 +65,49 @@ function criarCardEvento(evento) {
 function renderizarAgenda() {
   if (!agenda) return;
 
-  const eventos = listarEventos();
-  if (eventos.length === 0) {
+  try {
+    const eventos = listarEventos();
+    if (eventos.length === 0) {
+      const mensagem = document.createElement('p');
+      mensagem.className = 'agenda-eventos__vazia';
+      mensagem.textContent = 'Não há eventos programados no momento.';
+      agenda.replaceChildren(mensagem);
+      return;
+    }
+
+    const grupos = new Map();
+    for (const evento of eventos) {
+      const mes = formatoMes.format(new Date(evento.data_hora));
+      if (!grupos.has(mes)) grupos.set(mes, []);
+      grupos.get(mes).push(evento);
+    }
+
+    const fragmento = document.createDocumentFragment();
+    for (const [mes, eventosDoMes] of grupos) {
+      const grupo = document.createElement('section');
+      grupo.className = 'agenda-eventos__mes';
+
+      const tituloMes = document.createElement('h2');
+      tituloMes.className = 'agenda-eventos__titulo';
+      tituloMes.textContent = mes.charAt(0).toLocaleUpperCase('pt-BR') + mes.slice(1);
+
+      const lista = document.createElement('div');
+      lista.className = 'grid agenda-eventos__lista';
+      lista.append(...eventosDoMes.map(criarCardEvento));
+
+      grupo.append(tituloMes, lista);
+      fragmento.append(grupo);
+    }
+
+    agenda.replaceChildren(fragmento);
+  } catch (erro) {
+    console.error('Erro ao carregar eventos:', erro);
     const mensagem = document.createElement('p');
-    mensagem.className = 'agenda-eventos__vazia';
-    mensagem.textContent = 'Não há eventos programados no momento.';
+    mensagem.className = 'agenda-eventos__erro';
+    mensagem.setAttribute('role', 'alert');
+    mensagem.textContent = 'Não foi possível carregar os eventos. Tente novamente.';
     agenda.replaceChildren(mensagem);
-    return;
   }
-
-  const grupos = new Map();
-  for (const evento of eventos) {
-    const mes = formatoMes.format(new Date(evento.data_hora));
-    if (!grupos.has(mes)) grupos.set(mes, []);
-    grupos.get(mes).push(evento);
-  }
-
-  const fragmento = document.createDocumentFragment();
-  for (const [mes, eventosDoMes] of grupos) {
-    const grupo = document.createElement('section');
-    grupo.className = 'agenda-eventos__mes';
-
-    const tituloMes = document.createElement('h2');
-    tituloMes.className = 'agenda-eventos__titulo';
-    tituloMes.textContent = mes.charAt(0).toLocaleUpperCase('pt-BR') + mes.slice(1);
-
-    const lista = document.createElement('div');
-    lista.className = 'grid agenda-eventos__lista';
-    lista.append(...eventosDoMes.map(criarCardEvento));
-
-    grupo.append(tituloMes, lista);
-    fragmento.append(grupo);
-  }
-
-  agenda.replaceChildren(fragmento);
 }
 
 renderizarAgenda();
