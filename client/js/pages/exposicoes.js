@@ -60,14 +60,23 @@ function selecionarStatus(status, atualizarUrl = false) {
   lista.setAttribute('aria-labelledby', abaSelecionada.id);
   lista.replaceChildren();
 
-  const exposicoes = listarExposicoes({ status: statusSelecionado });
-  if (exposicoes.length === 0) {
+  try {
+    const exposicoes = listarExposicoes({ status: statusSelecionado });
+    if (exposicoes.length === 0) {
+      const mensagem = document.createElement('p');
+      mensagem.className = 'exposicoes-vazio';
+      mensagem.textContent = 'Não há exposições neste período.';
+      lista.append(mensagem);
+    } else {
+      lista.append(...exposicoes.map(criarCardExposicao));
+    }
+  } catch (erro) {
+    console.error('Erro ao carregar exposições:', erro);
     const mensagem = document.createElement('p');
-    mensagem.className = 'exposicoes-vazio';
-    mensagem.textContent = 'Não há exposições neste período.';
-    lista.append(mensagem);
-  } else {
-    lista.append(...exposicoes.map(criarCardExposicao));
+    mensagem.className = 'exposicoes-erro';
+    mensagem.setAttribute('role', 'alert');
+    mensagem.textContent = 'Não foi possível carregar as exposições. Tente novamente.';
+    lista.replaceChildren(mensagem);
   }
 
   if (atualizarUrl) {
