@@ -1,4 +1,4 @@
-// Responsável: M5 — dados de exemplo; substituir pelos reais
+
 export const exposicoes = [
   {
     id: 1,
