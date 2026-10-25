@@ -166,3 +166,43 @@
     padding: var(--espaco-2);
   }
 }
+
+/* Mensagens de retorno do formulário de perfil */
+.mensagem {
+  min-height: 1.5em;
+  margin-top: var(--espaco-2);
+}
+
+.mensagem--erro {
+  color: var(--cor-erro);
+}
+
+.mensagem--sucesso {
+  color: var(--cor-sucesso);
+}
+
+/* Lista de reservas (lista-reservas.js, M6) */
+.lista-reservas {
+  display: grid;
+  gap: var(--espaco-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lista-reservas__item {
+  align-items: flex-start;
+  gap: var(--espaco-1);
+}
+
+.lista-reservas__item p {
+  margin: 0;
+}
+
+.lista-reservas__codigo {
+  font-weight: 600;
+}
+
+.lista-reservas__item--cancelada {
+  opacity: 0.7;
+}

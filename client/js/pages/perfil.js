@@ -1,3 +1,4 @@
+// Responsável: M7 — veja a seção "M7 — Login e favoritos" no Guia da Entrega 1
 import {
   atualizarPerfil,
   aplicarPreferenciasAcessibilidade,
@@ -90,8 +91,8 @@ if (usuario) {
   arquivoAvatar.addEventListener('change', () => {
     const arquivo = arquivoAvatar.files[0];
     if (!arquivo) return;
-    if (!['image/png', 'image/jpeg', 'image/webp'].includes(arquivo.type) || arquivo.size > 1_000_000) {
-      mostrarMensagemPerfil('A foto deve ser PNG, JPEG ou WebP e ter no máximo 1 MB.', 'erro');
+    if (!['image/png', 'image/jpeg', 'image/webp'].includes(arquivo.type) || arquivo.size > 200_000) {
+      mostrarMensagemPerfil('A foto deve ser PNG, JPEG ou WebP e ter no máximo 200 KB.', 'erro');
       arquivoAvatar.value = '';
       return;
     }
@@ -194,7 +195,7 @@ if (usuario) {
 
   function renderizarReservas() {
     const conteudo = document.getElementById('conteudoReservas');
-    conteudo.replaceChildren(criarListaReservas(minhasReservas()));
+    conteudo.replaceChildren(criarListaReservas(minhasReservas(), renderizarReservas));
   }
 
   abas.forEach((botao) => {

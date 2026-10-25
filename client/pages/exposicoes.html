@@ -13,7 +13,44 @@
   <div id="header"></div>
   <main class="container">
     <h1>Exposições</h1>
-    <p class="em-construcao">Página em construção — responsável: M5.</p>
+    <div class="exposicoes-abas" role="tablist" aria-label="Período das exposições">
+      <button
+        class="exposicoes-aba"
+        id="aba-atual"
+        type="button"
+        role="tab"
+        aria-selected="true"
+        aria-controls="lista-exposicoes"
+        data-status="atual"
+      >Atuais</button>
+      <button
+        class="exposicoes-aba"
+        id="aba-futura"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-controls="lista-exposicoes"
+        data-status="futura"
+        tabindex="-1"
+      >Futuras</button>
+      <button
+        class="exposicoes-aba"
+        id="aba-passada"
+        type="button"
+        role="tab"
+        aria-selected="false"
+        aria-controls="lista-exposicoes"
+        data-status="passada"
+        tabindex="-1"
+      >Passadas</button>
+    </div>
+    <section
+      id="lista-exposicoes"
+      class="grid exposicoes-lista"
+      role="tabpanel"
+      aria-labelledby="aba-atual"
+      aria-live="polite"
+    ></section>
   </main>
   <div id="footer"></div>
   <script type="module" src="../js/pages/exposicoes.js"></script>

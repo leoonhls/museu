@@ -1,1 +1,123 @@
 /* Responsável: M8 — veja a seção "M8 — Área administrativa" no Guia da Entrega 1 */
+
+/* Barra de pesquisa e botão Nova obra */
+.admin-acoes {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--espaco-2);
+  margin-block: var(--espaco-3);
+}
+
+.admin-acoes input[type='search'] {
+  flex: 1 1 200px;
+  padding: var(--espaco-1);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  font: inherit;
+}
+
+/* Área da tabela: rola na horizontal em telas pequenas */
+.admin-tabela {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.admin-tabela table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-tabela th,
+.admin-tabela td {
+  padding: var(--espaco-1);
+  border-bottom: 1px solid var(--cor-borda);
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-tabela th {
+  background: var(--cor-superficie);
+  font-weight: bold;
+}
+
+.admin-tabela td:last-child {
+  display: flex;
+  gap: var(--espaco-1);
+}
+
+.admin-tabela img {
+  width: 3.75rem;
+  height: 3.75rem;
+  object-fit: cover;
+  border-radius: var(--raio);
+}
+
+/* Paginação */
+.admin-paginacao {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--espaco-2);
+  margin-block: var(--espaco-3);
+}
+
+/* Formulário de cadastro e edição de obras */
+#form-obra {
+  max-width: 40rem;
+  margin-block: var(--espaco-3);
+}
+
+#form-obra > div {
+  margin-bottom: var(--espaco-2);
+}
+
+#form-obra label {
+  display: block;
+  margin-bottom: var(--espaco-1);
+  font-weight: 600;
+}
+
+#form-obra input:not([type='checkbox']),
+#form-obra select,
+#form-obra textarea {
+  display: block;
+  width: 100%;
+  padding: var(--espaco-1);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  font: inherit;
+}
+
+#form-obra textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+#form-obra input[type='checkbox'] {
+  margin-right: var(--espaco-1);
+}
+
+#preview-imagem:not([hidden]) {
+  display: block;
+  max-width: 10rem;
+  height: auto;
+  margin-top: var(--espaco-2);
+  border-radius: var(--raio);
+}
+
+#preview-imagem[hidden] {
+  display: none;
+}
+
+.admin-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-2);
+  margin-top: var(--espaco-3);
+}

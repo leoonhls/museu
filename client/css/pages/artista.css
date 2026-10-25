@@ -1,1 +1,191 @@
 /* Responsável: M4 — veja a seção "M4 — Obra, artista e dados reais" no Guia da Entrega 1 */
+
+.artista-pagina {
+  padding-block: var(--espaco-3) var(--espaco-4);
+}
+
+.artista-trilha {
+  margin-bottom: var(--espaco-3);
+}
+
+.artista-trilha a {
+  color: var(--cor-destaque);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.artista-trilha a:hover,
+.artista-trilha a:focus-visible {
+  text-decoration: underline;
+}
+
+.artista-perfil {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--espaco-3);
+  align-items: center;
+  padding: var(--espaco-3);
+}
+
+.artista-perfil__moldura {
+  width: 100%;
+  max-width: 260px;
+  margin-inline: auto;
+}
+
+.artista-perfil__foto {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--raio);
+  border: 1px solid var(--cor-borda);
+  background: var(--cor-fundo);
+}
+
+.artista-perfil__dados {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+}
+
+.artista-perfil__metadados {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.artista-perfil__anos {
+  font-weight: 600;
+  color: var(--cor-texto-suave);
+}
+
+.artista-perfil__nome {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: 1.85rem;
+  line-height: 1.2;
+  color: var(--cor-texto);
+}
+
+.artista-perfil__biografia {
+  margin: 0;
+  color: var(--cor-texto);
+  line-height: 1.7;
+}
+
+.artista-obras {
+  margin-top: var(--espaco-4);
+}
+
+.artista-obras__cabecalho {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--espaco-2);
+  margin-bottom: var(--espaco-3);
+  padding-bottom: var(--espaco-2);
+  border-bottom: 1px solid var(--cor-borda);
+}
+
+.artista-obras__cabecalho h2 {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  font-size: 1.5rem;
+}
+
+.artista-obras__contador {
+  color: var(--cor-texto-suave);
+  font-size: 0.95rem;
+}
+
+.artista-obras__vazio {
+  color: var(--cor-texto-suave);
+  margin: 0;
+}
+
+.artista-obras .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--espaco-1);
+}
+
+.artista-obras .card a {
+  color: var(--cor-texto);
+  text-decoration: none;
+}
+
+.artista-obras .card img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--raio);
+  margin-bottom: var(--espaco-1);
+}
+
+.artista-obras .card h3 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.artista-obras .card p {
+  margin: 0;
+  color: var(--cor-texto-suave);
+  font-size: 0.9rem;
+}
+
+.artista-pagina .botao-favorito {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.5rem;
+  min-height: 2.5rem;
+  padding: var(--espaco-1) var(--espaco-2);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-fundo);
+  color: var(--cor-destaque);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.artista-pagina .botao-favorito:hover,
+.artista-pagina .botao-favorito:focus-visible {
+  border-color: var(--cor-destaque);
+}
+
+.artista-vazio {
+  text-align: center;
+  padding: var(--espaco-4) var(--espaco-3);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--espaco-2);
+}
+
+.artista-vazio h1,
+.artista-vazio p {
+  margin: 0;
+}
+
+.artista-vazio .botao {
+  text-decoration: none;
+}
+
+@media (min-width: 768px) {
+  .artista-perfil {
+    grid-template-columns: 240px 1fr;
+    gap: var(--espaco-4);
+  }
+
+  .artista-perfil__moldura {
+    margin-inline: 0;
+  }
+
+  .artista-perfil__nome {
+    font-size: 2.25rem;
+  }
+}

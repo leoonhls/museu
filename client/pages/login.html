@@ -11,8 +11,13 @@
 </head>
 <body>
   <div id="header"></div>
-  <main class="container login" id="paineisConta">
-    <section class="card login__painel" id="painelLogin">
+  <main class="container login">
+    <div class="login__abas" role="tablist" aria-label="Acesso à conta">
+      <button class="login__aba" id="abaEntrar" type="button" role="tab" aria-selected="true" aria-controls="painelLogin">Entrar</button>
+      <button class="login__aba" id="abaCadastro" type="button" role="tab" aria-selected="false" aria-controls="painelCadastro">Criar conta</button>
+    </div>
+
+    <section class="card login__painel" id="painelLogin" role="tabpanel" aria-labelledby="abaEntrar">
       <h1>Entrar</h1>
       <form id="formLogin" novalidate>
         <div class="campo">
@@ -33,41 +38,57 @@
         </div>
         <button class="botao" type="submit">Entrar</button>
       </form>
-      <p class="login__alternativa">
-        <button class="login__link" id="mostrarRecuperacao" type="button">Esqueci minha senha</button>
-      </p>
-      <p class="login__alternativa">
-        Ainda não tem cadastro?
-        <a class="botao" href="cadastro.html" target="_blank" rel="noopener">Cadastrar</a>
-      </p>
       <p class="mensagem" id="mensagemLogin" role="status" aria-live="polite"></p>
     </section>
 
-    <section class="card login__painel" id="painelRecuperacao" hidden>
-      <h1>Redefinir senha</h1>
-      <p class="login__aviso">Nesta versão local, a senha é redefinida neste navegador. Nenhum e-mail é enviado nem a identidade é verificada.</p>
-      <form id="formRecuperacao" novalidate>
+    <section class="card login__painel" id="painelCadastro" role="tabpanel" aria-labelledby="abaCadastro" hidden>
+      <h1>Criar conta</h1>
+      <form id="formCadastro" novalidate>
         <div class="campo">
-          <label for="emailRecuperacao">E-mail cadastrado</label>
-          <input id="emailRecuperacao" name="email" type="email" autocomplete="email" required>
+          <label for="nomeCadastro">Nome</label>
+          <input id="nomeCadastro" name="nome" type="text" autocomplete="name" minlength="3" required>
         </div>
         <div class="campo">
-          <label for="senhaRecuperacao">Nova senha</label>
+          <label for="emailCadastro">E-mail</label>
+          <input id="emailCadastro" name="email" type="email" autocomplete="email" required>
+        </div>
+        <div class="campo">
+          <label for="tipoCadastro">Tipo de cadastro</label>
+          <select id="tipoCadastro" name="tipoCadastro" required>
+            <option value="" selected disabled>Selecione uma opção</option>
+            <option value="visitante">Visitante</option>
+            <option value="estudante">Estudante</option>
+            <option value="pesquisador">Pesquisador</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label for="senhaCadastro">Senha</label>
           <div class="login__senha">
-            <input id="senhaRecuperacao" name="senha" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Za-z])(?=.*[0-9]).{8,}" required>
-            <button class="login__ver-senha" type="button" aria-label="Mostrar senha" aria-pressed="false" data-alvo-senha="senhaRecuperacao">
+            <input id="senhaCadastro" name="senha" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Za-z])(?=.*[0-9]).{8,}" aria-describedby="dicaSenhaCadastro" required>
+            <button class="login__ver-senha" type="button" aria-label="Mostrar senha" aria-pressed="false" data-alvo-senha="senhaCadastro">
               <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
             </button>
           </div>
-          <small>Use pelo menos 8 caracteres, incluindo letras e números.</small>
+          <small id="dicaSenhaCadastro">Use pelo menos 8 caracteres, incluindo letras e números.</small>
         </div>
-        <button class="botao" type="submit">Salvar nova senha</button>
+        <div class="campo">
+          <label for="confirmarSenhaCadastro">Confirmar senha</label>
+          <div class="login__senha">
+            <input id="confirmarSenhaCadastro" name="confirmarSenha" type="password" autocomplete="new-password" minlength="8" pattern="(?=.*[A-Za-z])(?=.*[0-9]).{8,}" required>
+            <button class="login__ver-senha" type="button" aria-label="Mostrar confirmação da senha" aria-pressed="false" data-alvo-senha="confirmarSenhaCadastro">
+              <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            </button>
+          </div>
+        </div>
+        <button class="botao" type="submit">Criar conta</button>
       </form>
-      <p class="login__alternativa">Lembrou a senha? <button class="login__link" id="voltarLogin" type="button">Voltar para entrar</button></p>
-      <p class="mensagem" id="mensagemRecuperacao" role="status" aria-live="polite"></p>
+      <p class="mensagem" id="mensagemCadastro" role="status" aria-live="polite"></p>
     </section>
   </main>
   <div id="footer"></div>

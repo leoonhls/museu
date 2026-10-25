@@ -1,1 +1,81 @@
 /* Responsável: M5 — veja a seção "M5 — Exposições e eventos" no Guia da Entrega 1 */
+.agenda-eventos {
+  display: grid;
+  gap: var(--espaco-4);
+}
+
+.agenda-eventos__mes {
+  display: grid;
+  gap: var(--espaco-2);
+}
+
+.agenda-eventos__titulo {
+  margin: 0;
+  padding-bottom: var(--espaco-1);
+  border-bottom: 1px solid var(--cor-borda);
+  font-family: var(--fonte-titulo);
+}
+
+.agenda-eventos__lista {
+  align-items: stretch;
+}
+
+.evento-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--espaco-1);
+  overflow: hidden;
+}
+
+.evento-card__imagem {
+  width: calc(100% + 2 * var(--espaco-2));
+  max-width: none;
+  aspect-ratio: 16 / 9;
+  margin: calc(-1 * var(--espaco-2)) calc(-1 * var(--espaco-2)) var(--espaco-1);
+  object-fit: cover;
+}
+
+.evento-card__titulo {
+  margin: 0;
+  color: var(--cor-destaque);
+  font-family: var(--fonte-titulo);
+}
+
+.evento-card p {
+  margin: 0;
+}
+
+.evento-card__data,
+.evento-card__vagas {
+  color: var(--cor-texto-suave);
+}
+
+.evento-card__preco {
+  font-weight: 700;
+}
+
+.evento-card__acao {
+  margin-top: auto;
+  text-decoration: none;
+}
+
+.evento-card__acao:focus-visible {
+  outline: 3px solid var(--cor-destaque);
+  outline-offset: 3px;
+}
+
+.evento-card__acao:disabled {
+  border-color: var(--cor-borda);
+  background: var(--cor-borda);
+  color: var(--cor-texto-suave);
+  cursor: not-allowed;
+}
+
+.agenda-eventos__vazia {
+  color: var(--cor-texto-suave);
+}
+
+.agenda-eventos__erro {
+  color: var(--cor-erro);
+}
