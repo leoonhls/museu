@@ -14,7 +14,6 @@
   padding-bottom: var(--espaco-1);
   border-bottom: 1px solid var(--cor-borda);
   font-family: var(--fonte-titulo);
-  text-transform: capitalize;
 }
 
 .agenda-eventos__lista {

@@ -195,7 +195,7 @@ if (usuario) {
 
   function renderizarReservas() {
     const conteudo = document.getElementById('conteudoReservas');
-    conteudo.replaceChildren(criarListaReservas(minhasReservas()));
+    conteudo.replaceChildren(criarListaReservas(minhasReservas(), renderizarReservas));
   }
 
   abas.forEach((botao) => {

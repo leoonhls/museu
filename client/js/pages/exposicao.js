@@ -20,6 +20,12 @@ try {
   erroAoBuscarExposicao = true;
 }
 
+function criarTitulo(texto) {
+  const titulo = document.createElement('h1');
+  titulo.textContent = texto;
+  return titulo;
+}
+
 function criarMensagem(texto) {
   const mensagem = document.createElement('p');
   mensagem.className = 'em-construcao';
@@ -77,12 +83,15 @@ function renderizarExposicao() {
     const mensagem = criarMensagem('Não foi possível carregar esta exposição. Tente novamente.');
     mensagem.classList.add('exposicao-erro');
     mensagem.setAttribute('role', 'alert');
-    detalhe.replaceChildren(mensagem);
+    detalhe.replaceChildren(criarTitulo('Erro ao carregar exposição'), mensagem);
     return;
   }
   if (!exposicao) {
     document.title = 'Exposição não encontrada — Museu';
-    detalhe.replaceChildren(criarMensagem('Exposição não encontrada.'));
+    detalhe.replaceChildren(
+      criarTitulo('Exposição não encontrada'),
+      criarMensagem('Confira o link ou veja todas as exposições.'),
+    );
     return;
   }
 

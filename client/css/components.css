@@ -223,15 +223,15 @@
   gap: var(--espaco-3);
 }
 
-.header__nav a,
+.header__nav a:not(.botao),
 .header__sair {
   color: var(--cor-texto);
   font-size: 0.95rem;
   text-decoration: none;
 }
 
-.header__nav a:hover,
-.header__nav a[aria-current='page'] {
+.header__nav a:not(.botao):hover,
+.header__nav a:not(.botao)[aria-current='page'] {
   color: var(--cor-destaque);
 }
 

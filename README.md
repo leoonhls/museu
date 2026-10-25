@@ -4,7 +4,7 @@ Projeto acadêmico: site de um museu de artes, feito em três entregas.
 
 | Entrega | Conteúdo | Estado |
 | --- | --- | --- |
-| 1 | Front-end com HTML, CSS e JavaScript; dados em `client/data/` e `localStorage` | em andamento |
+| 1 | Front-end com HTML, CSS e JavaScript; dados em `client/data/` e `localStorage` | concluída |
 | 2 | Backend com Node.js e Express | — |
 | 3 | Banco de dados PostgreSQL | — |
 
@@ -32,6 +32,7 @@ No Console do navegador (`F12`), rode `import('/js/api.js').then(api => api.rese
 - `client/data/` — dados do acervo (obras, artistas, exposições, eventos)
 - `client/js/api.js` — único ponto de acesso a dados
 - `client/js/components/` — componentes reutilizáveis
+- `client/js/utils/` — datas (`datas.js`) e montagem de links (`rotas.js`)
 - `client/js/pages/` — um script por página
 - `client/pages/` — páginas do site
 - `docs/` — equipe e créditos das imagens
