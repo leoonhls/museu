@@ -1,7 +1,5 @@
 // Responsável: M8 — veja a seção "M8 — Área administrativa" no Guia da Entrega 1
 
-/* Responsável: M8 — Área administrativa */
-
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { exigirAdmin } from '../auth.js';
@@ -114,7 +112,10 @@ if (usuario) {
         mostrarToast('Obra cadastrada com sucesso!', 'sucesso');
       }
 
-      window.location.href = 'obras.html';
+      // Espera o toast aparecer antes de voltar para a lista.
+      setTimeout(() => {
+        window.location.href = 'obras.html';
+      }, 1500);
     } catch (erro) {
       mostrarToast(erro.message, 'erro');
     }

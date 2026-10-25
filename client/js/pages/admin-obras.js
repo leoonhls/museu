@@ -1,4 +1,4 @@
-
+// Responsável: M8 — veja a seção "M8 — Área administrativa" no Guia da Entrega 1
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { exigirAdmin } from '../auth.js';
@@ -76,26 +76,28 @@ if (usuario) {
 
         editar.href = `obra-form.html?id=${obra.id}`;
         editar.textContent = 'Editar';
+        editar.className = 'botao botao--secundario';
 
         acoes.appendChild(editar);
-        
-const excluir = document.createElement('button');
-excluir.type = 'button';
-excluir.textContent = 'Excluir';
 
-excluir.addEventListener('click', () => {
-  confirmar(`Deseja excluir a obra "${obra.titulo}"?`, () => {
-    try {
-      excluirObra(obra.id);
-      mostrarToast('Obra excluída com sucesso!', 'sucesso');
-      carregarObras();
-    } catch (erro) {
-      mostrarToast(erro.message, 'erro');
-    }
-  });
-});
+        const excluir = document.createElement('button');
+        excluir.type = 'button';
+        excluir.className = 'botao';
+        excluir.textContent = 'Excluir';
 
-acoes.appendChild(excluir);
+        excluir.addEventListener('click', () => {
+          confirmar(`Deseja excluir a obra "${obra.titulo}"?`, () => {
+            try {
+              excluirObra(obra.id);
+              mostrarToast('Obra excluída com sucesso!', 'sucesso');
+              carregarObras();
+            } catch (erro) {
+              mostrarToast(erro.message, 'erro');
+            }
+          });
+        });
+
+        acoes.appendChild(excluir);
 
         linha.appendChild(acoes);
         tabela.appendChild(linha);
