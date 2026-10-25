@@ -1,5 +1,4 @@
-
-
+/* Responsável: M5 — veja a seção "M5 — Exposições e eventos" no Guia da Entrega 1 */
 .agenda-eventos {
   display: grid;
   gap: var(--espaco-4);
