@@ -33,7 +33,9 @@ function lerFiltros() {
   return Object.fromEntries(Object.entries(dados).filter(([, v]) => v.trim() !== ''));
 }
 
-function atualizar(pagina = 1) {
+// historico: 'novo' cria uma entrada (botão Voltar funciona), 'substituir' troca a atual
+// e 'nenhum' não mexe na URL (usado ao navegar pelo histórico).
+function atualizar(pagina = 1, historico = 'novo') {
   try {
     const filtros = { ...lerFiltros(), pagina };
     let resposta = listarObras(filtros);
@@ -45,7 +47,9 @@ function atualizar(pagina = 1) {
       resposta = listarObras(filtros);
     }
 
-    history.replaceState(null, '', `?${new URLSearchParams(filtros)}`);
+    const url = `?${new URLSearchParams({ ...filtros, pagina: resposta.pagina })}`;
+    if (historico === 'novo' && url !== location.search) history.pushState(null, '', url);
+    if (historico === 'substituir') history.replaceState(null, '', url);
     desenharContador(resposta.total);
     desenharObras(resposta.dados);
     desenharPaginacao(resposta);
@@ -120,6 +124,7 @@ function desenharPaginacao({ total, pagina, porPagina }) {
 }
 
 function limparFiltros() {
+  clearTimeout(espera);
   form.reset();
   atualizar(1);
 }
@@ -155,7 +160,7 @@ form.addEventListener('change', (evento) => {
 
 form.busca.addEventListener('input', () => {
   clearTimeout(espera);
-  espera = setTimeout(() => atualizar(1), 300);
+  espera = setTimeout(() => atualizar(1, 'substituir'), 300);
 });
 
 document.querySelector('#limpar-filtros').addEventListener('click', limparFiltros);
@@ -176,4 +181,9 @@ try {
 } catch (erro) {
   mostrarToast(erro.message, 'erro');
 }
-atualizar(preencherDaUrl());
+atualizar(preencherDaUrl(), 'substituir');
+
+window.addEventListener('popstate', () => {
+  form.reset();
+  atualizar(preencherDaUrl(), 'nenhum');
+});
