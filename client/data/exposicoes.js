@@ -1,4 +1,4 @@
-// Responsável: M5 — dados de exemplo; substituir pelos reais
+
 export const exposicoes = [
   {
     id: 1,
@@ -16,6 +16,24 @@ export const exposicoes = [
     data_inicio: '2027-08-01',
     data_fim: '2027-11-30',
     sala: 'Galeria 1',
+    imagem_url: '/assets/img/placeholder.svg',
+  },
+  {
+    id: 3,
+    titulo: 'Novos Olhares',
+    descricao: 'Uma exposição de exemplo.',
+    data_inicio: '2025-12-01',
+    data_fim: '2026-03-31',
+    sala: 'Galeria 3',
+    imagem_url: '/assets/img/placeholder.svg',
+  },
+  {
+    id: 4,
+    titulo: 'artes modernas',
+    descricao: 'Uma exposição de exemplo.',
+    data_inicio: '2026-07-01',
+    data_fim: '2027-03-31',
+    sala: 'Galeria 4',
     imagem_url: '/assets/img/placeholder.svg',
   },
 ];
