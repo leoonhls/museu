@@ -1,22 +1,86 @@
 <!-- Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Início — Museu</title>
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/pages/home.css">
-</head>
-<body>
-  <div id="header"></div>
-  <main class="container">
-    <h1>Início</h1>
-    <p class="em-construcao">Página em construção — responsável: M2.</p>
-    <p><a class="botao" href="pages/login.html">Entrar / cadastrar</a></p>
-  </main>
-  <div id="footer"></div>
-  <script type="module" src="js/pages/home.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Início — Museu de Artes</title>
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <link rel="stylesheet" href="css/pages/home.css" />
+  </head>
+  <body>
+    <div id="header"></div>
+
+    <main class="container home">
+      <section class="hero-section">
+        <span class="tag">Expressão • História • Cultura</span>
+        <h1 class="hero-titulo">A arte que transforma e perpetua o olhar humano.</h1>
+        <p class="hero-descricao">
+          Explore coleções, galerias e movimentos artísticos que moldaram a sensibilidade e a
+          estética através dos séculos.
+        </p>
+        <a href="pages/obras.html" class="botao">Explorar o acervo &rarr;</a>
+      </section>
+
+      <section class="home-secao" aria-labelledby="titulo-exposicao">
+        <div class="secao-cabecalho">
+          <h2 class="secao-titulo" id="titulo-exposicao">Em cartaz</h2>
+          <a href="pages/exposicoes.html" class="secao-link">Ver todas as exposições &rarr;</a>
+        </div>
+        <div id="banner-exposicao"></div>
+      </section>
+
+      <section class="home-secao" aria-labelledby="titulo-destaques">
+        <div class="secao-cabecalho">
+          <h2 class="secao-titulo" id="titulo-destaques">Obras em destaque</h2>
+          <a href="pages/obras.html" class="secao-link">Ver todo o acervo &rarr;</a>
+        </div>
+        <div id="grid-destaques" class="grid"></div>
+      </section>
+
+      <section class="home-secao" aria-labelledby="titulo-linha">
+        <div class="secao-cabecalho">
+          <div>
+            <h2 class="secao-titulo" id="titulo-linha">Linha do tempo</h2>
+            <p class="secao-subtitulo">Os grandes movimentos que atravessam o nosso acervo.</p>
+          </div>
+        </div>
+
+        <ol class="timeline-linear">
+          <li class="timeline-step">
+            <span class="timeline-icon" aria-hidden="true">🏛️</span>
+            <span class="timeline-ano">Renascimento</span>
+            <p class="timeline-texto">Retorno ao classicismo e perspectiva</p>
+          </li>
+          <li class="timeline-step">
+            <span class="timeline-icon" aria-hidden="true">🎨</span>
+            <span class="timeline-ano">Impressionismo</span>
+            <p class="timeline-texto">A luz e o instante ao ar livre</p>
+          </li>
+          <li class="timeline-step">
+            <span class="timeline-icon" aria-hidden="true">📷</span>
+            <span class="timeline-ano">Fotografia</span>
+            <p class="timeline-texto">Uma nova forma de registrar o mundo</p>
+          </li>
+          <li class="timeline-step">
+            <span class="timeline-icon" aria-hidden="true">🌀</span>
+            <span class="timeline-ano">Modernismo</span>
+            <p class="timeline-texto">Ruptura com as formas tradicionais</p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="home-secao home-secao--ultima" aria-labelledby="titulo-agenda">
+        <div class="secao-cabecalho">
+          <h2 class="secao-titulo" id="titulo-agenda">Agenda cultural</h2>
+          <a href="pages/eventos.html" class="secao-link">Ver agenda &rarr;</a>
+        </div>
+        <div id="grid-eventos" class="grid"></div>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+    <script type="module" src="js/pages/home.js"></script>
+  </body>
 </html>

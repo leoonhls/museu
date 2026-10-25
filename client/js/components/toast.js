@@ -3,6 +3,7 @@
 export function mostrarToast(mensagem, tipo = 'sucesso') {
   const toast = document.createElement('div');
   toast.className = `toast toast--${tipo}`;
+  toast.setAttribute('role', tipo === 'erro' ? 'alert' : 'status');
   toast.textContent = mensagem;
   document.body.append(toast);
   setTimeout(() => toast.remove(), 3000);
