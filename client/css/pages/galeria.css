@@ -1,62 +1,42 @@
 /* Responsável: M3 — veja a seção "M3 — Galeria" no Guia da Entrega 1 */
-.galeria {
-  padding-block: var(--espaco-4);
-}
 
-.galeria h1 {
-  margin-bottom: var(--espaco-1);
-  font-family: var(--fonte-titulo);
-}
-
-.galeria__introducao,
-.galeria__resumo {
-  color: var(--cor-texto-suave);
-}
-
-.galeria__resumo {
-  margin-top: var(--espaco-3);
-}
-
-.galeria__erro {
-  color: var(--cor-erro);
-}
-
-.galeria__grade {
-  margin-top: var(--espaco-2);
-}
-
-.galeria__grade .card {
+/* Card de obra: usado também na home, no perfil, na obra e nas exposições */
+.card-obra {
   position: relative;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.galeria__grade .card > a {
+.card-obra__link {
   color: inherit;
   text-decoration: none;
 }
 
-.galeria__grade .card img {
+.card-obra__imagem {
   width: 100%;
-  aspect-ratio: 4 / 3;
-  margin-bottom: var(--espaco-2);
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
   border-radius: var(--raio);
   background: var(--cor-borda);
-  object-fit: cover;
 }
 
-.galeria__grade .card h3 {
-  margin-bottom: var(--espaco-1);
+.card-obra__titulo {
+  margin: var(--espaco-1) 0 0;
   font-family: var(--fonte-titulo);
+  font-size: 1.1rem;
 }
 
-.galeria__grade .card p {
+.card-obra__link:hover .card-obra__titulo,
+.card-obra__link:focus-visible .card-obra__titulo {
+  color: var(--cor-destaque);
+}
+
+.card-obra__detalhes {
+  margin: 0;
   color: var(--cor-texto-suave);
 }
 
 .botao-favorito {
-  position: absolute;
-  top: var(--espaco-2);
-  right: var(--espaco-2);
   display: grid;
   width: 2.75rem;
   height: 2.75rem;
@@ -78,4 +58,120 @@
 .botao-favorito:focus-visible {
   outline: 3px solid var(--cor-destaque);
   outline-offset: 2px;
+}
+
+.card-obra .botao-favorito {
+  position: absolute;
+  top: calc(var(--espaco-2) + var(--espaco-1));
+  right: calc(var(--espaco-2) + var(--espaco-1));
+}
+
+/* Layout da página (mobile primeiro) */
+.galeria {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr); /* não deixa a imagem alargar a coluna */
+  gap: var(--espaco-2);
+  padding-block: var(--espaco-3);
+}
+
+.galeria__titulo {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+}
+
+.galeria__abrir-filtros {
+  justify-self: start;
+}
+
+.galeria__filtros {
+  display: none;
+  padding: var(--espaco-2);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+}
+
+.galeria__filtros--aberto {
+  display: block;
+}
+
+.galeria__filtros input,
+.galeria__filtros select {
+  width: 100%;
+  padding: var(--espaco-1);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio);
+  background: var(--cor-superficie);
+  color: var(--cor-texto);
+  font: inherit;
+}
+
+.galeria__periodo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--espaco-1);
+  margin: 0 0 var(--espaco-2);
+  padding: 0;
+  border: 0;
+}
+
+.galeria__periodo legend {
+  margin-bottom: var(--espaco-1);
+  padding: 0;
+}
+
+.galeria__periodo .campo {
+  margin-bottom: 0;
+}
+
+#limpar-filtros {
+  width: 100%;
+}
+
+#contador {
+  margin: 0 0 var(--espaco-2);
+  color: var(--cor-texto-suave);
+}
+
+.galeria__vazio {
+  grid-column: 1 / -1;
+  padding: var(--espaco-4) var(--espaco-2);
+  text-align: center;
+  color: var(--cor-texto-suave);
+}
+
+.galeria__paginacao {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--espaco-1);
+  margin-top: var(--espaco-3);
+}
+
+.galeria__paginacao .botao:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Computador: filtros numa coluna à esquerda, sempre visíveis */
+@media (min-width: 768px) {
+  .galeria {
+    grid-template-columns: 240px minmax(0, 1fr);
+    align-items: start;
+    column-gap: var(--espaco-4);
+  }
+
+  .galeria__titulo {
+    grid-column: 1 / -1;
+  }
+
+  .galeria__abrir-filtros {
+    display: none;
+  }
+
+  .galeria__filtros {
+    display: block;
+    position: sticky;
+    top: var(--espaco-2);
+  }
 }
