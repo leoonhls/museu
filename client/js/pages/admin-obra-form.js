@@ -2,7 +2,7 @@
 
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { exigirAdmin } from '../auth.js';
+import { exigirAdmin } from '../auth-local.js';
 
 import {
   listarArtistas,
@@ -10,7 +10,7 @@ import {
   buscarObra,
   criarObra,
   editarObra
-} from '../api.js';
+} from '../api-local.js';
 
 import { mostrarToast } from '../components/toast.js';
 

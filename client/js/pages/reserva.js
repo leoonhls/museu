@@ -2,8 +2,8 @@
 
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { exigirLogin } from '../auth.js';
-import { minhasReservas } from '../api.js';
+import { exigirLogin } from '../auth-local.js';
+import { minhasReservas } from '../api-local.js';
 
 montarHeader();
 montarFooter();

@@ -1,5 +1,5 @@
 // Responsável: M7 — veja a seção "M7 — Login e favoritos" no Guia da Entrega 1
-import { desfavoritar, favoritar, listarFavoritos, usuarioAtual } from '../api.js';
+import { desfavoritar, favoritar, listarFavoritos, usuarioAtual } from '../api-local.js';
 import { mostrarToast } from './toast.js';
 import { urlApp } from '../utils/rotas.js';
 

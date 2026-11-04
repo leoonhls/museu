@@ -1,5 +1,5 @@
 // Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1
-import { aplicarPreferenciasAcessibilidade, usuarioAtual, sair } from '../api.js';
+import { aplicarPreferenciasAcessibilidade, usuarioAtual, sair } from '../api-local.js';
 import { caminhoInicio, urlApp } from '../utils/rotas.js';
 
 function criarLink(caminho, texto) {

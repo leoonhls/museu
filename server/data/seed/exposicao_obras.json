@@ -1,0 +1,110 @@
+[
+  {
+    "exposicao_id": 1,
+    "obra_id": 1
+  },
+  {
+    "exposicao_id": 1,
+    "obra_id": 3
+  },
+  {
+    "exposicao_id": 1,
+    "obra_id": 4
+  },
+  {
+    "exposicao_id": 1,
+    "obra_id": 8
+  },
+  {
+    "exposicao_id": 1,
+    "obra_id": 9
+  },
+  {
+    "exposicao_id": 1,
+    "obra_id": 37
+  },
+  {
+    "exposicao_id": 1,
+    "obra_id": 38
+  },
+  {
+    "exposicao_id": 2,
+    "obra_id": 2
+  },
+  {
+    "exposicao_id": 2,
+    "obra_id": 6
+  },
+  {
+    "exposicao_id": 2,
+    "obra_id": 7
+  },
+  {
+    "exposicao_id": 2,
+    "obra_id": 10
+  },
+  {
+    "exposicao_id": 2,
+    "obra_id": 13
+  },
+  {
+    "exposicao_id": 2,
+    "obra_id": 14
+  },
+  {
+    "exposicao_id": 2,
+    "obra_id": 39
+  },
+  {
+    "exposicao_id": 3,
+    "obra_id": 30
+  },
+  {
+    "exposicao_id": 3,
+    "obra_id": 31
+  },
+  {
+    "exposicao_id": 3,
+    "obra_id": 32
+  },
+  {
+    "exposicao_id": 3,
+    "obra_id": 33
+  },
+  {
+    "exposicao_id": 3,
+    "obra_id": 34
+  },
+  {
+    "exposicao_id": 4,
+    "obra_id": 21
+  },
+  {
+    "exposicao_id": 4,
+    "obra_id": 22
+  },
+  {
+    "exposicao_id": 4,
+    "obra_id": 23
+  },
+  {
+    "exposicao_id": 4,
+    "obra_id": 35
+  },
+  {
+    "exposicao_id": 4,
+    "obra_id": 25
+  },
+  {
+    "exposicao_id": 4,
+    "obra_id": 26
+  },
+  {
+    "exposicao_id": 4,
+    "obra_id": 28
+  },
+  {
+    "exposicao_id": 4,
+    "obra_id": 29
+  }
+]

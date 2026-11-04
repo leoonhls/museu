@@ -7,12 +7,12 @@ import {
   minhasReservas,
   obterPerfilUsuario,
   sair,
-} from '../api.js';
+} from '../api-local.js';
 import { criarListaReservas } from '../components/lista-reservas.js';
 import { criarCardObra } from '../components/card-obra.js';
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { exigirLogin } from '../auth.js';
+import { exigirLogin } from '../auth-local.js';
 import { formatarData, formatarDataHora } from '../utils/datas.js';
 import { caminhoInicio, urlApp } from '../utils/rotas.js';
 

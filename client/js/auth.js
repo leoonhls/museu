@@ -1,24 +1,21 @@
 // Responsável: M1
 import { usuarioAtual } from './api.js';
-import { caminhoInicio, urlApp } from './utils/rotas.js';
 
-// Uso no início de uma página protegida:
-//   const usuario = exigirLogin();
-//   if (usuario) { ...código da página... }
-export function exigirLogin() {
-  const usuario = usuarioAtual();
+// Uso: const usuario = await exigirLogin(); if (usuario) { ... }
+export async function exigirLogin() {
+  const usuario = await usuarioAtual();
   if (!usuario) {
     const voltar = encodeURIComponent(location.pathname + location.search);
-    location.href = `${urlApp('pages/login.html')}?voltar=${voltar}`;
+    location.href = `/pages/login.html?voltar=${voltar}`;
     return null;
   }
   return usuario;
 }
 
-export function exigirAdmin() {
-  const usuario = exigirLogin();
+export async function exigirAdmin() {
+  const usuario = await exigirLogin();
   if (usuario && usuario.papel !== 'admin') {
-    location.href = caminhoInicio();
+    location.href = '/index.html';
     return null;
   }
   return usuario;

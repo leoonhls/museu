@@ -17,3 +17,8 @@ npm-debug.log*
 # Temporários
 *.log
 *.tmp
+
+# Entrega 2
+server/data/db/
+client/assets/img/uploads/*
+!client/assets/img/uploads/.gitkeep

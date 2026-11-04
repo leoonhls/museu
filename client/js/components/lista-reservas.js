@@ -1,5 +1,5 @@
 // Responsável: M6 — veja a seção "M6 — Ingressos" no Guia da Entrega 1
-import { cancelarReserva } from '../api.js';
+import { cancelarReserva } from '../api-local.js';
 import { formatarData } from '../utils/datas.js';
 import { urlApp } from '../utils/rotas.js';
 import { confirmar } from './modal.js';

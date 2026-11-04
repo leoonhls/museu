@@ -1,0 +1,13 @@
+# Responsável: M5 — veja a seção "M5" no Guia da Entrega 2
+# Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
+
+@base = http://localhost:3000/api
+
+### Exposições atuais
+GET {{base}}/exposicoes?status=atual
+
+### Detalhe de uma exposição, com obras e eventos
+GET {{base}}/exposicoes/1
+
+### Eventos num intervalo de datas
+GET {{base}}/eventos?de=2026-11-01&ate=2026-12-31

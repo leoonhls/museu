@@ -1,8 +1,8 @@
 // Responsável: M6 — veja a seção "M6 — Ingressos" no Guia da Entrega 1
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { exigirLogin } from '../auth.js';
-import { listarEventos, criarReserva } from '../api.js';
+import { exigirLogin } from '../auth-local.js';
+import { listarEventos, criarReserva } from '../api-local.js';
 import { PRECO_INTEIRA, MAX_INGRESSOS, DIAS_ANTECEDENCIA_MAX, DIA_FECHADO } from '../config.js';
 import { mostrarToast } from '../components/toast.js';
 

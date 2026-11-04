@@ -1,0 +1,31 @@
+# Responsável: M7 — veja a seção "M7" no Guia da Entrega 2
+# Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
+
+@base = http://localhost:3000/api
+
+### Usuário logado (null se ninguém entrou)
+GET {{base}}/auth/me
+
+### Criar conta
+POST {{base}}/auth/cadastro
+Content-Type: application/json
+
+{ "nome": "Visitante Teste", "email": "visitante@teste.com", "senha": "senha1234" }
+
+### Entrar
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "admin@museu.com", "senha": "admin123" }
+
+### Sair
+POST {{base}}/auth/logout
+
+### Listar favoritos
+GET {{base}}/favoritos
+
+### Favoritar uma obra
+POST {{base}}/favoritos/1
+
+### Desfavoritar uma obra
+DELETE {{base}}/favoritos/1

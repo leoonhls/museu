@@ -1,5 +1,5 @@
 // Responsável: M4 — veja a seção "M4 — Obra, artista e dados reais" no Guia da Entrega 1
-import { buscarObra, listarObras } from '../api.js';
+import { buscarObra, listarObras } from '../api-local.js';
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { criarBotaoFavorito } from '../components/botao-favorito.js';

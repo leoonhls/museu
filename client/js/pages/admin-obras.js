@@ -1,9 +1,9 @@
 // Responsável: M8 — veja a seção "M8 — Área administrativa" no Guia da Entrega 1
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { exigirAdmin } from '../auth.js';
+import { exigirAdmin } from '../auth-local.js';
 
-import { listarObras, excluirObra } from '../api.js';
+import { listarObras, excluirObra } from '../api-local.js';
 import { confirmar } from '../components/modal.js';
 import { mostrarToast } from '../components/toast.js';
 

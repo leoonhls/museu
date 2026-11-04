@@ -2,6 +2,7 @@
   "recommendations": [
     "ritwickdey.LiveServer",
     "esbenp.prettier-vscode",
-    "editorconfig.editorconfig"
+    "editorconfig.editorconfig",
+    "humao.rest-client"
   ]
 }
