@@ -10,7 +10,7 @@ Projeto acadêmico: site de um museu de artes, feito em três entregas.
 
 ## Como rodar (Entrega 2)
 
-1. Instale o [Node.js](https://nodejs.org) 22 ou superior (`node -v` para conferir).
+1. Instale o [Node.js](https://nodejs.org) 22 ou superior (`node -v` para conferir). Quem usa nvm pode rodar `nvm use`: ele lê a versão do arquivo `.nvmrc`.
 2. Na pasta do projeto, instale as dependências: `npm install`.
 3. Crie o banco de desenvolvimento: `npm run seed`.
 4. Ligue o servidor: `npm run dev`. Ele reinicia sozinho quando um arquivo do servidor é salvo.
