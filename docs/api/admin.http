@@ -1,0 +1,55 @@
+# Responsável: M8 — veja a seção "M8" no Guia da Entrega 2
+# Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
+
+@base = http://localhost:3000/api
+
+### Entrar como admin
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "admin@museu.com", "senha": "admin123" }
+
+### Criar obra
+POST {{base}}/obras
+Content-Type: application/json
+
+{
+  "titulo": "Obra de Teste",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "dimensoes": "50 × 70 cm",
+  "descricao": "Uma descrição com mais de vinte caracteres.",
+  "imagem_url": "/assets/img/placeholder.svg",
+  "em_exibicao": true
+}
+
+### Editar obra
+PUT {{base}}/obras/1000
+Content-Type: application/json
+
+{
+  "titulo": "Obra de Teste (editada)",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Uma descrição com mais de vinte caracteres.",
+  "imagem_url": "/assets/img/placeholder.svg",
+  "em_exibicao": false
+}
+
+### Excluir obra
+DELETE {{base}}/obras/1000
+
+### Enviar imagem (campo "imagem")
+POST {{base}}/uploads
+Content-Type: multipart/form-data; boundary=limite
+
+--limite
+Content-Disposition: form-data; name="imagem"; filename="noite-estrelada.jpg"
+Content-Type: image/jpeg
+
+< ../../client/assets/img/obras/noite-estrelada.jpg
+--limite--

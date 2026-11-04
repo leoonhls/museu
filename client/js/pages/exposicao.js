@@ -1,7 +1,7 @@
 // Responsável: M5 — veja a seção "M5 — Exposições e eventos" no Guia da Entrega 1
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { buscarExposicao } from '../api.js';
+import { buscarExposicao } from '../api-local.js';
 import { criarCardObra } from '../components/card-obra.js';
 import { formatarData, formatarDataHora } from '../utils/datas.js';
 import { urlApp } from '../utils/rotas.js';

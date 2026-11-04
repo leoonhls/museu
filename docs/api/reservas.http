@@ -1,0 +1,22 @@
+# Responsável: M6 — veja a seção "M6" no Guia da Entrega 2
+# Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
+
+@base = http://localhost:3000/api
+
+### Entrar como admin (as reservas exigem login)
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": "admin@museu.com", "senha": "admin123" }
+
+### Reservar ingressos para um evento
+POST {{base}}/reservas
+Content-Type: application/json
+
+{ "evento_id": 1, "qtd_inteira": 2, "qtd_meia": 1 }
+
+### Minhas reservas
+GET {{base}}/reservas/minhas
+
+### Cancelar uma reserva
+DELETE {{base}}/reservas/1

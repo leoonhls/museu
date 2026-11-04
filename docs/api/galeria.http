@@ -1,0 +1,7 @@
+# Responsável: M3 — veja a seção "M3" no Guia da Entrega 2
+# Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
+
+@base = http://localhost:3000/api
+
+### Listar obras (página 1)
+GET {{base}}/obras?pagina=1

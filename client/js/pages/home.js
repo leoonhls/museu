@@ -3,7 +3,7 @@ import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { mostrarToast } from '../components/toast.js';
 import { criarCardObra } from '../components/card-obra.js';
-import { listarExposicoes, listarObras, listarEventos } from '../api.js';
+import { listarExposicoes, listarObras, listarEventos } from '../api-local.js';
 import { formatarData, formatarDataHora } from '../utils/datas.js';
 import { urlApp } from '../utils/rotas.js';
 

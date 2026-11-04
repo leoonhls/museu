@@ -1,0 +1,16 @@
+# Responsável: M4 — veja a seção "M4" no Guia da Entrega 2
+# Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
+
+@base = http://localhost:3000/api
+
+### Detalhe de uma obra
+GET {{base}}/obras/1
+
+### Listar artistas
+GET {{base}}/artistas
+
+### Detalhe de um artista, com as obras
+GET {{base}}/artistas/1
+
+### Listar categorias
+GET {{base}}/categorias

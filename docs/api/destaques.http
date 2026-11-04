@@ -1,0 +1,7 @@
+# Responsável: M2 — veja a seção "M2" no Guia da Entrega 2
+# Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
+
+@base = http://localhost:3000/api
+
+### Destaques da home (exposição atual, 6 obras, 3 eventos)
+GET {{base}}/destaques

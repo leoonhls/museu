@@ -1,5 +1,5 @@
 // Responsável: M7 — veja a seção "M7 — Login e favoritos" no Guia da Entrega 1
-import { entrar, cadastrar } from '../api.js';
+import { entrar, cadastrar } from '../api-local.js';
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { caminhoInicio, urlApp } from '../utils/rotas.js';
