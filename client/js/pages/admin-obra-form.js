@@ -10,7 +10,7 @@ import {
   buscarObra,
   criarObra,
   editarObra
-} from '../api-local.js';
+} from '../api.js';
 
 import { mostrarToast } from '../components/toast.js';
 
@@ -20,6 +20,7 @@ montarFooter();
 const usuario = exigirAdmin();
 
 if (usuario) {
+  async function carregarDados() {
   const formulario = document.querySelector('#form-obra');
 
   const titulo = document.querySelector('#titulo');
@@ -47,12 +48,12 @@ if (usuario) {
     });
   }
 
-  preencherOpcoes(artista, listarArtistas());
-  preencherOpcoes(categoria, listarCategorias());
+  preencherOpcoes(artista, await listarArtistas());
+  preencherOpcoes(categoria, await listarCategorias());
 
   // Carregar os dados da obra no modo de edição
   if (modoEdicao) {
-    const obra = buscarObra(Number(idObra));
+    const obra = await buscarObra(Number(idObra));
 
     if (obra) {
       titulo.value = obra.titulo;
@@ -84,7 +85,7 @@ if (usuario) {
   });
 
   // Cadastrar ou atualizar uma obra
-  formulario.addEventListener('submit', (evento) => {
+  formulario.addEventListener('submit', async (evento) => {
     evento.preventDefault();
 
     if (formulario.hidden) {
@@ -105,10 +106,10 @@ if (usuario) {
 
     try {
       if (modoEdicao) {
-        editarObra(Number(idObra), dadosObra);
+        await editarObra(Number(idObra), dadosObra);
         mostrarToast('Obra atualizada com sucesso!', 'sucesso');
       } else {
-        criarObra(dadosObra);
+        await criarObra(dadosObra);
         mostrarToast('Obra cadastrada com sucesso!', 'sucesso');
       }
 
@@ -121,4 +122,5 @@ if (usuario) {
     }
   });
 }
-
+  carregarDados();
+}

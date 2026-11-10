@@ -2,11 +2,11 @@
 import express from 'express';
 import * as controller from './controller.js';
 import { uploadImagem } from '../../middlewares/upload.js';
-
+import { exigirAdmin } from '../../middlewares/autenticacao.js';
 export const rotas = express.Router();
 
-// TODO (M8): proteger as quatro rotas com exigirAdmin (middlewares/autenticacao.js)
-rotas.post('/obras', controller.criarObra);
-rotas.put('/obras/:id', controller.editarObra);
-rotas.delete('/obras/:id', controller.excluirObra);
-rotas.post('/uploads', uploadImagem, controller.receberUpload);
+
+rotas.post('/obras', exigirAdmin, controller.criarObra);
+rotas.put('/obras/:id', exigirAdmin, controller.editarObra);
+rotas.delete('/obras/:id', exigirAdmin, controller.excluirObra);
+rotas.post('/uploads', exigirAdmin, uploadImagem, controller.receberUpload);
