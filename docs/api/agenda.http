@@ -1,5 +1,5 @@
-# Responsável: M5 — veja a seção "M5" no Guia da Entrega 2
-# Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
+
+
 
 @base = http://localhost:3000/api
 
@@ -11,3 +11,12 @@ GET {{base}}/exposicoes/1
 
 ### Eventos num intervalo de datas
 GET {{base}}/eventos?de=2026-11-01&ate=2026-12-31
+
+### Erro 400: status inválido
+GET {{base}}/exposicoes?status=indefinido
+
+### Erro 400: data inválida
+GET {{base}}/eventos?de=2026-02-30
+
+### Erro 400: data inicial posterior à final
+GET {{base}}/eventos?de=2026-12-31&ate=2026-11-01
