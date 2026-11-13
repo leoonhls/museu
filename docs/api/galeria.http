@@ -1,7 +1,91 @@
 # Responsável: M3 — veja a seção "M3" no Guia da Entrega 2
 # Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
+# Resposta de sucesso: 200 com { dados, total, pagina, porPagina: 12 }
 
 @base = http://localhost:3000/api
 
-### Listar obras (página 1)
-GET {{base}}/obras?pagina=1
+### ------------------------------------------------------------------
+### Sucesso
+### ------------------------------------------------------------------
+
+### Sem filtros (página 1, ordem por título)
+GET {{base}}/obras
+
+### Página 2
+GET {{base}}/obras?pagina=2
+
+### Busca pelo título
+GET {{base}}/obras?busca=noite
+
+### Busca pelo nome do artista
+GET {{base}}/obras?busca=monet
+
+### Busca sem acento acha título com acento ("impressao" -> "Impressão, Sol Nascente")
+GET {{base}}/obras?busca=impressao
+
+### Busca com maiúsculas e espaços nas pontas (são ignorados)
+GET {{base}}/obras?busca=%20%20VAN%20GOGH%20%20
+
+### Só categoria
+GET {{base}}/obras?categoria=1
+
+### Só artista
+GET {{base}}/obras?artista=1
+
+### Só ano mínimo
+GET {{base}}/obras?anoMin=1880
+
+### Só ano máximo
+GET {{base}}/obras?anoMax=1600
+
+### Período (anoMin = anoMax também vale)
+GET {{base}}/obras?anoMin=1889&anoMax=1889
+
+### Ordem: mais antigas primeiro
+GET {{base}}/obras?ordem=antigas
+
+### Ordem: mais recentes primeiro
+GET {{base}}/obras?ordem=recentes
+
+### Vários filtros combinados
+GET {{base}}/obras?categoria=1&anoMin=1800&anoMax=1900&ordem=recentes&busca=a
+
+### Campos vazios contam como "não informados" (é o que o formulário manda)
+GET {{base}}/obras?busca=&categoria=&artista=&anoMin=&anoMax=&ordem=&pagina=
+
+### Busca sem resultado: dados [] e total 0
+GET {{base}}/obras?busca=xyzxyz
+
+### Página além do fim: dados [] com o total certo (não é erro)
+GET {{base}}/obras?pagina=50
+
+### ------------------------------------------------------------------
+### Erros (400)
+### ------------------------------------------------------------------
+
+### Página inválida: zero
+GET {{base}}/obras?pagina=0
+
+### Página inválida: texto
+GET {{base}}/obras?pagina=abc
+
+### Página inválida: decimal
+GET {{base}}/obras?pagina=1.5
+
+### Categoria inválida
+GET {{base}}/obras?categoria=-1
+
+### Artista inválido
+GET {{base}}/obras?artista=abc
+
+### Período inválido: ano não inteiro
+GET {{base}}/obras?anoMin=mil
+
+### Período inválido: anoMin maior que anoMax
+GET {{base}}/obras?anoMin=1900&anoMax=1800
+
+### Ordem inválida
+GET {{base}}/obras?ordem=preco
+
+### Busca muito longa (101 caracteres)
+GET {{base}}/obras?busca=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
