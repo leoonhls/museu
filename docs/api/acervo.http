@@ -3,14 +3,32 @@
 
 @base = http://localhost:3000/api
 
-### Detalhe de uma obra
+# ---------- Obras ----------
+
+### Detalhe de uma obra (200, com artista, categoria e exposições)
 GET {{base}}/obras/1
 
-### Listar artistas
+### Obra que não existe (404 "Obra não encontrada.")
+GET {{base}}/obras/99999
+
+### Id de obra inválido (400 "Id inválido.")
+GET {{base}}/obras/abc
+
+# ---------- Artistas ----------
+
+### Listar artistas (200, ordenados por nome)
 GET {{base}}/artistas
 
-### Detalhe de um artista, com as obras
+### Detalhe de um artista, com as obras (200)
 GET {{base}}/artistas/1
 
-### Listar categorias
+### Artista que não existe (404 "Artista não encontrado.")
+GET {{base}}/artistas/99999
+
+### Id de artista inválido (400 "Id inválido.")
+GET {{base}}/artistas/abc
+
+# ---------- Categorias ----------
+
+### Listar categorias (200)
 GET {{base}}/categorias

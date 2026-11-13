@@ -1,9 +1,9 @@
 // Responsável: M4 — veja a seção "M4 — Obra, artista e dados reais" no Guia da Entrega 1
-import { buscarArtista } from '../api-local.js';
+import { buscarArtista } from '../api.js';
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { criarCardObra } from '../components/card-obra.js';
-import { mostrarToast } from '../components/toast.js';
+import { mostrarCarregando, mostrarErro } from '../components/estado.js';
 import { urlApp } from '../utils/rotas.js';
 
 montarHeader();
@@ -122,21 +122,30 @@ function renderizarArtista(artista) {
   container.replaceChildren(trilha, perfil, secaoObras);
 }
 
-try {
+async function carregarArtista() {
   const parametroId = new URLSearchParams(location.search).get('id');
   const id = parametroId !== null && parametroId.trim() !== '' ? Number(parametroId) : NaN;
 
   if (!Number.isInteger(id) || id < 1) {
     renderizarNaoEncontrado();
-  } else {
-    const artista = buscarArtista(id);
+    return;
+  }
+
+  mostrarCarregando(container);
+  try {
+    const artista = await buscarArtista(id);
     if (!artista) {
       renderizarNaoEncontrado();
-    } else {
-      renderizarArtista(artista);
+      return;
     }
+    renderizarArtista(artista);
+  } catch (erro) {
+    mostrarErro(
+      container,
+      erro.message || 'Erro ao carregar os dados do artista.',
+      carregarArtista,
+    );
   }
-} catch (erro) {
-  mostrarToast(erro.message || 'Erro ao carregar os dados do artista.', 'erro');
-  renderizarNaoEncontrado('Não foi possível carregar o artista');
 }
+
+carregarArtista();
