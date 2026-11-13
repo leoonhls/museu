@@ -1,5 +1,5 @@
 // Responsável: M6 — veja a seção "M6 — Ingressos" no Guia da Entrega 1
-import { cancelarReserva } from '../api-local.js';
+import { cancelarReserva } from '../api.js';
 import { formatarData } from '../utils/datas.js';
 import { urlApp } from '../utils/rotas.js';
 import { confirmar } from './modal.js';
@@ -54,13 +54,16 @@ export function criarListaReservas(reservas, aoCancelar = () => {}) {
       botao.className = 'botao botao--secundario';
       botao.textContent = 'Cancelar reserva';
       botao.addEventListener('click', () => {
-        confirmar(`Cancelar a reserva ${reserva.codigo}?`, () => {
+        confirmar(`Cancelar a reserva ${reserva.codigo}?`, async () => {
+          botao.disabled = true;
+
           try {
-            cancelarReserva(reserva.id);
+            await cancelarReserva(reserva.id);
             mostrarToast('Reserva cancelada.');
             aoCancelar();
           } catch (erro) {
             mostrarToast(erro.message, 'erro');
+            botao.disabled = false;
           }
         });
       });

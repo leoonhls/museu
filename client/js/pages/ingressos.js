@@ -1,15 +1,15 @@
 // Responsável: M6 — veja a seção "M6 — Ingressos" no Guia da Entrega 1
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { exigirLogin } from '../auth-local.js';
-import { listarEventos, criarReserva } from '../api-local.js';
+import { exigirLogin } from '../auth.js';
+import { listarEventos, criarReserva } from '../api.js';
 import { PRECO_INTEIRA, MAX_INGRESSOS, DIAS_ANTECEDENCIA_MAX, DIA_FECHADO } from '../config.js';
 import { mostrarToast } from '../components/toast.js';
 
 montarHeader();
 montarFooter();
 
-const usuario = exigirLogin();
+const usuario = await exigirLogin();
 
 if (usuario) {
   const formulario = document.querySelector('#form-reserva');
@@ -251,11 +251,17 @@ if (usuario) {
     }
   }
 
-  function confirmarReserva() {
+  async function confirmarReserva() {
+    const botaoConfirmar = document.querySelector('#confirmar-reserva');
+
+    if (botaoConfirmar.disabled) return;
+
+    botaoConfirmar.disabled = true;
+
     try {
       const evento = tipoVisita.value === 'evento' ? obterEventoSelecionado() : null;
 
-      reservaCriada = criarReserva({
+      reservaCriada = await criarReserva({
         evento_id: evento ? evento.id : null,
         data_visita: evento ? undefined : campoData.value,
         qtd_inteira: Number(qtdInteira.value),
@@ -274,6 +280,8 @@ if (usuario) {
     } catch (erro) {
       mensagem.textContent = erro.message;
       mostrarToast(erro.message, 'erro');
+    } finally {
+      botaoConfirmar.disabled = false;
     }
   }
 
@@ -296,7 +304,7 @@ if (usuario) {
   qtdInteira.max = MAX_INGRESSOS;
   qtdMeia.max = MAX_INGRESSOS;
 
-  eventosDisponiveis = listarEventos();
+  eventosDisponiveis = await listarEventos();
   atualizarEventos();
   configurarDatas();
   atualizarTipoVisita();

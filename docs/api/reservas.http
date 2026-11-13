@@ -9,14 +9,75 @@ Content-Type: application/json
 
 { "email": "admin@museu.com", "senha": "admin123" }
 
-### Reservar ingressos para um evento
+### Reservar visita comum
 POST {{base}}/reservas
 Content-Type: application/json
 
-{ "evento_id": 1, "qtd_inteira": 2, "qtd_meia": 1 }
+{
+  "data_visita": "2026-11-15",
+  "qtd_inteira": 2,
+  "qtd_meia": 1
+}
 
-### Minhas reservas
+### Reservar ingressos para um evento (preço enviado deve ser ignorado)
+POST {{base}}/reservas
+Content-Type: application/json
+
+{
+  "evento_id": 1,
+  "qtd_inteira": 2,
+  "qtd_meia": 1,
+  "valor_total": 1
+}
+
+### Erro: quantidade acima do limite (11 ingressos)
+POST {{base}}/reservas
+Content-Type: application/json
+
+{
+  "data_visita": "2026-11-15",
+  "qtd_inteira": 11,
+  "qtd_meia": 0
+}
+
+### Erro: quantidade zero
+POST {{base}}/reservas
+Content-Type: application/json
+
+{
+  "data_visita": "2026-11-15",
+  "qtd_inteira": 0,
+  "qtd_meia": 0
+}
+
+### Erro: data inválida
+POST {{base}}/reservas
+Content-Type: application/json
+
+{
+  "data_visita": "17/11/2026",
+  "qtd_inteira": 1,
+  "qtd_meia": 0
+}
+
+### Erro: evento sem vagas suficientes
+POST {{base}}/reservas
+Content-Type: application/json
+
+{
+  "evento_id": 2,
+  "qtd_inteira": 1,
+  "qtd_meia": 0
+}
+
+### Consultar minhas reservas
 GET {{base}}/reservas/minhas
 
 ### Cancelar uma reserva
-DELETE {{base}}/reservas/1
+DELETE {{base}}/reservas/3
+
+### Tentar cancelar novamente a mesma reserva
+DELETE {{base}}/reservas/3
+
+### Teste sem autenticação (deve retornar 401)
+GET {{base}}/reservas/minhas

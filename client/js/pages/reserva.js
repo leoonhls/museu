@@ -2,13 +2,13 @@
 
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { exigirLogin } from '../auth-local.js';
-import { minhasReservas } from '../api-local.js';
+import { exigirLogin } from '../auth.js';
+import { minhasReservas } from '../api.js';
 
 montarHeader();
 montarFooter();
 
-const usuario = exigirLogin();
+const usuario = await exigirLogin();
 
 if (usuario) {
   const mensagem = document.querySelector('#mensagem-comprovante');
@@ -29,15 +29,16 @@ if (usuario) {
   let reserva = null;
   mensagem.textContent = '';
   try {
-    reserva = codigoProcurado
-      ? minhasReservas().find((item) => item.codigo === codigoProcurado)
-      : null;
+    const reservas = await minhasReservas();
+
+    reserva = codigoProcurado ? reservas.find((item) => item.codigo === codigoProcurado) : null;
   } catch (erro) {
     mensagem.textContent = erro.message;
   }
 
   if (!reserva) {
-    mensagem.textContent ||= 'Não encontramos essa reserva. Confira o link ou faça uma nova reserva.';
+    mensagem.textContent ||=
+      'Não encontramos essa reserva. Confira o link ou faça uma nova reserva.';
   } else {
     mensagem.textContent = 'Sua reserva foi encontrada!';
     dados.hidden = false;
