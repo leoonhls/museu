@@ -81,7 +81,7 @@ function validarDataVisita(dataVisita) {
   }
 }
 
-export async function criarReserva(usuarioId, dados) {
+export async function criarReserva(usuarioId, dados = {}) {
   const { evento_id, data_visita, qtd_inteira, qtd_meia } = dados;
 
   validarQuantidades(qtd_inteira, qtd_meia);
