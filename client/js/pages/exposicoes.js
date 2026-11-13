@@ -57,7 +57,7 @@ async function carregarExposicoes(status) {
       mostrarVazio(lista, 'Não há exposições neste período.');
       lista.firstElementChild.className = 'exposicoes-vazio';
     } else {
-      lista.append(...exposicoes.map(criarCardExposicao));
+      lista.replaceChildren(...exposicoes.map(criarCardExposicao));
     }
   } catch (erro) {
     if (requisicaoAtual !== numeroRequisicao) return;
