@@ -1,9 +1,10 @@
-// Responsável: M3 — veja a seção "M3 — Galeria" no Guia da Entrega 1
+// Responsável: M3 — veja a seção "M3" no Guia da Entrega 2
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { mostrarToast } from '../components/toast.js';
 import { criarCardObra } from '../components/card-obra.js';
-import { listarObras, listarCategorias, listarArtistas } from '../api-local.js';
+import { mostrarCarregando, mostrarErro, mostrarVazio } from '../components/estado.js';
+import { listarObras, listarCategorias, listarArtistas } from '../api.js';
 
 montarHeader();
 montarFooter();
@@ -24,6 +25,17 @@ function preencherSelect(select, itens, textoTodos) {
 }
 
 // ---------------------------------------------------------------------------
+// Estados (carregando, erro, vazio) ocupam a linha inteira da grid
+// ---------------------------------------------------------------------------
+
+function areaDeEstado() {
+  const area = document.createElement('div');
+  area.className = 'galeria__estado';
+  grid.replaceChildren(area);
+  return area;
+}
+
+// ---------------------------------------------------------------------------
 // Ler, pedir, desenhar
 // ---------------------------------------------------------------------------
 
@@ -33,29 +45,52 @@ function lerFiltros() {
   return Object.fromEntries(Object.entries(dados).filter(([, v]) => v.trim() !== ''));
 }
 
+// Cada pedido ganha um número. Se o usuário digita "mon" e depois "monet", a resposta de
+// "mon" pode chegar DEPOIS da de "monet": comparando o número, a resposta atrasada é ignorada.
+let ultimoPedido = 0;
+
 // historico: 'novo' cria uma entrada (botão Voltar funciona), 'substituir' troca a atual
 // e 'nenhum' não mexe na URL (usado ao navegar pelo histórico).
-function atualizar(pagina = 1, historico = 'novo') {
+async function atualizar(pagina = 1, historico = 'novo') {
+  const pedido = ++ultimoPedido;
+  const filtros = { ...lerFiltros(), pagina };
+
+  // A URL muda na hora, antes da resposta: copiar e abrir em outra aba mostra o mesmo resultado.
+  atualizarUrl(filtros, historico);
+  contador.textContent = '';
+  paginacao.replaceChildren();
+  grid.setAttribute('aria-busy', 'true');
+  mostrarCarregando(areaDeEstado());
+
   try {
-    const filtros = { ...lerFiltros(), pagina };
-    let resposta = listarObras(filtros);
+    let resposta = await listarObras(filtros);
+    if (pedido !== ultimoPedido) return; // chegou atrasada: ignore
 
     // página da URL maior que o total de páginas: vai para a última
     const totalPaginas = Math.ceil(resposta.total / resposta.porPagina);
     if (resposta.total > 0 && resposta.pagina > totalPaginas) {
       filtros.pagina = totalPaginas;
-      resposta = listarObras(filtros);
+      resposta = await listarObras(filtros);
+      if (pedido !== ultimoPedido) return;
+      atualizarUrl(filtros, 'substituir');
     }
 
-    const url = `?${new URLSearchParams({ ...filtros, pagina: resposta.pagina })}`;
-    if (historico === 'novo' && url !== location.search) history.pushState(null, '', url);
-    if (historico === 'substituir') history.replaceState(null, '', url);
     desenharContador(resposta.total);
     desenharObras(resposta.dados);
     desenharPaginacao(resposta);
   } catch (erro) {
-    mostrarToast(erro.message, 'erro');
+    if (pedido === ultimoPedido) {
+      mostrarErro(areaDeEstado(), erro.message, () => atualizar(pagina, 'nenhum'));
+    }
+  } finally {
+    if (pedido === ultimoPedido) grid.removeAttribute('aria-busy');
   }
+}
+
+function atualizarUrl(filtros, historico) {
+  const url = `?${new URLSearchParams(filtros)}`;
+  if (historico === 'novo' && url !== location.search) history.pushState(null, '', url);
+  if (historico === 'substituir') history.replaceState(null, '', url);
 }
 
 function desenharContador(total) {
@@ -65,27 +100,21 @@ function desenharContador(total) {
 
 function desenharObras(obras) {
   if (obras.length === 0) {
-    grid.replaceChildren(criarEstadoVazio());
+    const area = areaDeEstado();
+    mostrarVazio(area, 'Nenhuma obra encontrada.');
+    area.append(criarBotaoLimpar());
     return;
   }
   grid.replaceChildren(...obras.map(criarCardObra));
 }
 
-function criarEstadoVazio() {
-  const vazio = document.createElement('div');
-  vazio.className = 'galeria__vazio';
-
-  const mensagem = document.createElement('p');
-  mensagem.textContent = 'Nenhuma obra encontrada.';
-
+function criarBotaoLimpar() {
   const botao = document.createElement('button');
   botao.type = 'button';
   botao.className = 'botao';
   botao.textContent = 'Limpar filtros';
   botao.addEventListener('click', limparFiltros);
-
-  vazio.append(mensagem, botao);
-  return vazio;
+  return botao;
 }
 
 function criarBotaoPagina(texto, pagina, { desabilitado = false, atual = false } = {}) {
@@ -175,11 +204,17 @@ botaoFiltrar.addEventListener('click', () => {
 // Início
 // ---------------------------------------------------------------------------
 
+// Os selects precisam das opções ANTES de preencherDaUrl, senão o valor da URL não "pega".
+mostrarCarregando(areaDeEstado());
 try {
-  preencherSelect(form.categoria, listarCategorias(), 'Todas');
-  preencherSelect(form.artista, listarArtistas(), 'Todos');
+  const [categorias, artistas] = await Promise.all([listarCategorias(), listarArtistas()]);
+  preencherSelect(form.categoria, categorias, 'Todas');
+  preencherSelect(form.artista, artistas, 'Todos');
 } catch (erro) {
-  mostrarToast(erro.message, 'erro');
+  // sem as listas, os filtros de categoria e artista ficam só com "Todas/Todos"
+  preencherSelect(form.categoria, [], 'Todas');
+  preencherSelect(form.artista, [], 'Todos');
+  mostrarToast(`Não foi possível carregar os filtros: ${erro.message}`, 'erro');
 }
 atualizar(preencherDaUrl(), 'substituir');
 

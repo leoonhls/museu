@@ -67,7 +67,7 @@
   color: var(--cor-texto-suave);
 }
 
-.galeria__vazio {
+.galeria__estado {
   grid-column: 1 / -1;
   padding: var(--espaco-4) var(--espaco-2);
   text-align: center;
