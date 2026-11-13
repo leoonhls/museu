@@ -1,10 +1,10 @@
 // Responsável: M4 — veja a seção "M4 — Obra, artista e dados reais" no Guia da Entrega 1
-import { buscarObra, listarObras } from '../api-local.js';
+import { buscarArtista, buscarObra } from '../api.js';
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { criarBotaoFavorito } from '../components/botao-favorito.js';
 import { criarCardObra } from '../components/card-obra.js';
-import { mostrarToast } from '../components/toast.js';
+import { mostrarCarregando, mostrarErro } from '../components/estado.js';
 import { urlApp } from '../utils/rotas.js';
 
 montarHeader();
@@ -284,25 +284,35 @@ function renderizarObra(obra, maisObras) {
   container.replaceChildren(trilha, artigo, secaoRelacionadas, dialog);
 }
 
-try {
+async function carregarObra() {
   const parametroId = new URLSearchParams(location.search).get('id');
   const id = parametroId !== null && parametroId.trim() !== '' ? Number(parametroId) : NaN;
 
   if (!Number.isInteger(id) || id < 1) {
     renderizarNaoEncontrada();
-  } else {
-    const obra = buscarObra(id);
+    return;
+  }
+
+  mostrarCarregando(container);
+  try {
+    const obra = await buscarObra(id);
     if (!obra) {
       renderizarNaoEncontrada();
-    } else {
-      const respostaArtista = listarObras({ artista: obra.artista_id });
-      const maisObras = respostaArtista.dados
-        .filter((item) => item.id !== obra.id)
-        .slice(0, 4);
-      renderizarObra(obra, maisObras);
+      return;
     }
+
+    const artista = await buscarArtista(obra.artista_id);
+    const maisObras = (artista?.obras ?? [])
+      .filter((item) => item.id !== obra.id)
+      .slice(0, 4);
+    renderizarObra(obra, maisObras);
+  } catch (erro) {
+    mostrarErro(
+      container,
+      erro.message || 'Erro ao carregar os detalhes da obra.',
+      carregarObra,
+    );
   }
-} catch (erro) {
-  mostrarToast(erro.message || 'Erro ao carregar os detalhes da obra.', 'erro');
-  renderizarNaoEncontrada('Não foi possível carregar a obra');
 }
+
+carregarObra();
