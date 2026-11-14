@@ -1,7 +1,7 @@
-// Responsável: M5 — veja a seção "M5 — Exposições e eventos" no Guia da Entrega 1
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { listarExposicoes } from '../api-local.js';
+import { listarExposicoes } from '../api.js';
+import { mostrarCarregando, mostrarErro, mostrarVazio } from '../components/estado.js';
 import { formatarData } from '../utils/datas.js';
 import { urlApp } from '../utils/rotas.js';
 
@@ -47,6 +47,32 @@ function criarCardExposicao(exposicao) {
   return card;
 }
 
+async function carregarExposicoes(status) {
+  const requisicaoAtual = ++numeroRequisicao;
+  mostrarCarregando(lista);
+  try {
+    const exposicoes = await listarExposicoes({ status });
+    if (requisicaoAtual !== numeroRequisicao) return;
+    if (exposicoes.length === 0) {
+      mostrarVazio(lista, 'Não há exposições neste período.');
+      lista.firstElementChild.className = 'exposicoes-vazio';
+    } else {
+      lista.replaceChildren(...exposicoes.map(criarCardExposicao));
+    }
+  } catch (erro) {
+    if (requisicaoAtual !== numeroRequisicao) return;
+    console.error('Erro ao carregar exposições:', erro);
+    mostrarErro(
+      lista,
+      erro.message || 'Não foi possível carregar as exposições. Tente novamente.',
+      () => carregarExposicoes(status),
+    );
+    lista.querySelector('[role="alert"]').className = 'exposicoes-erro';
+  }
+}
+
+let numeroRequisicao = 0;
+
 function selecionarStatus(status, atualizarUrl = false) {
   const statusSelecionado = statusValidos.includes(status) ? status : 'atual';
   const abaSelecionada = abas.find((aba) => aba.dataset.status === statusSelecionado);
@@ -58,26 +84,7 @@ function selecionarStatus(status, atualizarUrl = false) {
     aba.tabIndex = selecionada ? 0 : -1;
   }
   lista.setAttribute('aria-labelledby', abaSelecionada.id);
-  lista.replaceChildren();
-
-  try {
-    const exposicoes = listarExposicoes({ status: statusSelecionado });
-    if (exposicoes.length === 0) {
-      const mensagem = document.createElement('p');
-      mensagem.className = 'exposicoes-vazio';
-      mensagem.textContent = 'Não há exposições neste período.';
-      lista.append(mensagem);
-    } else {
-      lista.append(...exposicoes.map(criarCardExposicao));
-    }
-  } catch (erro) {
-    console.error('Erro ao carregar exposições:', erro);
-    const mensagem = document.createElement('p');
-    mensagem.className = 'exposicoes-erro';
-    mensagem.setAttribute('role', 'alert');
-    mensagem.textContent = 'Não foi possível carregar as exposições. Tente novamente.';
-    lista.replaceChildren(mensagem);
-  }
+  carregarExposicoes(statusSelecionado);
 
   if (atualizarUrl) {
     const url = new URL(window.location.href);

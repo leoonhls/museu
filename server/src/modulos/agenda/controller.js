@@ -1,4 +1,4 @@
-// Responsável: M5 — veja a seção "M5" no Guia da Entrega 2
+
 import * as service from './service.js';
 
 export async function listarExposicoes(req, res) {

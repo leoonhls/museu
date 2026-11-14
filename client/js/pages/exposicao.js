@@ -1,7 +1,7 @@
-// Responsável: M5 — veja a seção "M5 — Exposições e eventos" no Guia da Entrega 1
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { buscarExposicao } from '../api-local.js';
+import { buscarExposicao } from '../api.js';
+import { mostrarCarregando, mostrarErro, mostrarVazio } from '../components/estado.js';
 import { criarCardObra } from '../components/card-obra.js';
 import { formatarData, formatarDataHora } from '../utils/datas.js';
 import { urlApp } from '../utils/rotas.js';
@@ -11,14 +11,6 @@ montarFooter();
 
 const detalhe = document.querySelector('#detalhe-exposicao');
 const id = new URLSearchParams(window.location.search).get('id');
-let exposicao = null;
-let erroAoBuscarExposicao = false;
-try {
-  exposicao = id && /^\d+$/.test(id) ? buscarExposicao(id) : null;
-} catch (erro) {
-  console.error('Erro ao carregar exposição:', erro);
-  erroAoBuscarExposicao = true;
-}
 
 function criarTitulo(texto) {
   const titulo = document.createElement('h1');
@@ -42,7 +34,9 @@ function criarSecao(tituloTexto, itens, criarItem, mensagemVazia) {
   secao.append(titulo);
 
   if (itens.length === 0) {
-    secao.append(criarMensagem(mensagemVazia));
+    const vazio = document.createElement('div');
+    mostrarVazio(vazio, mensagemVazia);
+    secao.append(vazio);
     return secao;
   }
 
@@ -76,22 +70,16 @@ function criarCardEvento(evento) {
   return card;
 }
 
-function renderizarExposicao() {
+function renderizarExposicao(exposicao) {
   if (!detalhe) return;
-  if (erroAoBuscarExposicao) {
-    document.title = 'Erro ao carregar exposição — Museu';
-    const mensagem = criarMensagem('Não foi possível carregar esta exposição. Tente novamente.');
-    mensagem.classList.add('exposicao-erro');
-    mensagem.setAttribute('role', 'alert');
-    detalhe.replaceChildren(criarTitulo('Erro ao carregar exposição'), mensagem);
-    return;
-  }
   if (!exposicao) {
     document.title = 'Exposição não encontrada — Museu';
     detalhe.replaceChildren(
       criarTitulo('Exposição não encontrada'),
-      criarMensagem('Confira o link ou veja todas as exposições.'),
     );
+    const vazio = document.createElement('div');
+    mostrarVazio(vazio, 'Confira o link ou veja todas as exposições.');
+    detalhe.append(vazio);
     return;
   }
 
@@ -140,4 +128,27 @@ function renderizarExposicao() {
   );
 }
 
-renderizarExposicao();
+async function carregarExposicao() {
+  if (!detalhe) return;
+  mostrarCarregando(detalhe);
+  if (!id || !/^\d+$/.test(id)) {
+    renderizarExposicao(null);
+    return;
+  }
+
+  try {
+    const exposicao = await buscarExposicao(id);
+    renderizarExposicao(exposicao);
+  } catch (erro) {
+    console.error('Erro ao carregar exposição:', erro);
+    document.title = 'Erro ao carregar exposição — Museu';
+    mostrarErro(
+      detalhe,
+      erro.message || 'Não foi possível carregar esta exposição. Tente novamente.',
+      carregarExposicao,
+    );
+    detalhe.querySelector('[role="alert"]').classList.add('exposicao-erro');
+  }
+}
+
+carregarExposicao();
