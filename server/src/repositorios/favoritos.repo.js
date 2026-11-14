@@ -14,23 +14,23 @@ export async function adicionar(usuarioId, obraId) {
     const existente = linhas.find(
       (f) => f.usuario_id === Number(usuarioId) && f.obra_id === Number(obraId),
     );
-    if (existente) return { linhas, resultado: existente };
+    if (existente) return { linhas, resultado: { ...existente, criado: false } };
     const favorito = {
       usuario_id: Number(usuarioId),
       obra_id: Number(obraId),
       criado_em: new Date().toISOString(),
     };
-    return { linhas: [...linhas, favorito], resultado: favorito };
+    return { linhas: [...linhas, favorito], resultado: { ...favorito, criado: true } };
   });
 }
 
 export async function remover(usuarioId, obraId) {
-  return atualizarTabela('favoritos', (linhas) => ({
-    linhas: linhas.filter(
+  return atualizarTabela('favoritos', (linhas) => {
+    const restantes = linhas.filter(
       (f) => !(f.usuario_id === Number(usuarioId) && f.obra_id === Number(obraId)),
-    ),
-    resultado: undefined,
-  }));
+    );
+    return { linhas: restantes, resultado: restantes.length < linhas.length };
+  });
 }
 
 export async function excluirPorObra(obraId) {

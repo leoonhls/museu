@@ -1,5 +1,5 @@
 // Responsável: M7 — veja a seção "M7 — Login e favoritos" no Guia da Entrega 1
-import { entrar, cadastrar } from '../api-local.js';
+import { entrar, cadastrar } from '../api.js';
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
 import { caminhoInicio, urlApp } from '../utils/rotas.js';
@@ -121,13 +121,15 @@ document.querySelectorAll('[data-alvo-senha]').forEach((botao) => {
   });
 });
 
-formLogin.addEventListener('submit', (event) => {
+formLogin.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!validarFormularioLogin()) return;
 
   const dados = new FormData(formLogin);
+  const botaoEnviar = formLogin.querySelector('[type="submit"]');
+  botaoEnviar.disabled = true;
   try {
-    entrar(dados.get('email'), dados.get('senha'));
+    await entrar(dados.get('email'), dados.get('senha'));
     location.href = destinoAposLogin();
   } catch (erro) {
     mostrarErro(
@@ -136,16 +138,20 @@ formLogin.addEventListener('submit', (event) => {
         ? 'E-mail ou senha incorretos. Confira os dados e tente novamente.'
         : erro.message,
     );
+  } finally {
+    botaoEnviar.disabled = false;
   }
 });
 
-formCadastro.addEventListener('submit', (event) => {
+formCadastro.addEventListener('submit', async (event) => {
   event.preventDefault();
   if (!validarFormularioCadastro()) return;
 
   const dados = new FormData(formCadastro);
+  const botaoEnviar = formCadastro.querySelector('[type="submit"]');
+  botaoEnviar.disabled = true;
   try {
-    cadastrar({
+    await cadastrar({
       nome: dados.get('nome'),
       email: dados.get('email'),
       senha: dados.get('senha'),
@@ -154,6 +160,8 @@ formCadastro.addEventListener('submit', (event) => {
     location.href = destinoAposLogin();
   } catch (erro) {
     mostrarErro(mensagemCadastro, erro.message);
+  } finally {
+    botaoEnviar.disabled = false;
   }
 });
 

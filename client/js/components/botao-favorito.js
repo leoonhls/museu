@@ -1,11 +1,29 @@
 // Responsável: M7 — veja a seção "M7 — Login e favoritos" no Guia da Entrega 1
-import { desfavoritar, favoritar, listarFavoritos, usuarioAtual } from '../api-local.js';
+import { desfavoritar, favoritar, listarFavoritos, usuarioAtual } from '../api.js';
 import { mostrarToast } from './toast.js';
 import { urlApp } from '../utils/rotas.js';
 
-function ehFavorita(obraId) {
-  if (!usuarioAtual()) return false;
-  return listarFavoritos().some((obra) => obra.id === obraId);
+let favoritos = null;
+let usuario = null;
+let erroCarregamento = null;
+
+function carregarFavoritos() {
+  favoritos ??= usuarioAtual()
+    .then((atual) => {
+      usuario = atual;
+      return atual ? listarFavoritos() : [];
+    })
+    .then((lista) => {
+      erroCarregamento = null;
+      return new Set(lista.map((obra) => obra.id));
+    })
+    .catch((erro) => {
+      favoritos = null;
+      erroCarregamento = erro;
+      mostrarToast(erro.message, 'erro');
+      return new Set();
+    });
+  return favoritos;
 }
 
 export function criarBotaoFavorito(obraId) {
@@ -22,25 +40,33 @@ export function criarBotaoFavorito(obraId) {
     botao.title = favorito ? 'Remover dos favoritos' : 'Adicionar aos favoritos';
   }
 
-  atualizarEstado(ehFavorita(obraId));
+  carregarFavoritos().then((lista) => atualizarEstado(lista.has(obraId)));
 
-  botao.addEventListener('click', (evento) => {
+  botao.addEventListener('click', async (evento) => {
     evento.preventDefault();
 
-    if (!usuarioAtual()) {
-      const voltar = encodeURIComponent(location.pathname + location.search + location.hash);
-      location.href = `${urlApp('pages/login.html')}?voltar=${voltar}`;
-      return;
-    }
-
-    const favorito = botao.getAttribute('aria-pressed') === 'true';
+    botao.disabled = true;
     try {
-      if (favorito) desfavoritar(obraId);
-      else favoritar(obraId);
+      const lista = await carregarFavoritos();
+      if (erroCarregamento) throw erroCarregamento;
+
+      if (!usuario) {
+        const voltar = encodeURIComponent(location.pathname + location.search + location.hash);
+        location.href = `${urlApp('pages/login.html')}?voltar=${voltar}`;
+        return;
+      }
+
+      const favorito = lista.has(obraId);
+      if (favorito) await desfavoritar(obraId);
+      else await favoritar(obraId);
+      if (favorito) lista.delete(obraId);
+      else lista.add(obraId);
       atualizarEstado(!favorito);
       mostrarToast(favorito ? 'Obra removida dos favoritos.' : 'Obra adicionada aos favoritos.');
     } catch (erro) {
       mostrarToast(erro.message, 'erro');
+    } finally {
+      botao.disabled = false;
     }
   });
 

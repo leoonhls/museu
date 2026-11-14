@@ -36,7 +36,8 @@ const usuarios = [
 await gravar('usuarios', usuarios);
 await gravar('favoritos', []);
 await gravar('reservas', []);
-Object.assign(resumo, { usuarios: usuarios.length, favoritos: 0, reservas: 0 });
+await gravar('historico_conta', []);
+Object.assign(resumo, { usuarios: usuarios.length, favoritos: 0, reservas: 0, historico_conta: 0 });
 
 console.log('Banco recriado em server/data/db/:');
 for (const [nome, total] of Object.entries(resumo)) console.log(`  ${nome}.json: ${total}`);

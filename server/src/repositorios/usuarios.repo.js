@@ -18,3 +18,14 @@ export async function criar(dados) {
     return { linhas: [...linhas, usuario], resultado: usuario };
   });
 }
+
+export async function atualizarPerfil(id, perfil) {
+  return atualizarTabela('usuarios', (linhas) => {
+    const indice = linhas.findIndex((usuario) => usuario.id === Number(id));
+    if (indice === -1) return { linhas, resultado: null };
+    const usuario = { ...linhas[indice], perfil };
+    const atualizados = [...linhas];
+    atualizados[indice] = usuario;
+    return { linhas: atualizados, resultado: usuario };
+  });
+}

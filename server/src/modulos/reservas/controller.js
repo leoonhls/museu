@@ -6,9 +6,10 @@ export async function criar(req, res) {
 }
 
 export async function listarMinhas(req, res) {
-  res.json(await service.minhasReservas());
+  res.json(await service.minhasReservas(req.usuario.id));
 }
 
 export async function cancelar(req, res) {
-  res.json(await service.cancelarReserva());
+  await service.cancelarReserva(req.usuario.id, req.params.id);
+  res.status(204).end();
 }

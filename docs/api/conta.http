@@ -1,31 +1,150 @@
 # Responsável: M7 — veja a seção "M7" no Guia da Entrega 2
 # Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
+# Para rodar o cadastro válido pela primeira vez, use o banco recém-criado pelo npm run seed.
 
 @base = http://localhost:3000/api
+@emailTeste = visitante@teste.com
+@senhaTeste = Museu1234
+@obraId = 1
 
-### Usuário logado (null se ninguém entrou)
+### Limpar uma sessão anterior do REST Client (204)
+POST {{base}}/auth/logout
+
+### Sem login: /me retorna null
 GET {{base}}/auth/me
 
-### Criar conta
+### Sem login: listar favoritos retorna 401
+GET {{base}}/favoritos
+
+### Sem login: favoritar retorna 401
+POST {{base}}/favoritos/{{obraId}}
+
+### Sem login: desfavoritar retorna 401
+DELETE {{base}}/favoritos/{{obraId}}
+
+### Cadastro inválido: nome menor que 3 caracteres após trim (400)
 POST {{base}}/auth/cadastro
 Content-Type: application/json
 
-{ "nome": "Visitante Teste", "email": "visitante@teste.com", "senha": "senha1234" }
+{ "nome": " A ", "email": "{{emailTeste}}", "senha": "{{senhaTeste}}" }
 
-### Entrar
+### Cadastro inválido: e-mail (400)
+POST {{base}}/auth/cadastro
+Content-Type: application/json
+
+{ "nome": "Visitante Teste", "email": "email-invalido", "senha": "{{senhaTeste}}" }
+
+### Cadastro inválido: senha menor que 8 caracteres (400)
+POST {{base}}/auth/cadastro
+Content-Type: application/json
+
+{ "nome": "Visitante Teste", "email": "{{emailTeste}}", "senha": "abc123" }
+
+### Cadastro inválido: senha sem letra (400)
+POST {{base}}/auth/cadastro
+Content-Type: application/json
+
+{ "nome": "Visitante Teste", "email": "{{emailTeste}}", "senha": "12345678" }
+
+### Cadastro inválido: senha sem número (400)
+POST {{base}}/auth/cadastro
+Content-Type: application/json
+
+{ "nome": "Visitante Teste", "email": "{{emailTeste}}", "senha": "abcdefgh" }
+
+### Cadastro duplicado: e-mail já existente (409)
+POST {{base}}/auth/cadastro
+Content-Type: application/json
+
+{ "nome": "Administrador", "email": "ADMIN@MUSEU.COM", "senha": "{{senhaTeste}}" }
+
+### Cadastro válido (201); papel enviado é ignorado, resposta não inclui senha_hash
+POST {{base}}/auth/cadastro
+Content-Type: application/json
+
+{ "nome": "Visitante Teste", "email": " {{emailTeste}} ", "senha": "{{senhaTeste}}", "papel": "admin" }
+
+### /me com a sessão criada no cadastro (200; sem senha_hash e papel visitante)
+GET {{base}}/auth/me
+
+### Obter perfil (200)
+GET {{base}}/auth/perfil
+
+### Atualizar perfil e preferências (200)
+PUT {{base}}/auth/perfil
+Content-Type: application/json
+
+{
+  "avatar": "",
+  "biografia": "Gosto de arte moderna.",
+  "interesses": "Pintura e fotografia",
+  "telefone": "",
+  "site": "https://example.com",
+  "idioma": "pt-BR",
+  "newsletter": true,
+  "altoContraste": true,
+  "reduzirAnimacoes": false
+}
+
+### Site com protocolo não permitido (400)
+PUT {{base}}/auth/perfil
+Content-Type: application/json
+
+{ "site": "ftp://example.com" }
+
+### Listar histórico da conta (200; mais recentes primeiro)
+GET {{base}}/auth/historico
+
+### Login: e-mail inexistente (401, mensagem genérica)
 POST {{base}}/auth/login
 Content-Type: application/json
 
-{ "email": "admin@museu.com", "senha": "admin123" }
+{ "email": "nao-existe@teste.com", "senha": "{{senhaTeste}}" }
 
-### Sair
-POST {{base}}/auth/logout
+### Login: senha incorreta (401; mesma mensagem acima)
+POST {{base}}/auth/login
+Content-Type: application/json
 
-### Listar favoritos
+{ "email": "{{emailTeste}}", "senha": "SenhaErrada123" }
+
+### Login válido (200; sem senha_hash; deve emitir novo connect.sid)
+# Compare o connect.sid com o emitido no cadastro: ele deve ser diferente.
+POST {{base}}/auth/login
+Content-Type: application/json
+
+{ "email": " {{emailTeste}} ", "senha": "{{senhaTeste}}" }
+
+### Conferir /me após login (200; sem senha_hash)
+GET {{base}}/auth/me
+
+### Conferir sessão antiga após login (null)
+# Substitua o valor abaixo pelo connect.sid emitido no cadastro.
+GET {{base}}/auth/me
+Cookie: connect.sid=COLE_AQUI_O_CONNECT_SID_ANTIGO
+
+### Listar favoritos (200; cada obra inclui artista_nome e categoria_nome)
 GET {{base}}/favoritos
 
-### Favoritar uma obra
-POST {{base}}/favoritos/1
+### Favoritar obra (204)
+POST {{base}}/favoritos/{{obraId}}
 
-### Desfavoritar uma obra
-DELETE {{base}}/favoritos/1
+### Favoritar a mesma obra outra vez (204; a lista não deve duplicar)
+POST {{base}}/favoritos/{{obraId}}
+
+### Verificar favorito (200; a obra deve aparecer uma única vez)
+GET {{base}}/favoritos
+
+### Favoritar obra inexistente (404)
+POST {{base}}/favoritos/999999
+
+### Desfavoritar obra (204)
+DELETE {{base}}/favoritos/{{obraId}}
+
+### Sair (204; invalida a sessão e limpa o cookie)
+POST {{base}}/auth/logout
+
+### /me após sair (null)
+GET {{base}}/auth/me
+
+### Favoritos após sair (401)
+GET {{base}}/favoritos

@@ -1,6 +1,7 @@
 // Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1
-import { aplicarPreferenciasAcessibilidade, usuarioAtual, sair } from '../api-local.js';
+import { aplicarPreferenciasAcessibilidade, usuarioAtual, sair } from '../api.js';
 import { caminhoInicio, urlApp } from '../utils/rotas.js';
+import { mostrarToast } from './toast.js';
 
 function criarLink(caminho, texto) {
   const link = document.createElement('a');
@@ -10,12 +11,17 @@ function criarLink(caminho, texto) {
   return link;
 }
 
-export function montarHeader() {
+export async function montarHeader() {
   const alvo = document.getElementById('header');
   if (!alvo) return;
 
-  aplicarPreferenciasAcessibilidade();
-  const usuario = usuarioAtual();
+  let usuario = null;
+  try {
+    usuario = await usuarioAtual();
+  } catch (erro) {
+    mostrarToast(erro.message, 'erro');
+  }
+  aplicarPreferenciasAcessibilidade(usuario?.perfil);
 
   const header = document.createElement('header');
   header.className = 'header';
@@ -45,9 +51,13 @@ export function montarHeader() {
     botaoSair.type = 'button';
     botaoSair.className = 'header__sair';
     botaoSair.textContent = 'Sair';
-    botaoSair.addEventListener('click', () => {
-      sair();
-      location.href = caminhoInicio();
+    botaoSair.addEventListener('click', async () => {
+      try {
+        await sair();
+        location.href = caminhoInicio();
+      } catch (erro) {
+        mostrarToast(erro.message, 'erro');
+      }
     });
     nav.append(botaoSair);
   } else {
