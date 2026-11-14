@@ -50,33 +50,38 @@ if (usuario) {
         select.appendChild(opcao);
       });
     }
+    try {
+      preencherOpcoes(artista, await listarArtistas());
+      preencherOpcoes(categoria, await listarCategorias());
 
-    preencherOpcoes(artista, await listarArtistas());
-    preencherOpcoes(categoria, await listarCategorias());
+      // Carregar os dados da obra no modo de edição
+      if (modoEdicao) {
+        const obra = await buscarObra(Number(idObra));
 
-    // Carregar os dados da obra no modo de edição
-    if (modoEdicao) {
-      const obra = await buscarObra(Number(idObra));
+        if (obra) {
+          titulo.value = obra.titulo;
+          artista.value = obra.artista_id;
+          categoria.value = obra.categoria_id;
+          ano.value = obra.ano;
+          tecnica.value = obra.tecnica;
+          dimensoes.value = obra.dimensoes ?? '';
+          descricao.value = obra.descricao;
+          imagemUrlAtual = obra.imagem_url ?? '';
+          emExibicao.checked = obra.em_exibicao;
 
-      if (obra) {
-        titulo.value = obra.titulo;
-        artista.value = obra.artista_id;
-        categoria.value = obra.categoria_id;
-        ano.value = obra.ano;
-        tecnica.value = obra.tecnica;
-        dimensoes.value = obra.dimensoes ?? '';
-        descricao.value = obra.descricao;
-        imagemUrlAtual = obra.imagem_url ?? '';
-        emExibicao.checked = obra.em_exibicao;
-
-        previewImagem.src = obra.imagem_url;
-        previewImagem.hidden = false;
-      } else {
-        mostrarToast('Obra não encontrada.', 'erro');
-        formulario.hidden = true;
+          previewImagem.src = obra.imagem_url;
+          previewImagem.hidden = false;
+        } else {
+          mostrarToast('Obra não encontrada.', 'erro');
+          formulario.hidden = true;
+        }
       }
+    } catch (erro) {
+      const mensagemErro = document.getElementById('erro-formulario');
+      mensagemErro.textContent = erro.message || 'Não foi possível carregar os dados da obra.';
+      mensagemErro.hidden = false;
+      formulario.querySelector('button[type="submit"]').disabled = true;
     }
-
     // Atualizar a prévia da imagem
     campoImagem.addEventListener('change', () => {
       const arquivo = campoImagem.files[0];
@@ -142,7 +147,9 @@ if (usuario) {
           window.location.href = 'obras.html';
         }, 1500);
       } catch (erro) {
-        mostrarToast(erro.message, 'erro');
+        const mensagemErro = document.getElementById('erro-formulario');
+        mensagemErro.textContent = erro.message || 'Não foi possível salvar a obra.';
+        mensagemErro.hidden = false;
       } finally {
         botaoSalvar.disabled = false;
       }
