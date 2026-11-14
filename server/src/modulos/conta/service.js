@@ -6,12 +6,7 @@ import * as favoritosRepo from '../../repositorios/favoritos.repo.js';
 import * as historicoRepo from '../../repositorios/historico-conta.repo.js';
 import * as obrasRepo from '../../repositorios/obras.repo.js';
 import * as usuariosRepo from '../../repositorios/usuarios.repo.js';
-import {
-  conflito,
-  naoAutenticado,
-  naoEncontrado,
-  requisicaoInvalida,
-} from '../../erros.js';
+import { conflito, naoAutenticado, naoEncontrado, requisicaoInvalida } from '../../erros.js';
 
 const PERFIL_PADRAO = {
   avatar: '',
@@ -53,7 +48,9 @@ export async function usuarioAtual(usuarioId) {
 
 export async function cadastrar(dados = {}) {
   const nome = String(dados?.nome ?? '').trim();
-  const email = String(dados?.email ?? '').trim().toLowerCase();
+  const email = String(dados?.email ?? '')
+    .trim()
+    .toLowerCase();
   const senha = String(dados?.senha ?? '');
 
   if (nome.length < 3) {
@@ -82,7 +79,9 @@ export async function cadastrar(dados = {}) {
 }
 
 export async function entrar(dados = {}) {
-  const email = String(dados?.email ?? '').trim().toLowerCase();
+  const email = String(dados?.email ?? '')
+    .trim()
+    .toLowerCase();
   const senha = String(dados?.senha ?? '');
   const usuario = await usuariosRepo.buscarPorEmail(email);
 
@@ -94,13 +93,9 @@ export async function entrar(dados = {}) {
   return semSenha(usuario);
 }
 
-export async function sair(sessao) {
-  if (sessao.usuarioId) {
-    await registrarHistorico(sessao.usuarioId, 'logout', 'Saída da conta.');
-  }
-  await new Promise((resolve, reject) => {
-    sessao.destroy((erro) => (erro ? reject(erro) : resolve()));
-  });
+// Só registra no histórico; quem destrói a sessão é o controller.
+export async function sair(usuarioId) {
+  if (usuarioId) await registrarHistorico(usuarioId, 'logout', 'Saída da conta.');
 }
 
 export async function obterPerfil(usuarioId) {
@@ -118,10 +113,14 @@ export async function atualizarPerfil(usuarioId, dados = {}) {
   const idioma = String(dados?.idioma ?? atual.idioma);
   const idiomasPermitidos = ['pt-BR', 'en', 'es'];
 
-  if (biografia.length > 500) throw requisicaoInvalida('A biografia deve ter no máximo 500 caracteres.');
-  if (interesses.length > 500) throw requisicaoInvalida('Os interesses devem ter no máximo 500 caracteres.');
-  if (telefone.length > 30) throw requisicaoInvalida('O telefone deve ter no máximo 30 caracteres.');
-  if (site.length > 200) throw requisicaoInvalida('O endereço do site deve ter no máximo 200 caracteres.');
+  if (biografia.length > 500)
+    throw requisicaoInvalida('A biografia deve ter no máximo 500 caracteres.');
+  if (interesses.length > 500)
+    throw requisicaoInvalida('Os interesses devem ter no máximo 500 caracteres.');
+  if (telefone.length > 30)
+    throw requisicaoInvalida('O telefone deve ter no máximo 30 caracteres.');
+  if (site.length > 200)
+    throw requisicaoInvalida('O endereço do site deve ter no máximo 200 caracteres.');
   if (site) {
     let url;
     try {
@@ -183,29 +182,46 @@ export async function listarFavoritos(usuarioId) {
   return favoritos.flatMap(({ obra_id }) => {
     const obra = obrasPorId.get(obra_id);
     if (!obra) return [];
-    return [{
-      ...obra,
-      artista_nome: artistasPorId.get(obra.artista_id)?.nome ?? null,
-      categoria_nome: categoriasPorId.get(obra.categoria_id)?.nome ?? null,
-    }];
+    return [
+      {
+        ...obra,
+        artista_nome: artistasPorId.get(obra.artista_id)?.nome ?? null,
+        categoria_nome: categoriasPorId.get(obra.categoria_id)?.nome ?? null,
+      },
+    ];
   });
 }
 
-export async function favoritar(usuarioId, obraId) {
-  const obra = await obrasRepo.buscarPorId(obraId);
+function lerIdObra(texto) {
+  const id = Number(texto);
+  if (!Number.isInteger(id) || id < 1) throw requisicaoInvalida('Id inválido.');
+  return id;
+}
+
+export async function favoritar(usuarioId, obraIdTexto) {
+  const obra = await obrasRepo.buscarPorId(lerIdObra(obraIdTexto));
   if (!obra) throw naoEncontrado('Obra não encontrada.');
   const favorito = await favoritosRepo.adicionar(usuarioId, obra.id);
   if (favorito.criado) {
-    await registrarHistorico(usuarioId, 'favorito', `Obra adicionada aos favoritos: ${obra.titulo}.`);
+    await registrarHistorico(
+      usuarioId,
+      'favorito',
+      `Obra adicionada aos favoritos: ${obra.titulo}.`,
+    );
   }
 }
 
-export async function desfavoritar(usuarioId, obraId) {
+export async function desfavoritar(usuarioId, obraIdTexto) {
+  const obraId = lerIdObra(obraIdTexto);
   const removido = await favoritosRepo.remover(usuarioId, obraId);
   if (removido) {
     const obra = await obrasRepo.buscarPorId(obraId);
     if (obra) {
-      await registrarHistorico(usuarioId, 'favorito', `Obra removida dos favoritos: ${obra.titulo}.`);
+      await registrarHistorico(
+        usuarioId,
+        'favorito',
+        `Obra removida dos favoritos: ${obra.titulo}.`,
+      );
     }
   }
 }

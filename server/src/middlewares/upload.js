@@ -1,3 +1,4 @@
+// Responsável: M8 — veja a seção "M8" no Guia da Entrega 2
 import multer from 'multer';
 import { randomUUID } from 'node:crypto';
 import { PASTA_UPLOADS } from '../config.js';

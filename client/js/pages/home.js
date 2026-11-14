@@ -1,59 +1,119 @@
-// Responsável: M2 — veja a seção "M2" no Guia da Entrega 2[cite: 10]
+// Responsável: M2 — veja a seção "M2" no Guia da Entrega 2
+import { montarHeader } from '../components/header.js';
+import { montarFooter } from '../components/footer.js';
+import { criarCardObra } from '../components/card-obra.js';
+import { mostrarCarregando, mostrarErro, mostrarVazio } from '../components/estado.js';
 import { buscarDestaques } from '../api.js';
-import { mostrarCarregando, mostrarErro } from '../components/estado.js';
+import { formatarData, formatarDataHora } from '../utils/datas.js';
+import { urlApp } from '../utils/rotas.js';
 
+montarHeader();
+montarFooter();
+
+const formatoPreco = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+
+const areaExposicao = document.getElementById('banner-exposicao');
+const areaObras = document.getElementById('grid-destaques');
+const areaEventos = document.getElementById('grid-eventos');
+
+function criarElemento(tag, classe, texto) {
+  const elemento = document.createElement(tag);
+  if (classe) elemento.className = classe;
+  if (texto !== undefined) elemento.textContent = texto;
+  return elemento;
+}
+
+// Os estados ocupam a linha inteira das grids.
+function areaDeEstado(grid) {
+  const area = criarElemento('div', 'grid__estado');
+  grid.replaceChildren(area);
+  return area;
+}
+
+// Banner da exposição atual
+function desenharExposicao(exposicao) {
+  if (!exposicao) {
+    mostrarVazio(areaExposicao, 'Nenhuma exposição em cartaz no momento.');
+    return;
+  }
+
+  const banner = criarElemento('article', 'card banner-exposicao');
+  const imagem = criarElemento('img', 'banner-exposicao__imagem');
+  imagem.src = urlApp(exposicao.imagem_url);
+  imagem.alt = '';
+
+  const texto = criarElemento('div', 'banner-exposicao__texto');
+  const link = criarElemento('a', 'botao', 'Conhecer a exposição');
+  link.href = urlApp(`pages/exposicao.html?id=${exposicao.id}`);
+  texto.append(
+    criarElemento('span', 'tag', 'Em cartaz'),
+    criarElemento('h3', 'banner-exposicao__titulo', exposicao.titulo),
+    criarElemento('p', '', exposicao.descricao),
+    criarElemento(
+      'p',
+      'banner-exposicao__datas',
+      `${formatarData(exposicao.data_inicio)} – ${formatarData(exposicao.data_fim)} · ${exposicao.sala}`,
+    ),
+    link,
+  );
+
+  banner.append(imagem, texto);
+  areaExposicao.replaceChildren(banner);
+}
+
+// 6 obras em destaque (o servidor prioriza as que estão em exibição)
+function desenharObras(obras) {
+  if (obras.length === 0) {
+    mostrarVazio(areaDeEstado(areaObras), 'Nenhuma obra em exibição.');
+    return;
+  }
+  areaObras.replaceChildren(...obras.map(criarCardObra));
+}
+
+// 3 próximos eventos
+function criarCardEvento(evento) {
+  const card = criarElemento('article', 'card');
+  const link = criarElemento('a', 'secao-link', 'Reservar ingressos →');
+  link.href = urlApp(`pages/ingressos.html?evento=${evento.id}`);
+  card.append(
+    criarElemento(
+      'span',
+      'tag',
+      evento.preco === 0 ? 'Gratuito' : formatoPreco.format(evento.preco),
+    ),
+    criarElemento('h3', 'card-titulo', evento.titulo),
+    criarElemento('p', 'card-texto', formatarDataHora(evento.data_hora)),
+    criarElemento('p', 'card-texto', evento.descricao),
+    evento.vagas_restantes === 0 ? criarElemento('p', 'card-texto', 'Esgotado') : link,
+  );
+  return card;
+}
+
+function desenharEventos(eventos) {
+  if (eventos.length === 0) {
+    mostrarVazio(areaDeEstado(areaEventos), 'Não há eventos programados no momento.');
+    return;
+  }
+  areaEventos.replaceChildren(...eventos.map(criarCardEvento));
+}
+
+// Uma chamada só traz as três seções.
 async function carregarHome() {
-  const areaDestaques = document.querySelector('#destaques');
-
-  if (!areaDestaques) return;
-
-  // 1. Mostra o spinner de carregamento global criado no M2
-  mostrarCarregando(areaDestaques, 'Carregando destaques do museu...');
+  mostrarCarregando(areaExposicao);
+  mostrarCarregando(areaDeEstado(areaObras));
+  mostrarCarregando(areaDeEstado(areaEventos));
 
   try {
-    // 2. Busca todos os dados de uma só vez do servidor com await
     const { exposicao_atual, obras, eventos } = await buscarDestaques();
-
-    // Limpa a área de carregamento para desenhar o conteúdo real
-    areaDestaques.replaceChildren();
-
-    // 3. Renderiza a exposição atual (se houver)
-    if (exposicao_atual) {
-      const banner = document.createElement('div');
-      banner.className = 'banner-exposicao';
-      banner.innerHTML = `
-                <h2>Exposição em Destaque: ${exposicao_atual.titulo}</h2>
-                <p>${exposicao_atual.descricao}</p>
-            `;
-      areaDestaques.appendChild(banner);
-    }
-
-    // 4. Renderiza a grade de obras em destaque
-    const gradeObras = document.createElement('div');
-    gradeObras.className = 'grid';
-
-    obras.forEach((obra) => {
-      const card = document.createElement('article');
-      card.className = 'card card-obra';
-      card.innerHTML = `
-                <a class="card-obra__link" href="/obra.html?id=${obra.id}">
-                    <img class="card-obra__imagem" src="${obra.imagem_url}" alt="${obra.titulo}">
-                    <h3 class="card-obra__titulo">${obra.titulo}</h3>
-                    <p class="card-obra__detalhes">${obra.artista_nome}</p>
-                </a>
-            `;
-      gradeObras.appendChild(card);
-    });
-    areaDestaques.appendChild(gradeObras);
-
-    // (Opcional) Aqui você também pode adicionar a renderização dos eventos se desejar
+    desenharExposicao(exposicao_atual);
+    desenharObras(obras);
+    desenharEventos(eventos);
   } catch (erro) {
-    // 4. Se o servidor cair ou der erro, exibe o estado de erro com botão de recarregar[cite: 11]
-    mostrarErro(areaDestaques, erro.message || 'Erro ao carregar os dados do servidor.', () =>
-      location.reload(),
-    );
+    // O botão só aparece na primeira seção, para não repetir três vezes.
+    mostrarErro(areaExposicao, erro.message, carregarHome);
+    areaObras.replaceChildren();
+    areaEventos.replaceChildren();
   }
 }
 
-// Executa a função ao carregar a página
 carregarHome();

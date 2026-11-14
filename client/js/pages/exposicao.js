@@ -74,9 +74,7 @@ function renderizarExposicao(exposicao) {
   if (!detalhe) return;
   if (!exposicao) {
     document.title = 'Exposição não encontrada — Museu';
-    detalhe.replaceChildren(
-      criarTitulo('Exposição não encontrada'),
-    );
+    detalhe.replaceChildren(criarTitulo('Exposição não encontrada'));
     const vazio = document.createElement('div');
     mostrarVazio(vazio, 'Confira o link ou veja todas as exposições.');
     detalhe.append(vazio);
@@ -123,8 +121,18 @@ function renderizarExposicao(exposicao) {
 
   detalhe.replaceChildren(
     banner,
-    criarSecao('Obras em exposição', exposicao.obras, criarCardObra, 'Não há obras disponíveis para esta exposição.'),
-    criarSecao('Eventos relacionados', exposicao.eventos, criarCardEvento, 'Não há eventos relacionados a esta exposição.'),
+    criarSecao(
+      'Obras em exposição',
+      exposicao.obras,
+      criarCardObra,
+      'Não há obras disponíveis para esta exposição.',
+    ),
+    criarSecao(
+      'Eventos relacionados',
+      exposicao.eventos,
+      criarCardEvento,
+      'Não há eventos relacionados a esta exposição.',
+    ),
   );
 }
 
@@ -147,7 +155,7 @@ async function carregarExposicao() {
       erro.message || 'Não foi possível carregar esta exposição. Tente novamente.',
       carregarExposicao,
     );
-    detalhe.querySelector('[role="alert"]').classList.add('exposicao-erro');
+    detalhe.firstElementChild.classList.add('exposicao-erro');
   }
 }
 

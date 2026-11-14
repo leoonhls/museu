@@ -1,4 +1,4 @@
-// Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1
+// Responsável: M2 — veja a seção "M2" no Guia da Entrega 2
 import { aplicarPreferenciasAcessibilidade, usuarioAtual, sair } from '../api.js';
 import { caminhoInicio, urlApp } from '../utils/rotas.js';
 import { mostrarToast } from './toast.js';
@@ -11,17 +11,39 @@ function criarLink(caminho, texto) {
   return link;
 }
 
+// Links da direita: "Entrar" ou "Admin / Meu perfil / Sair".
+function criarLinksUsuario(usuario) {
+  if (!usuario) {
+    const entrar = criarLink('pages/login.html', 'Entrar');
+    entrar.className = 'botao';
+    return [entrar];
+  }
+
+  const links = [];
+  if (usuario.papel === 'admin') links.push(criarLink('pages/admin/obras.html', 'Admin'));
+  links.push(criarLink('pages/perfil.html', 'Meu perfil'));
+
+  const botaoSair = document.createElement('button');
+  botaoSair.type = 'button';
+  botaoSair.className = 'header__sair';
+  botaoSair.textContent = 'Sair';
+  botaoSair.addEventListener('click', async () => {
+    try {
+      await sair();
+      location.href = caminhoInicio();
+    } catch (erro) {
+      mostrarToast(erro.message, 'erro');
+    }
+  });
+  links.push(botaoSair);
+  return links;
+}
+
+// Desenha o header na hora e completa a parte do usuário quando o servidor responder.
+// As páginas podem chamar sem await.
 export async function montarHeader() {
   const alvo = document.getElementById('header');
   if (!alvo) return;
-
-  let usuario = null;
-  try {
-    usuario = await usuarioAtual();
-  } catch (erro) {
-    mostrarToast(erro.message, 'erro');
-  }
-  aplicarPreferenciasAcessibilidade(usuario?.perfil);
 
   const header = document.createElement('header');
   header.className = 'header';
@@ -43,29 +65,6 @@ export async function montarHeader() {
     criarLink('pages/ingressos.html', 'Ingressos'),
   );
 
-  if (usuario) {
-    if (usuario.papel === 'admin') nav.append(criarLink('pages/admin/obras.html', 'Admin'));
-    nav.append(criarLink('pages/perfil.html', 'Meu perfil'));
-
-    const botaoSair = document.createElement('button');
-    botaoSair.type = 'button';
-    botaoSair.className = 'header__sair';
-    botaoSair.textContent = 'Sair';
-    botaoSair.addEventListener('click', async () => {
-      try {
-        await sair();
-        location.href = caminhoInicio();
-      } catch (erro) {
-        mostrarToast(erro.message, 'erro');
-      }
-    });
-    nav.append(botaoSair);
-  } else {
-    const entrar = criarLink('pages/login.html', 'Entrar');
-    entrar.className = 'botao';
-    nav.append(entrar);
-  }
-
   // Menu sanduíche: só aparece em telas pequenas (components.css)
   const botaoMenu = document.createElement('button');
   botaoMenu.type = 'button';
@@ -83,4 +82,14 @@ export async function montarHeader() {
   conteudo.append(logo, botaoMenu, nav);
   header.append(conteudo);
   alvo.replaceChildren(header);
+
+  // Se a pergunta ao servidor falhar, mostra "Entrar" (o mais seguro).
+  let usuario = null;
+  try {
+    usuario = await usuarioAtual();
+  } catch {
+    usuario = null;
+  }
+  aplicarPreferenciasAcessibilidade(usuario?.perfil);
+  nav.append(...criarLinksUsuario(usuario));
 }

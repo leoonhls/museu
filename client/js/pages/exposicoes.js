@@ -55,7 +55,7 @@ async function carregarExposicoes(status) {
     if (requisicaoAtual !== numeroRequisicao) return;
     if (exposicoes.length === 0) {
       mostrarVazio(lista, 'Não há exposições neste período.');
-      lista.firstElementChild.className = 'exposicoes-vazio';
+      lista.firstElementChild.classList.add('exposicoes-vazio');
     } else {
       lista.replaceChildren(...exposicoes.map(criarCardExposicao));
     }
@@ -67,7 +67,7 @@ async function carregarExposicoes(status) {
       erro.message || 'Não foi possível carregar as exposições. Tente novamente.',
       () => carregarExposicoes(status),
     );
-    lista.querySelector('[role="alert"]').className = 'exposicoes-erro';
+    lista.firstElementChild.classList.add('exposicoes-erro');
   }
 }
 

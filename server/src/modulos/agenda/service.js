@@ -1,4 +1,4 @@
-
+// Responsável: M5 — veja a seção "M5" no Guia da Entrega 2
 import * as exposicoesRepo from '../../repositorios/exposicoes.repo.js';
 import * as exposicaoObrasRepo from '../../repositorios/exposicao-obras.repo.js';
 import * as eventosRepo from '../../repositorios/eventos.repo.js';
@@ -17,38 +17,32 @@ function statusExposicao(exposicao, hoje) {
   return 'atual';
 }
 
+// "AAAA-MM-DD" vira o início (ou o fim) daquele dia; vazio vira null.
 function dataFiltro(valor, fimDoDia = false) {
   if (valor === '' || valor === null || valor === undefined) return null;
-  if (typeof valor !== 'string') {
-    throw requisicaoInvalida('Informe uma data válida para os filtros de eventos.');
+  if (typeof valor !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(valor)) {
+    throw requisicaoInvalida('Data inválida.');
   }
-  const texto = String(valor);
-  if (/^\d{4}-\d{2}-\d{2}$/.test(texto)) {
-    const [ano, mes, dia] = texto.split('-').map(Number);
-    const dataCalendario = new Date(ano, mes - 1, dia);
-    if (
-      dataCalendario.getFullYear() !== ano ||
-      dataCalendario.getMonth() !== mes - 1 ||
-      dataCalendario.getDate() !== dia
-    ) {
-      throw requisicaoInvalida('Informe uma data válida para os filtros de eventos.');
-    }
+  const [ano, mes, dia] = valor.split('-').map(Number);
+  const data = new Date(ano, mes - 1, dia);
+  // 2026-02-30 "rola" para março: confere se o dia continua o mesmo.
+  if (data.getFullYear() !== ano || data.getMonth() !== mes - 1 || data.getDate() !== dia) {
+    throw requisicaoInvalida('Data inválida.');
   }
-  const data = new Date(
-    texto.length === 10
-      ? `${texto}T${fimDoDia ? '23:59:59.999' : '00:00:00'}`
-      : texto,
-  );
-  if (Number.isNaN(data.getTime())) {
-    throw requisicaoInvalida('Informe uma data válida para os filtros de eventos.');
-  }
+  if (fimDoDia) data.setHours(23, 59, 59, 999);
   return data;
+}
+
+function lerId(texto) {
+  const id = Number(texto);
+  if (!Number.isInteger(id) || id < 1) throw requisicaoInvalida('Id inválido.');
+  return id;
 }
 
 export async function listarExposicoes(filtros) {
   const status = filtros?.status;
   if (status && !['atual', 'futura', 'passada'].includes(status)) {
-    throw requisicaoInvalida('O status deve ser atual, futura ou passada.');
+    throw requisicaoInvalida('Status inválido.');
   }
   const hoje = new Date();
   hoje.setHours(0, 0, 0, 0);
@@ -56,11 +50,20 @@ export async function listarExposicoes(filtros) {
   return exposicoes
     .map((exposicao) => ({ ...exposicao, status: statusExposicao(exposicao, hoje) }))
     .filter((exposicao) => !status || exposicao.status === status)
-    .sort((a, b) => dataLocal(a.data_inicio) - dataLocal(b.data_inicio));
+    .sort((a, b) => {
+      // Atuais e futuras por data_inicio crescente; as passadas no fim, da mais recente
+      // para a mais antiga. Datas AAAA-MM-DD podem ser comparadas como texto.
+      const aPassou = a.status === 'passada';
+      const bPassou = b.status === 'passada';
+      if (aPassou !== bPassou) return aPassou ? 1 : -1;
+      return aPassou
+        ? b.data_inicio.localeCompare(a.data_inicio)
+        : a.data_inicio.localeCompare(b.data_inicio);
+    });
 }
 
-export async function buscarExposicao(id) {
-  const exposicao = await exposicoesRepo.buscarPorId(id);
+export async function buscarExposicao(idTexto) {
+  const exposicao = await exposicoesRepo.buscarPorId(lerId(idTexto));
   if (!exposicao) throw naoEncontrado('Exposição não encontrada.');
   const [vinculos, obras, artistas, eventos] = await Promise.all([
     exposicaoObrasRepo.listarPorExposicao(exposicao.id),
@@ -88,7 +91,7 @@ export async function listarEventos(filtros) {
   const de = dataFiltro(filtros?.de);
   const ate = dataFiltro(filtros?.ate, true);
   if (de && ate && de > ate) {
-    throw requisicaoInvalida('A data inicial não pode ser posterior à data final.');
+    throw requisicaoInvalida('Período inválido.');
   }
   const agora = new Date();
   const inicio = de && de > agora ? de : agora;

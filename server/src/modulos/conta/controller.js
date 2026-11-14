@@ -33,7 +33,10 @@ export async function entrar(req, res) {
 }
 
 export async function sair(req, res) {
-  await service.sair(req.session);
+  await service.sair(req.session.usuarioId);
+  await new Promise((resolve, reject) => {
+    req.session.destroy((erro) => (erro ? reject(erro) : resolve()));
+  });
   res.clearCookie('connect.sid');
   res.status(204).end();
 }

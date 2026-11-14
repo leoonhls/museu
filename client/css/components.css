@@ -376,3 +376,8 @@
     transform: rotate(360deg);
   }
 }
+
+/* Estado dentro de uma .grid: ocupa a linha inteira */
+.grid__estado {
+  grid-column: 1 / -1;
+}

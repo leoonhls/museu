@@ -5,7 +5,7 @@ Projeto acadêmico: site de um museu de artes, feito em três entregas.
 | Entrega | Conteúdo | Estado |
 | --- | --- | --- |
 | 1 | Front-end com HTML, CSS e JavaScript; dados em `client/data/` e `localStorage` | concluída |
-| 2 | Backend com Node.js e Express; API REST em `/api` e dados em arquivos JSON | em andamento |
+| 2 | Backend com Node.js e Express; API REST em `/api` e dados em arquivos JSON | concluída |
 | 3 | Banco de dados PostgreSQL | — |
 
 ## Como rodar (Entrega 2)
@@ -48,8 +48,6 @@ Pare o servidor e rode `npm run seed`. Isso recria `server/data/db/` a partir de
 - `client/pages/` — páginas do site
 - `docs/api/` — requisições de teste da API (extensão REST Client)
 - `docs/` — guia de uso, equipe e créditos das imagens
-
-Durante a Entrega 2, `client/js/api-local.js`, `client/js/auth-local.js` e `client/data/` ainda existem para as páginas que não migraram para o servidor. Eles serão apagados no fim da entrega.
 
 ## Equipe e contribuição
 

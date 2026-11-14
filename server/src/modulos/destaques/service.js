@@ -1,4 +1,4 @@
-// Responsável: M2 — veja a seção "M2" no Guia da Entrega 2[cite: 10]
+// Responsável: M2 — veja a seção "M2" no Guia da Entrega 2
 import * as obrasRepo from '../../repositorios/obras.repo.js';
 import * as artistasRepo from '../../repositorios/artistas.repo.js';
 import * as exposicoesRepo from '../../repositorios/exposicoes.repo.js';

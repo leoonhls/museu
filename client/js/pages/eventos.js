@@ -45,9 +45,7 @@ function criarCardEvento(evento) {
   preco.textContent = evento.preco === 0 ? 'Gratuito' : formatoPreco.format(evento.preco);
 
   const acao =
-    evento.vagas_restantes === 0
-      ? document.createElement('button')
-      : document.createElement('a');
+    evento.vagas_restantes === 0 ? document.createElement('button') : document.createElement('a');
   acao.className = 'botao evento-card__acao';
   if (evento.vagas_restantes === 0) {
     acao.type = 'button';
@@ -74,7 +72,7 @@ async function renderizarAgenda() {
     });
     if (eventos.length === 0) {
       mostrarVazio(agenda, 'Não há eventos programados no momento.');
-      agenda.firstElementChild.className = 'agenda-eventos__vazia';
+      agenda.firstElementChild.classList.add('agenda-eventos__vazia');
       return;
     }
 
@@ -105,8 +103,12 @@ async function renderizarAgenda() {
     agenda.replaceChildren(fragmento);
   } catch (erro) {
     console.error('Erro ao carregar eventos:', erro);
-    mostrarErro(agenda, erro.message || 'Não foi possível carregar os eventos. Tente novamente.', renderizarAgenda);
-    agenda.querySelector('[role="alert"]').className = 'agenda-eventos__erro';
+    mostrarErro(
+      agenda,
+      erro.message || 'Não foi possível carregar os eventos. Tente novamente.',
+      renderizarAgenda,
+    );
+    agenda.firstElementChild.classList.add('agenda-eventos__erro');
   }
 }
 
