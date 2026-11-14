@@ -15,7 +15,5 @@ export async function excluirObra(req, res) {
 }
 
 export async function receberUpload(req, res) {
-
-res.status(201).json(await service.enviarImagem(req.file));
-
+  res.status(201).json(await service.enviarImagem(req.file));
 }

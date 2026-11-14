@@ -53,3 +53,138 @@ Content-Type: image/jpeg
 
 < ../../client/assets/img/obras/noite-estrelada.jpg
 --limite--
+### Teste — Título obrigatório
+POST {{base}}/obras
+Content-Type: application/json
+
+{
+  "titulo": "",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Uma descrição com mais de vinte caracteres.",
+  "imagem_url": "/assets/img/placeholder.svg"
+}
+### Teste — Título com mais de 150 caracteres
+POST {{base}}/obras
+Content-Type: application/json
+
+{
+  "titulo": "Esta é uma obra de teste cujo título foi escrito propositalmente com uma quantidade excessiva de caracteres para verificar se o sistema rejeita corretamente títulos que ultrapassam o limite permitido de cento e cinquenta caracteres.",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Uma descrição com mais de vinte caracteres.",
+  "imagem_url": "/assets/img/placeholder.svg"
+}
+### Teste — Artista inválido
+POST {{base}}/obras
+Content-Type: application/json
+
+{
+  "titulo": "Obra de Teste",
+  "artista_id": -1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Uma descrição com mais de vinte caracteres.",
+  "imagem_url": "/assets/img/placeholder.svg"
+}
+### Teste — Categoria inválida
+POST {{base}}/obras
+Content-Type: application/json
+
+{
+  "titulo": "Obra de Teste",
+  "artista_id": 1,
+  "categoria_id": -1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Uma descrição com mais de vinte caracteres.",
+  "imagem_url": "/assets/img/placeholder.svg"
+}
+### Teste — Ano inválido
+POST {{base}}/obras
+Content-Type: application/json
+
+{
+  "titulo": "Obra de Teste",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": -100,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Uma descrição com mais de vinte caracteres.",
+  "imagem_url": "/assets/img/placeholder.svg"
+}
+### Teste — Técnica obrigatória
+POST {{base}}/obras
+Content-Type: application/json
+
+{
+  "titulo": "Obra de Teste",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "",
+  "descricao": "Uma descrição com mais de vinte caracteres.",
+  "imagem_url": "/assets/img/placeholder.svg"
+}
+### Teste — Imagem inválida
+POST {{base}}/obras
+Content-Type: application/json
+
+{
+  "titulo": "Obra de Teste",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Uma descrição com mais de vinte caracteres.",
+  "imagem_url": "imagem-invalida.jpg"
+}
+### Teste — Acesso sem autenticação (HTTP 401)
+# Enviar sem realizar login
+POST {{base}}/obras
+Content-Type: application/json
+
+{
+  "titulo": "Obra sem autenticação",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Teste de acesso sem autenticação ao sistema.",
+  "imagem_url": "/assets/img/placeholder.svg"
+}
+### Teste — Acesso proibido para usuário comum (HTTP 403)
+# Executar após fazer login como usuário sem perfil de administrador
+POST {{base}}/obras
+Content-Type: application/json
+
+{
+  "titulo": "Obra de Teste",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Teste de permissão para usuário comum.",
+  "imagem_url": "/assets/img/placeholder.svg"
+}
+### Teste — Editar obra inexistente (HTTP 404)
+PUT {{base}}/obras/999999
+Content-Type: application/json
+
+{
+  "titulo": "Obra inexistente",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Teste de edição de uma obra inexistente.",
+  "imagem_url": "/assets/img/placeholder.svg"
+}
+### Teste — Excluir obra inexistente (HTTP 404)
+DELETE {{base}}/obras/999999
+

@@ -5,7 +5,6 @@ import { uploadImagem } from '../../middlewares/upload.js';
 import { exigirAdmin } from '../../middlewares/autenticacao.js';
 export const rotas = express.Router();
 
-
 rotas.post('/obras', exigirAdmin, controller.criarObra);
 rotas.put('/obras/:id', exigirAdmin, controller.editarObra);
 rotas.delete('/obras/:id', exigirAdmin, controller.excluirObra);

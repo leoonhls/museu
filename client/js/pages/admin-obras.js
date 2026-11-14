@@ -1,17 +1,16 @@
 // Responsável: M8 — veja a seção "M8 — Área administrativa" no Guia da Entrega 1
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { exigirAdmin } from '../auth-local.js';
+import { exigirAdmin } from '../auth.js';
 
-import { listarObras, excluirObra } from '../api-local.js';
+import { listarObras, excluirObra } from '../api.js';
 import { confirmar } from '../components/modal.js';
 import { mostrarToast } from '../components/toast.js';
-
 
 montarHeader();
 montarFooter();
 
-const usuario = exigirAdmin();
+const usuario = await exigirAdmin();
 
 if (usuario) {
   const campoBusca = document.querySelector('#busca-obras');
@@ -22,17 +21,14 @@ if (usuario) {
 
   let pagina = 1;
 
-  function carregarObras() {
+  async function carregarObras() {
     try {
-      const resultado = listarObras({
+      const resultado = await listarObras({
         busca: campoBusca.value.trim(),
-        pagina
+        pagina,
       });
 
-      const totalPaginas = Math.max(
-        1,
-        Math.ceil(resultado.total / resultado.porPagina)
-      );
+      const totalPaginas = Math.max(1, Math.ceil(resultado.total / resultado.porPagina));
 
       if (pagina > totalPaginas) {
         pagina = totalPaginas;
@@ -51,7 +47,7 @@ if (usuario) {
           obra.artista_nome ?? 'Não informado',
           obra.categoria_nome ?? 'Não informada',
           obra.ano,
-          obra.em_exibicao ? 'Sim' : 'Não'
+          obra.em_exibicao ? 'Sim' : 'Não',
         ];
 
         valores.forEach((valor, indice) => {
@@ -86,9 +82,9 @@ if (usuario) {
         excluir.textContent = 'Excluir';
 
         excluir.addEventListener('click', () => {
-          confirmar(`Deseja excluir a obra "${obra.titulo}"?`, () => {
+          confirmar(`Deseja excluir a obra "${obra.titulo}"?`, async () => {
             try {
-              excluirObra(obra.id);
+              await excluirObra(obra.id);
               mostrarToast('Obra excluída com sucesso!', 'sucesso');
               carregarObras();
             } catch (erro) {
@@ -117,7 +113,6 @@ if (usuario) {
       infoPagina.textContent = `Página ${pagina} de ${totalPaginas}`;
       anterior.disabled = pagina <= 1;
       proxima.disabled = pagina >= totalPaginas;
-
     } catch (erro) {
       tabela.replaceChildren();
       infoPagina.textContent = erro.message;
