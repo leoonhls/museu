@@ -7,20 +7,22 @@ import {
   minhasReservas,
   obterPerfilUsuario,
   sair,
-} from '../api-local.js';
+} from '../api.js';
 import { criarListaReservas } from '../components/lista-reservas.js';
 import { criarCardObra } from '../components/card-obra.js';
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { exigirLogin } from '../auth-local.js';
+import { exigirLogin } from '../auth.js';
 import { formatarData, formatarDataHora } from '../utils/datas.js';
 import { caminhoInicio, urlApp } from '../utils/rotas.js';
 
 montarHeader();
 montarFooter();
 
-const usuario = exigirLogin();
-if (usuario) {
+async function iniciarPerfil() {
+  const usuario = await exigirLogin();
+  if (!usuario) return;
+
   const abas = [...document.querySelectorAll('[data-aba]')];
   const paineis = {
     dados: document.getElementById('painelDados'),
@@ -54,9 +56,18 @@ if (usuario) {
     mensagemPerfil.textContent = texto;
   }
 
-  function renderizarHistorico() {
+  async function renderizarHistorico() {
     const lista = document.getElementById('listaHistoricoConta');
-    const itens = listarHistoricoConta();
+    let itens;
+    try {
+      itens = await listarHistoricoConta();
+    } catch (erro) {
+      const linha = document.createElement('li');
+      linha.textContent = erro.message;
+      lista.replaceChildren(linha);
+      return;
+    }
+
     if (itens.length === 0) {
       const vazio = document.createElement('li');
       vazio.textContent = 'Nenhuma atividade registrada ainda.';
@@ -76,7 +87,14 @@ if (usuario) {
     }));
   }
 
-  const perfil = obterPerfilUsuario();
+  let perfil;
+  try {
+    perfil = await obterPerfilUsuario();
+  } catch (erro) {
+    mostrarMensagemPerfil(erro.message, 'erro');
+    return;
+  }
+  aplicarPreferenciasAcessibilidade(perfil);
   document.getElementById('biografiaPerfil').value = perfil.biografia;
   document.getElementById('interessesPerfil').value = perfil.interesses;
   document.getElementById('telefonePerfil').value = perfil.telefone;
@@ -86,7 +104,7 @@ if (usuario) {
   document.getElementById('altoContrastePerfil').checked = perfil.acessibilidade.altoContraste;
   document.getElementById('reduzirAnimacoesPerfil').checked = perfil.acessibilidade.reduzirAnimacoes;
   mostrarAvatar(perfil.avatar);
-  renderizarHistorico();
+  await renderizarHistorico();
 
   arquivoAvatar.addEventListener('change', () => {
     const arquivo = arquivoAvatar.files[0];
@@ -128,11 +146,12 @@ if (usuario) {
     mostrarAvatar('');
   });
 
-  formPerfil.addEventListener('submit', (event) => {
+  formPerfil.addEventListener('submit', async (event) => {
     event.preventDefault();
     const dados = new FormData(formPerfil);
+    botaoSalvarPerfil.disabled = true;
     try {
-      atualizarPerfil({
+      const perfilAtualizado = await atualizarPerfil({
         biografia: dados.get('biografia'),
         interesses: dados.get('interesses'),
         telefone: dados.get('telefone'),
@@ -144,15 +163,17 @@ if (usuario) {
         ...(avatarAtualizado ? { avatar: avatarSelecionado } : {}),
       });
       avatarAtualizado = false;
-      aplicarPreferenciasAcessibilidade();
-      renderizarHistorico();
+      aplicarPreferenciasAcessibilidade(perfilAtualizado);
+      await renderizarHistorico();
       mostrarMensagemPerfil('Perfil atualizado com sucesso.', 'sucesso');
     } catch (erro) {
       mostrarMensagemPerfil(erro.message, 'erro');
+    } finally {
+      botaoSalvarPerfil.disabled = false;
     }
   });
 
-  function exibirAba(nomeAba, atualizarUrl = true) {
+  async function exibirAba(nomeAba, atualizarUrl = true) {
     const aba = paineis[nomeAba] ? nomeAba : 'dados';
     abas.forEach((botao) => {
       const ativa = botao.dataset.aba === aba;
@@ -163,9 +184,9 @@ if (usuario) {
       painel.hidden = nome !== aba;
     });
 
-    if (aba === 'favoritos') renderizarFavoritos();
-    if (aba === 'reservas') renderizarReservas();
-    if (aba === 'dados') renderizarHistorico();
+    if (aba === 'favoritos') await renderizarFavoritos();
+    if (aba === 'reservas') await renderizarReservas();
+    if (aba === 'dados') await renderizarHistorico();
 
     if (atualizarUrl) {
       const url = new URL(location.href);
@@ -174,9 +195,18 @@ if (usuario) {
     }
   }
 
-  function renderizarFavoritos() {
+  async function renderizarFavoritos() {
     const conteudo = document.getElementById('conteudoFavoritos');
-    const obras = listarFavoritos();
+    let obras;
+    try {
+      obras = await listarFavoritos();
+    } catch (erro) {
+      const mensagem = document.createElement('p');
+      mensagem.textContent = erro.message;
+      conteudo.replaceChildren(mensagem);
+      return;
+    }
+
     if (obras.length === 0) {
       const vazio = document.createElement('p');
       vazio.textContent = 'Você ainda não favoritou nenhuma obra.';
@@ -193,23 +223,39 @@ if (usuario) {
     conteudo.replaceChildren(grade);
   }
 
-  function renderizarReservas() {
+  async function renderizarReservas() {
     const conteudo = document.getElementById('conteudoReservas');
-    conteudo.replaceChildren(criarListaReservas(minhasReservas(), renderizarReservas));
+    try {
+      conteudo.replaceChildren(
+        criarListaReservas(await minhasReservas(), renderizarReservas),
+      );
+    } catch (erro) {
+      const mensagem = document.createElement('p');
+      mensagem.textContent = erro.message;
+      conteudo.replaceChildren(mensagem);
+    }
   }
 
   abas.forEach((botao) => {
-    botao.addEventListener('click', () => exibirAba(botao.dataset.aba));
+    botao.addEventListener('click', () => {
+      void exibirAba(botao.dataset.aba);
+    });
   });
 
   window.addEventListener('popstate', () => {
-    exibirAba(new URLSearchParams(location.search).get('aba'), false);
+    void exibirAba(new URLSearchParams(location.search).get('aba'), false);
   });
 
-  document.getElementById('botaoSairPerfil').addEventListener('click', () => {
-    sair();
-    location.href = caminhoInicio();
+  document.getElementById('botaoSairPerfil').addEventListener('click', async () => {
+    try {
+      await sair();
+      location.href = caminhoInicio();
+    } catch (erro) {
+      mostrarMensagemPerfil(erro.message, 'erro');
+    }
   });
 
-  exibirAba(new URLSearchParams(location.search).get('aba'), false);
+  await exibirAba(new URLSearchParams(location.search).get('aba'), false);
 }
+
+await iniciarPerfil();

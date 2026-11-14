@@ -1,31 +1,36 @@
 # Museu de Artes — como acessar e navegar
 
-O site da Entrega 1 roda direto no navegador, pelo Live Server do VS Code. Não há servidor nem banco de dados: os dados vêm de `client/data/` e o que você cria (contas, favoritos, reservas, obras do admin) fica salvo no `localStorage` do seu navegador.
+Na Entrega 2 o site roda num servidor Node.js com Express. O servidor entrega as páginas e responde a API REST em `/api`. Os dados ficam em arquivos JSON em `server/data/db/`: contas, favoritos, reservas e obras criadas no Admin valem para qualquer navegador que acesse o mesmo servidor.
 
 ## 1. Como acessar
 
-1. Clone o repositório e abra a pasta no VS Code:
+1. Instale o [Node.js](https://nodejs.org) 22 ou superior (`node -v` para conferir).
+2. Clone o repositório e entre na pasta:
    ```bash
    git clone https://github.com/leoonhls/museu.git
-   code museu
+   cd museu
    ```
    Se já tem o projeto, troque para a `main` e dê **Pull**.
-2. Aceite instalar as extensões recomendadas (Live Server, Prettier e EditorConfig).
-3. Clique com o botão direito em `client/index.html` → **Open with Live Server**.
-4. O site abre em `http://127.0.0.1:5500/`.
+3. Instale as dependências e crie o banco de desenvolvimento:
+   ```bash
+   npm install
+   npm run seed
+   ```
+4. Ligue o servidor com `npm run dev` e abra `http://localhost:3000`.
 
-Não abra o HTML com dois cliques: em endereços `file://` o navegador bloqueia os módulos JavaScript e a página fica em branco.
+O Live Server não é mais usado: por ele, as chamadas à API não funcionam.
 
 ## 2. Usuários de teste
 
 | Perfil | E-mail | Senha | Como conseguir |
 | --- | --- | --- | --- |
-| Administrador | `admin@museu.com` | `admin123` | Já existe. É criado sozinho no primeiro acesso. |
+| Administrador | `admin@museu.com` | `admin123` | Já existe. É criado pelo `npm run seed`. |
 | Visitante | o que você quiser | 8+ caracteres, com letras e números | Crie em **Entrar → aba Criar conta**. Ex.: `visitante@teste.com` / `senha1234`. |
 
 - Ao criar a conta, o visitante já entra logado.
-- Cada navegador tem os próprios dados: uma conta criada no Chrome não existe no Firefox nem numa janela anônima.
-- O login da Entrega 1 é simulado e **não é seguro**. Ele será trocado por autenticação no servidor na Entrega 2.
+- As contas ficam no servidor: a mesma conta funciona em qualquer navegador.
+- A senha é guardada com hash (bcrypt) e o login usa sessão com cookie `httpOnly`. As sessões ficam na memória do servidor: ao reiniciá-lo, é preciso entrar de novo.
+- O servidor confere tudo de novo, mesmo o que o formulário já validou. Preço, papel de administrador e dono da reserva nunca vêm do navegador.
 
 ## 3. Mapa do site
 
@@ -87,10 +92,11 @@ Quem abre uma página de login sem estar logado vai para o **Entrar** e, depois 
 2. Em **Admin**, use a busca e a paginação da tabela.
 3. Clique em **+ Nova obra** e preencha:
    - título, artista, categoria, ano, técnica e descrição (mínimo de 20 caracteres);
-   - endereço da imagem começando com `/` ou `https://`. Exemplo: `/assets/img/placeholder.svg`.
-   Ao salvar, você volta para a tabela e a obra aparece no Acervo.
+   - imagem: escolha um arquivo JPG, PNG ou WebP de até 2 MB. A prévia aparece na hora.
+   Ao salvar, a imagem é enviada ao servidor, você volta para a tabela e a obra aparece no Acervo.
 4. Clique em **Editar** numa obra, mude o título e salve.
-5. Clique em **Excluir** e confirme. A obra some do Acervo e dos favoritos de quem a tinha.
+5. Clique em **Excluir** e confirme. A obra some do Acervo, dos favoritos de quem a tinha e das exposições.
+6. As rotas do Admin são protegidas no servidor: chamadas à API sem login respondem 401 e, com login de visitante, 403.
 
 ## 7. Regras de reserva e dados de teste
 
@@ -103,8 +109,20 @@ Quem abre uma página de login sem estar logado vai para o **Entrar** e, depois 
 | Dia fechado | segunda-feira |
 | Reserva de evento | a data é a do evento; precisa ter vagas e o evento não pode ter passado |
 
-**Zerar os dados de teste:** abra o Console do navegador (`F12`), rode o comando abaixo e recarregue a página. Isso apaga contas, favoritos, reservas e obras criadas no Admin. O administrador é recriado no próximo acesso.
+**Zerar os dados de teste:** pare o servidor (`Ctrl+C`) e rode `npm run seed`. Isso apaga contas, favoritos, reservas e obras criadas no Admin, e recria o administrador.
 
-```js
-import('/js/api.js').then((api) => api.resetarDados())
-```
+## 8. Testar a API
+
+Cada área do servidor tem um arquivo em `docs/api/` com requisições de teste para a extensão **REST Client** do VS Code, cobrindo os casos de sucesso e de erro. Veja `docs/api/README.md`.
+
+| Área | Rotas |
+| --- | --- |
+| Destaques | `GET /api/destaques` |
+| Acervo e galeria | `GET /api/obras` (busca, filtros e paginação), `GET /api/obras/:id`, `GET /api/artistas`, `GET /api/artistas/:id`, `GET /api/categorias` |
+| Agenda | `GET /api/exposicoes`, `GET /api/exposicoes/:id`, `GET /api/eventos` |
+| Conta | `POST /api/auth/cadastro`, `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`, `GET/PUT /api/auth/perfil`, `GET /api/auth/historico` |
+| Favoritos | `GET /api/favoritos`, `POST` e `DELETE /api/favoritos/:obraId` |
+| Reservas | `POST /api/reservas`, `GET /api/reservas/minhas`, `DELETE /api/reservas/:id` |
+| Admin | `POST /api/obras`, `PUT` e `DELETE /api/obras/:id`, `POST /api/uploads` |
+
+Os erros respondem com o status HTTP correspondente (400, 401, 403, 404 ou 409) e um JSON `{ "erro": "mensagem" }`.

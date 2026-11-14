@@ -5,3 +5,4 @@
 
 ### Destaques da home (exposição atual, 6 obras, 3 eventos)
 GET {{base}}/destaques
+

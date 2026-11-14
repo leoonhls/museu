@@ -1,9 +1,9 @@
-// Responsável: M2 — veja a seção "M2 — Layout e design system" no Guia da Entrega 1
+// Responsável: M2 — veja a seção "M2" no Guia da Entrega 2
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { mostrarToast } from '../components/toast.js';
 import { criarCardObra } from '../components/card-obra.js';
-import { listarExposicoes, listarObras, listarEventos } from '../api-local.js';
+import { mostrarCarregando, mostrarErro, mostrarVazio } from '../components/estado.js';
+import { buscarDestaques } from '../api.js';
 import { formatarData, formatarDataHora } from '../utils/datas.js';
 import { urlApp } from '../utils/rotas.js';
 
@@ -12,6 +12,10 @@ montarFooter();
 
 const formatoPreco = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
 
+const areaExposicao = document.getElementById('banner-exposicao');
+const areaObras = document.getElementById('grid-destaques');
+const areaEventos = document.getElementById('grid-eventos');
+
 function criarElemento(tag, classe, texto) {
   const elemento = document.createElement(tag);
   if (classe) elemento.className = classe;
@@ -19,16 +23,17 @@ function criarElemento(tag, classe, texto) {
   return elemento;
 }
 
-function mensagemVazia(texto) {
-  return criarElemento('p', 'em-construcao', texto);
+// Os estados ocupam a linha inteira das grids.
+function areaDeEstado(grid) {
+  const area = criarElemento('div', 'grid__estado');
+  grid.replaceChildren(area);
+  return area;
 }
 
 // Banner da exposição atual
-function desenharExposicao() {
-  const alvo = document.getElementById('banner-exposicao');
-  const [exposicao] = listarExposicoes({ status: 'atual' });
+function desenharExposicao(exposicao) {
   if (!exposicao) {
-    alvo.replaceChildren(mensagemVazia('Nenhuma exposição em cartaz no momento.'));
+    mostrarVazio(areaExposicao, 'Nenhuma exposição em cartaz no momento.');
     return;
   }
 
@@ -53,18 +58,16 @@ function desenharExposicao() {
   );
 
   banner.append(imagem, texto);
-  alvo.replaceChildren(banner);
+  areaExposicao.replaceChildren(banner);
 }
 
-// 6 obras em destaque: as que estão em exibição
-function desenharDestaques() {
-  const alvo = document.getElementById('grid-destaques');
-  const obras = listarObras({ ordem: 'recentes' })
-    .dados.filter((obra) => obra.em_exibicao)
-    .slice(0, 6);
-  alvo.replaceChildren(
-    ...(obras.length ? obras.map(criarCardObra) : [mensagemVazia('Nenhuma obra em exibição.')]),
-  );
+// 6 obras em destaque (o servidor prioriza as que estão em exibição)
+function desenharObras(obras) {
+  if (obras.length === 0) {
+    mostrarVazio(areaDeEstado(areaObras), 'Nenhuma obra em exibição.');
+    return;
+  }
+  areaObras.replaceChildren(...obras.map(criarCardObra));
 }
 
 // 3 próximos eventos
@@ -73,7 +76,11 @@ function criarCardEvento(evento) {
   const link = criarElemento('a', 'secao-link', 'Reservar ingressos →');
   link.href = urlApp(`pages/ingressos.html?evento=${evento.id}`);
   card.append(
-    criarElemento('span', 'tag', evento.preco === 0 ? 'Gratuito' : formatoPreco.format(evento.preco)),
+    criarElemento(
+      'span',
+      'tag',
+      evento.preco === 0 ? 'Gratuito' : formatoPreco.format(evento.preco),
+    ),
     criarElemento('h3', 'card-titulo', evento.titulo),
     criarElemento('p', 'card-texto', formatarDataHora(evento.data_hora)),
     criarElemento('p', 'card-texto', evento.descricao),
@@ -82,20 +89,31 @@ function criarCardEvento(evento) {
   return card;
 }
 
-function desenharEventos() {
-  const alvo = document.getElementById('grid-eventos');
-  const eventos = listarEventos().slice(0, 3);
-  alvo.replaceChildren(
-    ...(eventos.length
-      ? eventos.map(criarCardEvento)
-      : [mensagemVazia('Não há eventos programados no momento.')]),
-  );
+function desenharEventos(eventos) {
+  if (eventos.length === 0) {
+    mostrarVazio(areaDeEstado(areaEventos), 'Não há eventos programados no momento.');
+    return;
+  }
+  areaEventos.replaceChildren(...eventos.map(criarCardEvento));
 }
 
-for (const desenhar of [desenharExposicao, desenharDestaques, desenharEventos]) {
+// Uma chamada só traz as três seções.
+async function carregarHome() {
+  mostrarCarregando(areaExposicao);
+  mostrarCarregando(areaDeEstado(areaObras));
+  mostrarCarregando(areaDeEstado(areaEventos));
+
   try {
-    desenhar();
+    const { exposicao_atual, obras, eventos } = await buscarDestaques();
+    desenharExposicao(exposicao_atual);
+    desenharObras(obras);
+    desenharEventos(eventos);
   } catch (erro) {
-    mostrarToast(erro.message, 'erro');
+    // O botão só aparece na primeira seção, para não repetir três vezes.
+    mostrarErro(areaExposicao, erro.message, carregarHome);
+    areaObras.replaceChildren();
+    areaEventos.replaceChildren();
   }
 }
+
+carregarHome();

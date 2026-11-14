@@ -117,6 +117,18 @@ export function usuarioAtual() {
   return requisicao('GET', '/auth/me');
 }
 
+export function obterPerfilUsuario() {
+  return requisicao('GET', '/auth/perfil');
+}
+
+export function atualizarPerfil(dados) {
+  return requisicao('PUT', '/auth/perfil', dados);
+}
+
+export function listarHistoricoConta() {
+  return requisicao('GET', '/auth/historico');
+}
+
 export function listarFavoritos() {
   return requisicao('GET', '/favoritos');
 }
@@ -127,6 +139,12 @@ export function favoritar(obraId) {
 
 export function desfavoritar(obraId) {
   return requisicao('DELETE', `/favoritos/${id(obraId)}`);
+}
+
+export function aplicarPreferenciasAcessibilidade(perfil = {}) {
+  const acessibilidade = perfil.acessibilidade ?? {};
+  document.documentElement.dataset.altoContraste = String(Boolean(acessibilidade.altoContraste));
+  document.documentElement.dataset.reduzirAnimacoes = String(Boolean(acessibilidade.reduzirAnimacoes));
 }
 
 // ---------------------------------------------------------------------------

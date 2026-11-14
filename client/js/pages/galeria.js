@@ -94,27 +94,18 @@ function atualizarUrl(filtros, historico) {
 }
 
 function desenharContador(total) {
-  contador.textContent =
-    total === 1 ? '1 obra encontrada' : `${total} obras encontradas`;
+  contador.textContent = total === 1 ? '1 obra encontrada' : `${total} obras encontradas`;
 }
 
 function desenharObras(obras) {
   if (obras.length === 0) {
-    const area = areaDeEstado();
-    mostrarVazio(area, 'Nenhuma obra encontrada.');
-    area.append(criarBotaoLimpar());
+    mostrarVazio(areaDeEstado(), 'Nenhuma obra encontrada.', {
+      texto: 'Limpar filtros',
+      aoClicar: limparFiltros,
+    });
     return;
   }
   grid.replaceChildren(...obras.map(criarCardObra));
-}
-
-function criarBotaoLimpar() {
-  const botao = document.createElement('button');
-  botao.type = 'button';
-  botao.className = 'botao';
-  botao.textContent = 'Limpar filtros';
-  botao.addEventListener('click', limparFiltros);
-  return botao;
 }
 
 function criarBotaoPagina(texto, pagina, { desabilitado = false, atual = false } = {}) {

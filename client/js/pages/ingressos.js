@@ -304,7 +304,13 @@ if (usuario) {
   qtdInteira.max = MAX_INGRESSOS;
   qtdMeia.max = MAX_INGRESSOS;
 
-  eventosDisponiveis = await listarEventos();
+  try {
+    eventosDisponiveis = await listarEventos();
+  } catch (erro) {
+    // Sem a lista, ainda dá para reservar uma visita comum.
+    eventosDisponiveis = [];
+    mostrarToast(`Não foi possível carregar os eventos: ${erro.message}`, 'erro');
+  }
   atualizarEventos();
   configurarDatas();
   atualizarTipoVisita();

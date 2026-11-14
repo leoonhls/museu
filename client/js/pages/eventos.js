@@ -1,7 +1,7 @@
-// Responsável: M5 — veja a seção "M5 — Exposições e eventos" no Guia da Entrega 1
 import { montarHeader } from '../components/header.js';
 import { montarFooter } from '../components/footer.js';
-import { listarEventos } from '../api-local.js';
+import { listarEventos } from '../api.js';
+import { mostrarCarregando, mostrarErro, mostrarVazio } from '../components/estado.js';
 import { formatarDataHora } from '../utils/datas.js';
 import { urlApp } from '../utils/rotas.js';
 
@@ -45,9 +45,7 @@ function criarCardEvento(evento) {
   preco.textContent = evento.preco === 0 ? 'Gratuito' : formatoPreco.format(evento.preco);
 
   const acao =
-    evento.vagas_restantes === 0
-      ? document.createElement('button')
-      : document.createElement('a');
+    evento.vagas_restantes === 0 ? document.createElement('button') : document.createElement('a');
   acao.className = 'botao evento-card__acao';
   if (evento.vagas_restantes === 0) {
     acao.type = 'button';
@@ -62,16 +60,19 @@ function criarCardEvento(evento) {
   return card;
 }
 
-function renderizarAgenda() {
+async function renderizarAgenda() {
   if (!agenda) return;
 
+  mostrarCarregando(agenda);
   try {
-    const eventos = listarEventos();
+    const parametros = new URLSearchParams(window.location.search);
+    const eventos = await listarEventos({
+      de: parametros.get('de'),
+      ate: parametros.get('ate'),
+    });
     if (eventos.length === 0) {
-      const mensagem = document.createElement('p');
-      mensagem.className = 'agenda-eventos__vazia';
-      mensagem.textContent = 'Não há eventos programados no momento.';
-      agenda.replaceChildren(mensagem);
+      mostrarVazio(agenda, 'Não há eventos programados no momento.');
+      agenda.firstElementChild.classList.add('agenda-eventos__vazia');
       return;
     }
 
@@ -102,11 +103,12 @@ function renderizarAgenda() {
     agenda.replaceChildren(fragmento);
   } catch (erro) {
     console.error('Erro ao carregar eventos:', erro);
-    const mensagem = document.createElement('p');
-    mensagem.className = 'agenda-eventos__erro';
-    mensagem.setAttribute('role', 'alert');
-    mensagem.textContent = 'Não foi possível carregar os eventos. Tente novamente.';
-    agenda.replaceChildren(mensagem);
+    mostrarErro(
+      agenda,
+      erro.message || 'Não foi possível carregar os eventos. Tente novamente.',
+      renderizarAgenda,
+    );
+    agenda.firstElementChild.classList.add('agenda-eventos__erro');
   }
 }
 
