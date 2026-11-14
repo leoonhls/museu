@@ -7,7 +7,7 @@ import { rotaNaoEncontrada, tratarErros } from './middlewares/erros.js';
 
 export const app = express();
 
-app.use(express.json({ limit: '100kb' }));
+app.use(express.json({ limit: '350kb' }));
 app.use(
   session({
     secret: SEGREDO_SESSAO,

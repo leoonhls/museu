@@ -29,7 +29,7 @@ A senha fica guardada com hash (bcrypt) no servidor, e o login usa sessão com c
 
 ## Zerar os dados de teste
 
-Pare o servidor e rode `npm run seed`. Isso recria `server/data/db/` a partir de `server/data/seed/`, apagando usuários, favoritos, reservas e obras criadas no admin. O administrador é recriado.
+Pare o servidor e rode `npm run seed`. Isso recria `server/data/db/` a partir de `server/data/seed/`, apagando usuários, histórico da conta, favoritos, reservas e obras criadas no admin. O administrador é recriado.
 
 ## Estrutura
 
