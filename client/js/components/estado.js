@@ -1,34 +1,60 @@
-// Responsável: M2 — veja a seção "M2" no Guia da Entrega 2
-// Versão mínima: o M2 completa o visual (giro animado, ícone de erro) mantendo as assinaturas.
+// Responsável: M2 — veja a seção "M2" no Guia da Entrega 2[cite: 10]
 
-// Troca o conteúdo do elemento por "Carregando…".
-export function mostrarCarregando(alvo) {
-  const mensagem = document.createElement('p');
-  mensagem.setAttribute('role', 'status');
-  mensagem.textContent = 'Carregando…';
-  alvo.replaceChildren(mensagem);
+// Troca o conteúdo do elemento por um estado de carregamento com spinner animado e acessibilidade.
+export function mostrarCarregando(alvo, texto = 'Carregando...') {
+  const caixa = document.createElement('div');
+  caixa.className = 'estado estado--carregando';
+  caixa.setAttribute('role', 'status');
+
+  const giro = document.createElement('span');
+  giro.className = 'estado__giro';
+  giro.setAttribute('aria-hidden', 'true');
+
+  const msg = document.createElement('p');
+  msg.textContent = texto;
+
+  caixa.append(giro, msg);
+  alvo.replaceChildren(caixa);
 }
 
-// Mensagem de erro e, se aoTentarDeNovo for passada, um botão "Tentar de novo" que a chama.
+// Exibe a mensagem de erro e, se aoTentarDeNovo for passada, adiciona o botão correspondente.
 export function mostrarErro(alvo, mensagem, aoTentarDeNovo) {
-  const texto = document.createElement('p');
-  texto.setAttribute('role', 'alert');
-  texto.textContent = mensagem;
-  const conteudo = [texto];
+  const caixa = document.createElement('div');
+  caixa.className = 'estado estado--erro';
+
+  const msg = document.createElement('p');
+  msg.textContent = mensagem;
+  caixa.append(msg);
+
   if (aoTentarDeNovo) {
     const botao = document.createElement('button');
     botao.type = 'button';
     botao.className = 'botao';
     botao.textContent = 'Tentar de novo';
     botao.addEventListener('click', aoTentarDeNovo);
-    conteudo.push(botao);
+    caixa.append(botao);
   }
-  alvo.replaceChildren(...conteudo);
+
+  alvo.replaceChildren(caixa);
 }
 
-// Mensagem neutra para listas sem resultado.
-export function mostrarVazio(alvo, mensagem) {
-  const texto = document.createElement('p');
-  texto.textContent = mensagem;
-  alvo.replaceChildren(texto);
+// Exibe uma mensagem neutra para listas vazias, com suporte a uma ação opcional (botão/link).
+export function mostrarVazio(alvo, mensagem, acao) {
+  const caixa = document.createElement('div');
+  caixa.className = 'estado estado--vazio';
+
+  const msg = document.createElement('p');
+  msg.textContent = mensagem;
+  caixa.append(msg);
+
+  if (acao && acao.texto && acao.callback) {
+    const botao = document.createElement('button');
+    botao.type = 'button';
+    botao.className = 'botao';
+    botao.textContent = acao.texto;
+    botao.addEventListener('click', acao.callback);
+    caixa.append(botao);
+  }
+
+  alvo.replaceChildren(caixa);
 }
