@@ -1,11 +1,18 @@
 // Responsável: M1
-import fs from 'node:fs';
-import path from 'node:path';
 import { app } from './app.js';
-import { PASTA_DADOS, PORTA } from './config.js';
+import { PORTA } from './config.js';
+import { pool } from './db.js';
 
-if (!fs.existsSync(path.join(PASTA_DADOS, 'obras.json'))) {
-  console.error('Banco vazio. Rode: npm run seed');
+// Antes de abrir a porta, confere se o banco está ligado e já tem as tabelas.
+try {
+  await pool.query('SELECT 1');
+  await pool.query('SELECT 1 FROM obras LIMIT 1');
+} catch (erro) {
+  console.error(
+    erro.code === '42P01'
+      ? 'Banco sem tabelas. Rode: npm run db:reset'
+      : 'Não consegui conectar ao banco. Ele está ligado? Rode: docker compose up -d',
+  );
   process.exit(1);
 }
 

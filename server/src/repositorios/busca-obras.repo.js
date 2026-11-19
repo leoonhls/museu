@@ -1,7 +1,8 @@
-// Responsável: M3 — veja a seção "M3" no Guia da Entrega 2
-// Na Entrega 3 esta função vira uma consulta SQL (WHERE, ORDER BY, LIMIT/OFFSET);
-// por isso a filtragem fica aqui, e não no service: só esta função vai mudar.
-import { lerTabela } from './base-json.js';
+// Responsável: M3 — veja a seção "M3" no Guia da Entrega 3
+// Versão mínima do setup: o JOIN já é SQL, mas filtro, ordem e paginação continuam em
+// JavaScript, como na Entrega 2.
+// TODO (M3): fazer tudo em SQL: WHERE (com unaccent), ORDER BY, LIMIT/OFFSET e COUNT(*) OVER().
+import { consultar } from '../db.js';
 
 export const POR_PAGINA = 12;
 
@@ -25,21 +26,13 @@ export async function buscarComFiltros({
   ordem = 'titulo',
   pagina = 1,
 } = {}) {
-  const [obras, artistas, categorias] = await Promise.all([
-    lerTabela('obras'),
-    lerTabela('artistas'),
-    lerTabela('categorias'),
-  ]);
-
-  const nomeArtista = new Map(artistas.map((a) => [a.id, a.nome]));
-  const nomeCategoria = new Map(categorias.map((c) => [c.id, c.nome]));
-
-  // 1. Junta artista_nome e categoria_nome (equivale a um JOIN)
-  let lista = obras.map((obra) => ({
-    ...obra,
-    artista_nome: nomeArtista.get(obra.artista_id) ?? null,
-    categoria_nome: nomeCategoria.get(obra.categoria_id) ?? null,
-  }));
+  // 1. Junta artista_nome e categoria_nome
+  let lista = await consultar(
+    `SELECT o.*, a.nome AS artista_nome, c.nome AS categoria_nome
+       FROM obras o
+       LEFT JOIN artistas a ON a.id = o.artista_id
+       LEFT JOIN categorias c ON c.id = o.categoria_id`,
+  );
 
   // 2. Filtra (equivale ao WHERE)
   if (busca) {
@@ -53,8 +46,8 @@ export async function buscarComFiltros({
   if (anoMin !== undefined) lista = lista.filter((obra) => obra.ano >= anoMin);
   if (anoMax !== undefined) lista = lista.filter((obra) => obra.ano <= anoMax);
 
-  // 3. Ordena (equivale ao ORDER BY). "lista" já é uma cópia: o sort não mexe nos dados lidos.
-  // Empate de ano desempata pelo título, para a ordem ser sempre a mesma entre as páginas.
+  // 3. Ordena (equivale ao ORDER BY). Empate de ano desempata pelo título,
+  // para a ordem ser sempre a mesma entre as páginas.
   if (ordem === 'antigas') {
     lista.sort((a, b) => a.ano - b.ano || compararTitulo(a, b));
   } else if (ordem === 'recentes') {

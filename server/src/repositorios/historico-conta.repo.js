@@ -1,36 +1,22 @@
-// Responsável: M7 — veja a seção "M7" no Guia da Entrega 2
-import { atualizarTabela, gravarTabela, lerTabela } from './base-json.js';
+// Responsável: M7 — veja a seção "M7" no Guia da Entrega 3
+import { comoId, consultar } from '../db.js';
 
-let tabelaInicializada;
-
-async function garantirTabela() {
-  tabelaInicializada ??= (async () => {
-    try {
-      await lerTabela('historico_conta');
-    } catch (erro) {
-      if (erro.code !== 'ENOENT') throw erro;
-      await gravarTabela('historico_conta', []);
-    }
-  })();
-  await tabelaInicializada;
-}
-
+// As 50 ações mais recentes do usuário.
 export async function listarPorUsuario(usuarioId) {
-  await garantirTabela();
-  return (await lerTabela('historico_conta'))
-    .filter((item) => item.usuario_id === Number(usuarioId))
-    .sort((a, b) => b.data_hora.localeCompare(a.data_hora))
-    .slice(0, 50)
-    .map(({ tipo, descricao, data_hora }) => ({ tipo, descricao, data_hora }));
+  return consultar(
+    `SELECT tipo, descricao, data_hora
+       FROM historico_conta
+      WHERE usuario_id = $1
+      ORDER BY data_hora DESC, id DESC
+      LIMIT 50`,
+    [comoId(usuarioId)],
+  );
 }
 
 export async function registrar(usuarioId, tipo, descricao) {
-  await garantirTabela();
-  return atualizarTabela('historico_conta', (linhas) => ({
-    linhas: [
-      ...linhas,
-      { usuario_id: Number(usuarioId), tipo, descricao, data_hora: new Date().toISOString() },
-    ].slice(-1000),
-    resultado: undefined,
-  }));
+  await consultar('INSERT INTO historico_conta (usuario_id, tipo, descricao) VALUES ($1, $2, $3)', [
+    comoId(usuarioId),
+    tipo,
+    descricao,
+  ]);
 }

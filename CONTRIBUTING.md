@@ -35,3 +35,19 @@ Depois de cada Pull na `main`: se o `package.json` mudou, rode `npm install`; se
 4. O servidor nunca confia em preço, papel ou id de usuário vindos do front: usa `req.session` e os dados do repositório.
 5. Nenhuma resposta contém `senha_hash`.
 6. Erros esperados são `ErroApi` (de `server/src/erros.js`); nunca `res.status(500)` à mão.
+
+## Entrega 3
+
+O passo a passo de cada área está no **Guia da Entrega 3** (PDF enviado no grupo).
+
+Na primeira vez, crie o `.env`: `cp .env.example .env` (obrigatório; sem ele o `npm run dev` quebra em algumas versões do Node 22).
+
+Depois de cada Pull na `main`: se o `package.json` mudou, rode `npm install`; se o `.env.example` mudou, copie as linhas novas para o seu `.env`; se alguma migration ou `server/data/seed/` mudou, rode `npm run db:reset`. O banco precisa estar ligado (`docker compose up -d`).
+
+### Regras do banco
+
+1. SQL só nos repositórios (`server/src/repositorios/`), nas migrations (`server/db/migrations/`) e nos scripts (`server/scripts/`).
+2. Sempre parâmetros (`$1`, `$2`...): nunca concatene no SQL um valor vindo do usuário. Nomes de coluna dinâmicos (como no `ORDER BY`) só a partir de uma lista fixa no código.
+3. Mudou o esquema? Mude a migration da sua área e rode `npm run db:reset`. Avise no grupo: todos precisam resetar depois do Pull. (Só durante a Entrega 3 editamos migrations já aplicadas; em produção se cria uma migration nova.)
+4. Operações que mexem em mais de uma linha e precisam acontecer juntas usam `transacao` (de `server/src/db.js`).
+5. Regras que o banco consegue garantir (único, obrigatório, faixa de valores, apagar em cascata) ficam **também** no banco, não só no JavaScript.

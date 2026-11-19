@@ -1,79 +1,78 @@
-// Responsável: M6 — veja a seção "M6" no Guia da Entrega 2
-import { atualizarTabela, lerTabela, proximoId } from './base-json.js';
+// Responsável: M6 — veja a seção "M6" no Guia da Entrega 3
+// TODO (M6): no criarComLimite, travar o evento com SELECT ... FOR UPDATE antes de contar,
+// para duas reservas simultâneas não passarem juntas da capacidade.
+import { comoId, consultar, consultarUm, transacao } from '../db.js';
 import { requisicaoInvalida } from '../erros.js';
+
+const INSERIR = `
+  INSERT INTO reservas (codigo, usuario_id, evento_id, data_visita, qtd_inteira, qtd_meia, valor_total, status)
+  VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+  RETURNING *`;
+
+// status padrão 'confirmada': só as confirmadas contam na lotação do evento.
+const valores = (dados) => [
+  dados.codigo,
+  dados.usuario_id,
+  dados.evento_id ?? null,
+  dados.data_visita,
+  dados.qtd_inteira ?? 0,
+  dados.qtd_meia ?? 0,
+  dados.valor_total,
+  dados.status ?? 'confirmada',
+];
 
 // Mais recentes primeiro.
 export async function listarPorUsuario(usuarioId) {
-  return (await lerTabela('reservas'))
-    .filter((reserva) => reserva.usuario_id === Number(usuarioId))
-    .sort((a, b) => b.criado_em.localeCompare(a.criado_em) || b.id - a.id);
+  return consultar('SELECT * FROM reservas WHERE usuario_id = $1 ORDER BY criado_em DESC, id DESC', [
+    comoId(usuarioId),
+  ]);
 }
 
 export async function buscarPorId(id) {
-  return (await lerTabela('reservas')).find((reserva) => reserva.id === Number(id)) ?? null;
+  return consultarUm('SELECT * FROM reservas WHERE id = $1', [comoId(id)]);
 }
 
 export async function buscarPorCodigo(codigo) {
-  return (await lerTabela('reservas')).find((reserva) => reserva.codigo === codigo) ?? null;
+  return consultarUm('SELECT * FROM reservas WHERE codigo = $1', [codigo]);
 }
+
 // Soma inteiras + meias das reservas confirmadas do evento.
 export async function somarIngressosPorEvento(eventoId) {
-  return (await lerTabela('reservas'))
-    .filter((r) => r.evento_id === Number(eventoId) && r.status === 'confirmada')
-    .reduce((soma, r) => soma + r.qtd_inteira + r.qtd_meia, 0);
+  const { total } = await consultarUm(
+    `SELECT COALESCE(SUM(qtd_inteira + qtd_meia), 0) AS total
+       FROM reservas
+      WHERE evento_id = $1 AND status = 'confirmada'`,
+    [comoId(eventoId)],
+  );
+  return total;
 }
 
 export async function criar(dados) {
-  return atualizarTabela('reservas', (linhas) => {
-    // status padrão 'confirmada': só as confirmadas contam na lotação do evento.
-    const reserva = {
-      status: 'confirmada',
-      ...dados,
-      id: proximoId(linhas),
-      criado_em: new Date().toISOString(),
-    };
-    return { linhas: [...linhas, reserva], resultado: reserva };
-  });
+  return consultarUm(INSERIR, valores(dados));
 }
 
 // Cria uma reserva de evento somente se ainda houver vagas.
 export async function criarComLimite(dados, capacidade) {
-  return atualizarTabela('reservas', (linhas) => {
-    const ocupadas = linhas
-      .filter((r) => r.evento_id === dados.evento_id && r.status === 'confirmada')
-      .reduce((soma, r) => soma + r.qtd_inteira + r.qtd_meia, 0);
-
+  return transacao(async (sql) => {
+    const [{ ocupadas }] = await sql(
+      `SELECT COALESCE(SUM(qtd_inteira + qtd_meia), 0) AS ocupadas
+         FROM reservas
+        WHERE evento_id = $1 AND status = 'confirmada'`,
+      [dados.evento_id],
+    );
     const pedidas = dados.qtd_inteira + dados.qtd_meia;
-
     if (ocupadas + pedidas > capacidade) {
       const restam = capacidade - ocupadas;
-
       throw requisicaoInvalida(
         restam > 0 ? `Restam apenas ${restam} vagas para este evento.` : 'Evento esgotado.',
       );
     }
-
-    const reserva = {
-      status: 'confirmada',
-      ...dados,
-      id: proximoId(linhas),
-      criado_em: new Date().toISOString(),
-    };
-
-    return {
-      linhas: [...linhas, reserva],
-      resultado: reserva,
-    };
+    const [reserva] = await sql(INSERIR, valores(dados));
+    return reserva;
   });
 }
 
 // Devolve a reserva atualizada, ou null se não existir.
 export async function atualizarStatus(id, status) {
-  return atualizarTabela('reservas', (linhas) => {
-    const indice = linhas.findIndex((reserva) => reserva.id === Number(id));
-    if (indice === -1) return { linhas, resultado: null };
-    const novas = [...linhas];
-    novas[indice] = { ...linhas[indice], status };
-    return { linhas: novas, resultado: novas[indice] };
-  });
+  return consultarUm('UPDATE reservas SET status = $2 WHERE id = $1 RETURNING *', [comoId(id), status]);
 }

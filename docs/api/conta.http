@@ -1,6 +1,6 @@
 # Responsável: M7 — veja a seção "M7" no Guia da Entrega 2
 # Teste com a extensão REST Client: clique em "Send Request" acima de cada bloco.
-# Para rodar o cadastro válido pela primeira vez, use o banco recém-criado pelo npm run seed.
+# Para rodar o cadastro válido pela primeira vez, use o banco recém-criado pelo npm run db:reset.
 
 @base = http://localhost:3000/api
 @emailTeste = visitante@teste.com

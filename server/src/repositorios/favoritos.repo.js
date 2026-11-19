@@ -1,41 +1,38 @@
-// Responsável: M7 — veja a seção "M7" no Guia da Entrega 2
-import { atualizarTabela, lerTabela } from './base-json.js';
+// Responsável: M7 — veja a seção "M7" no Guia da Entrega 3
+// TODO (M7): trocar a checagem do adicionar por INSERT ... ON CONFLICT DO NOTHING.
+import { comoId, consultar, consultarUm } from '../db.js';
 
 // Mais recentes primeiro.
 export async function listarPorUsuario(usuarioId) {
-  return (await lerTabela('favoritos'))
-    .filter((favorito) => favorito.usuario_id === Number(usuarioId))
-    .sort((a, b) => b.criado_em.localeCompare(a.criado_em));
+  return consultar('SELECT * FROM favoritos WHERE usuario_id = $1 ORDER BY criado_em DESC', [
+    comoId(usuarioId),
+  ]);
 }
 
 // Não duplica: favoritar de novo não faz nada.
 export async function adicionar(usuarioId, obraId) {
-  return atualizarTabela('favoritos', (linhas) => {
-    const existente = linhas.find(
-      (f) => f.usuario_id === Number(usuarioId) && f.obra_id === Number(obraId),
-    );
-    if (existente) return { linhas, resultado: { ...existente, criado: false } };
-    const favorito = {
-      usuario_id: Number(usuarioId),
-      obra_id: Number(obraId),
-      criado_em: new Date().toISOString(),
-    };
-    return { linhas: [...linhas, favorito], resultado: { ...favorito, criado: true } };
-  });
+  const parametros = [comoId(usuarioId), comoId(obraId)];
+  const existente = await consultarUm(
+    'SELECT * FROM favoritos WHERE usuario_id = $1 AND obra_id = $2',
+    parametros,
+  );
+  if (existente) return { ...existente, criado: false };
+  const favorito = await consultarUm(
+    'INSERT INTO favoritos (usuario_id, obra_id) VALUES ($1, $2) RETURNING *',
+    parametros,
+  );
+  return { ...favorito, criado: true };
 }
 
+// Devolve true se removeu, false se não era favorito.
 export async function remover(usuarioId, obraId) {
-  return atualizarTabela('favoritos', (linhas) => {
-    const restantes = linhas.filter(
-      (f) => !(f.usuario_id === Number(usuarioId) && f.obra_id === Number(obraId)),
-    );
-    return { linhas: restantes, resultado: restantes.length < linhas.length };
-  });
+  const linhas = await consultar(
+    'DELETE FROM favoritos WHERE usuario_id = $1 AND obra_id = $2 RETURNING obra_id',
+    [comoId(usuarioId), comoId(obraId)],
+  );
+  return linhas.length > 0;
 }
 
 export async function excluirPorObra(obraId) {
-  return atualizarTabela('favoritos', (linhas) => ({
-    linhas: linhas.filter((f) => f.obra_id !== Number(obraId)),
-    resultado: undefined,
-  }));
+  await consultar('DELETE FROM favoritos WHERE obra_id = $1', [comoId(obraId)]);
 }

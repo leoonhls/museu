@@ -1,0 +1,20 @@
+# Responsável: M1 — banco PostgreSQL de desenvolvimento (Entrega 3)
+services:
+  banco:
+    image: postgres:16
+    container_name: museu-banco
+    environment:
+      POSTGRES_USER: museu
+      POSTGRES_PASSWORD: museu
+      POSTGRES_DB: museu
+    ports:
+      - "5432:5432"
+    volumes:
+      - dados-banco:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U museu -d museu"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  dados-banco:

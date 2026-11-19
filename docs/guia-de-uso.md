@@ -1,20 +1,22 @@
 # Museu de Artes — como acessar e navegar
 
-Na Entrega 2 o site roda num servidor Node.js com Express. O servidor entrega as páginas e responde a API REST em `/api`. Os dados ficam em arquivos JSON em `server/data/db/`: contas, favoritos, reservas e obras criadas no Admin valem para qualquer navegador que acesse o mesmo servidor.
+O site roda num servidor Node.js com Express. O servidor entrega as páginas e responde a API REST em `/api`. A partir da Entrega 3 os dados ficam num banco PostgreSQL 16: contas, favoritos, reservas, sessões de login e obras criadas no Admin valem para qualquer navegador que acesse o mesmo servidor, e o login continua valendo mesmo se o servidor for reiniciado.
 
 ## 1. Como acessar
 
-1. Instale o [Node.js](https://nodejs.org) 22 ou superior (`node -v` para conferir).
+1. Instale o [Node.js](https://nodejs.org) 22 ou superior (`node -v` para conferir) e o [Docker Desktop](https://www.docker.com/products/docker-desktop/). Sem Docker, dá para instalar o [PostgreSQL 16](https://www.postgresql.org/download/) e criar o usuário `museu`, com senha `museu`, dono de um banco `museu`.
 2. Clone o repositório e entre na pasta:
    ```bash
    git clone https://github.com/leoonhls/museu.git
    cd museu
    ```
    Se já tem o projeto, troque para a `main` e dê **Pull**.
-3. Instale as dependências e crie o banco de desenvolvimento:
+3. Ligue o banco, instale as dependências e crie as tabelas com os dados iniciais:
    ```bash
+   docker compose up -d
+   cp .env.example .env
    npm install
-   npm run seed
+   npm run db:reset
    ```
 4. Ligue o servidor com `npm run dev` e abra `http://localhost:3000`.
 
@@ -24,7 +26,7 @@ O Live Server não é mais usado: por ele, as chamadas à API não funcionam.
 
 | Perfil | E-mail | Senha | Como conseguir |
 | --- | --- | --- | --- |
-| Administrador | `admin@museu.com` | `admin123` | Já existe. É criado pelo `npm run seed`. |
+| Administrador | `admin@museu.com` | `admin123` | Já existe. É criado pelo `npm run db:reset`. |
 | Visitante | o que você quiser | 8+ caracteres, com letras e números | Crie em **Entrar → aba Criar conta**. Ex.: `visitante@teste.com` / `senha1234`. |
 
 - Ao criar a conta, o visitante já entra logado.
@@ -109,7 +111,7 @@ Quem abre uma página de login sem estar logado vai para o **Entrar** e, depois 
 | Dia fechado | segunda-feira |
 | Reserva de evento | a data é a do evento; precisa ter vagas e o evento não pode ter passado |
 
-**Zerar os dados de teste:** pare o servidor (`Ctrl+C`) e rode `npm run seed`. Isso apaga contas, favoritos, reservas e obras criadas no Admin, e recria o administrador.
+**Zerar os dados de teste:** rode `npm run db:reset`. Isso apaga contas, favoritos, reservas e obras criadas no Admin, e recria o administrador.
 
 ## 8. Testar a API
 
