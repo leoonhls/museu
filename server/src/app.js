@@ -1,15 +1,21 @@
 // Responsável: M1
 import express from 'express';
 import session from 'express-session';
+import connectPgSimple from 'connect-pg-simple';
 import { PASTA_CLIENTE, SEGREDO_SESSAO } from './config.js';
+import { pool } from './db.js';
 import { rotas } from './rotas.js';
 import { rotaNaoEncontrada, tratarErros } from './middlewares/erros.js';
 
 export const app = express();
 
+// Sessões ficam na tabela "sessoes": o login sobrevive ao reinício do servidor.
+const ArmazemSessao = connectPgSimple(session);
+
 app.use(express.json({ limit: '350kb' }));
 app.use(
   session({
+    store: new ArmazemSessao({ pool, tableName: 'sessoes' }),
     secret: SEGREDO_SESSAO,
     resave: false,
     saveUninitialized: false,

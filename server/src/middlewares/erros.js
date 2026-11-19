@@ -7,6 +7,18 @@ const MENSAGENS_MULTER = {
   LIMIT_FILE_COUNT: 'Arquivos demais no envio.',
 };
 
+// Erros do PostgreSQL (err.code) que escaparam dos services. A mensagem original do banco
+// não vai para o cliente: ela pode mostrar nomes de tabelas e colunas.
+const ERROS_BANCO = {
+  23505: [409, 'Registro duplicado.'],
+  23503: [400, 'Referência inválida.'],
+  23502: [400, 'Dados inválidos.'],
+  23514: [400, 'Dados inválidos.'],
+  '22P02': [400, 'Valor em formato inválido.'],
+  22007: [400, 'Valor em formato inválido.'],
+  22008: [400, 'Valor em formato inválido.'],
+};
+
 // Qualquer /api/* que nenhuma rota atendeu.
 export function rotaNaoEncontrada(req, res) {
   res.status(404).json({ erro: 'Rota não encontrada.' });
@@ -28,5 +40,10 @@ export function tratarErros(err, req, res, next) {
     return res.status(400).json({ erro: 'Corpo da requisição inválido.' });
   }
   console.error(err);
+  const erroBanco = ERROS_BANCO[err.code];
+  if (erroBanco) {
+    const [status, mensagem] = erroBanco;
+    return res.status(status).json({ erro: mensagem });
+  }
   res.status(500).json({ erro: 'Erro interno no servidor.' });
 }

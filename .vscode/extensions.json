@@ -3,6 +3,8 @@
     "ritwickdey.LiveServer",
     "esbenp.prettier-vscode",
     "editorconfig.editorconfig",
-    "humao.rest-client"
+    "humao.rest-client",
+    "mtxr.sqltools",
+    "mtxr.sqltools-driver-pg"
   ]
 }

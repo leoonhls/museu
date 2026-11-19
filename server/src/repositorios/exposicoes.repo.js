@@ -1,10 +1,11 @@
-// Responsável: M5 — veja a seção "M5" no Guia da Entrega 2
-import { lerTabela } from './base-json.js';
+// Responsável: M5 — veja a seção "M5" no Guia da Entrega 3
+// TODO (M5): calcular o status (atual, futura, passada) no SQL com CURRENT_DATE.
+import { comoId, consultar, consultarUm } from '../db.js';
 
 export async function listarTodas() {
-  return lerTabela('exposicoes');
+  return consultar('SELECT * FROM exposicoes ORDER BY id');
 }
 
 export async function buscarPorId(id) {
-  return (await lerTabela('exposicoes')).find((exposicao) => exposicao.id === Number(id)) ?? null;
+  return consultarUm('SELECT * FROM exposicoes WHERE id = $1', [comoId(id)]);
 }

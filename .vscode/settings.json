@@ -4,5 +4,16 @@
   "files.eol": "\n",
   "liveServer.settings.root": "/client",
   "liveServer.settings.port": 5500,
-  "git.confirmSync": false
+  "git.confirmSync": false,
+  "sqltools.connections": [
+    {
+      "name": "Museu (local)",
+      "driver": "PostgreSQL",
+      "server": "localhost",
+      "port": 5432,
+      "database": "museu",
+      "username": "museu",
+      "password": "museu"
+    }
+  ]
 }

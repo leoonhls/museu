@@ -1,10 +1,10 @@
-// Responsável: M4 — veja a seção "M4" no Guia da Entrega 2
-import { lerTabela } from './base-json.js';
+// Responsável: M4 — veja a seção "M4" no Guia da Entrega 3
+import { comoId, consultar, consultarUm } from '../db.js';
 
 export async function listarTodas() {
-  return lerTabela('categorias');
+  return consultar('SELECT * FROM categorias ORDER BY id');
 }
 
 export async function buscarPorId(id) {
-  return (await lerTabela('categorias')).find((categoria) => categoria.id === Number(id)) ?? null;
+  return consultarUm('SELECT * FROM categorias WHERE id = $1', [comoId(id)]);
 }

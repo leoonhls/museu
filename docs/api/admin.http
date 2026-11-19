@@ -9,7 +9,8 @@ Content-Type: application/json
 
 { "email": "admin@museu.com", "senha": "admin123" }
 
-### Criar obra
+### Criar obra (o id vem do banco; Editar e Excluir usam o id devolvido aqui)
+# @name criarObra
 POST {{base}}/obras
 Content-Type: application/json
 
@@ -26,7 +27,7 @@ Content-Type: application/json
 }
 
 ### Editar obra
-PUT {{base}}/obras/1000
+PUT {{base}}/obras/{{criarObra.response.body.$.id}}
 Content-Type: application/json
 
 {
@@ -41,7 +42,7 @@ Content-Type: application/json
 }
 
 ### Excluir obra
-DELETE {{base}}/obras/1000
+DELETE {{base}}/obras/{{criarObra.response.body.$.id}}
 
 ### Enviar imagem (campo "imagem")
 POST {{base}}/uploads

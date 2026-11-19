@@ -18,7 +18,6 @@ npm-debug.log*
 *.log
 *.tmp
 
-# Entrega 2
-server/data/db/
+# Uploads (a partir da Entrega 2)
 client/assets/img/uploads/*
 !client/assets/img/uploads/.gitkeep

@@ -31,3 +31,13 @@ Closes #
 - [ ] Nenhuma resposta contém `senha_hash`
 - [ ] Minhas páginas usam `api.js` (não `api-local.js`) com `await` e mostram “carregando” e erro de conexão
 - [ ] Ninguém além dos repositórios lê `server/data/`
+
+### Entrega 3
+
+- [ ] `npm run db:reset` roda do zero sem erro com a minha migration
+- [ ] Todo SQL usa parâmetros (`$1`, `$2`...), sem concatenar valores
+- [ ] Testei as consultas no SQLTools (`docs/sql/<área>.sql`)
+- [ ] Testei no SQLTools que as minhas restrições recusam dado errado
+- [ ] Os arquivos `docs/api/*.http` da minha área continuam passando, com os mesmos status e formatos
+- [ ] Erros do banco viram mensagens claras (sem mostrar a mensagem original do PostgreSQL)
+- [ ] Atualizei `docs/banco/diagrama.md` se mudei alguma tabela
