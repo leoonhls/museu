@@ -42,12 +42,12 @@ O passo a passo de cada área está no **Guia da Entrega 3** (PDF enviado no gru
 
 Na primeira vez, crie o `.env`: `cp .env.example .env` (obrigatório; sem ele o `npm run dev` quebra em algumas versões do Node 22).
 
-Depois de cada Pull na `main`: se o `package.json` mudou, rode `npm install`; se o `.env.example` mudou, copie as linhas novas para o seu `.env`; se alguma migration ou `server/data/seed/` mudou, rode `npm run db:reset`. O banco precisa estar ligado (`docker compose up -d`).
+Depois de cada Pull na `main`: se o `package.json` mudou, rode `npm install`; se o `.env.example` mudou, copie as linhas novas para o seu `.env`; se algum arquivo de `server/db/esquema/` ou `server/data/seed/` mudou, rode `npm run db:reset` e `npm run db:demo`. O banco precisa estar ligado (`docker compose up -d`).
 
 ### Regras do banco
 
-1. SQL só nos repositórios (`server/src/repositorios/`), nas migrations (`server/db/migrations/`) e nos scripts (`server/scripts/`).
+1. SQL só nos repositórios (`server/src/repositorios/`), nos arquivos de esquema (`server/db/esquema/`) e nos scripts (`server/scripts/`).
 2. Sempre parâmetros (`$1`, `$2`...): nunca concatene no SQL um valor vindo do usuário. Nomes de coluna dinâmicos (como no `ORDER BY`) só a partir de uma lista fixa no código.
-3. Mudou o esquema? Mude a migration da sua área e rode `npm run db:reset`. Avise no grupo: todos precisam resetar depois do Pull. (Só durante a Entrega 3 editamos migrations já aplicadas; em produção se cria uma migration nova.)
+3. Mudou uma tabela? Edite o arquivo de esquema da sua área → `npm run db:reset` → `npm run db:demo`. Avise no grupo: todos precisam resetar depois do Pull.
 4. Operações que mexem em mais de uma linha e precisam acontecer juntas usam `transacao` (de `server/src/db.js`).
 5. Regras que o banco consegue garantir (único, obrigatório, faixa de valores, apagar em cascata) ficam **também** no banco, não só no JavaScript.

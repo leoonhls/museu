@@ -7,9 +7,7 @@
 
 async function requisicao(metodo, caminho, corpo) {
   const opcoes = { method: metodo, headers: {} };
-  if (corpo instanceof FormData) {
-    opcoes.body = corpo;
-  } else if (corpo !== undefined) {
+  if (corpo !== undefined) {
     opcoes.headers['Content-Type'] = 'application/json';
     opcoes.body = JSON.stringify(corpo);
   }
@@ -177,12 +175,4 @@ export function editarObra(obraId, dados) {
 
 export function excluirObra(obraId) {
   return requisicao('DELETE', `/obras/${id(obraId)}`);
-}
-
-// Envia a imagem (campo "imagem") e devolve a url dela no site.
-export async function enviarImagem(arquivo) {
-  const formulario = new FormData();
-  formulario.append('imagem', arquivo);
-  const { url } = await requisicao('POST', '/uploads', formulario);
-  return url;
 }

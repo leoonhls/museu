@@ -6,7 +6,7 @@ Projeto acadêmico: site de um museu de artes, feito em três entregas.
 | --- | --- | --- |
 | 1 | Front-end com HTML, CSS e JavaScript; dados em `client/data/` e `localStorage` | concluída |
 | 2 | Backend com Node.js e Express; API REST em `/api` e dados em arquivos JSON | concluída |
-| 3 | Banco de dados PostgreSQL 16; migrations, repositórios em SQL e sessões no banco | em andamento |
+| 3 | Banco de dados PostgreSQL 16; esquema em SQL, repositórios em SQL e sessões no banco | em andamento |
 
 ## Como rodar (Entrega 3)
 
@@ -16,7 +16,7 @@ Projeto acadêmico: site de um museu de artes, feito em três entregas.
    - **Sem Docker:** instale o [PostgreSQL 16](https://www.postgresql.org/download/) e crie o usuário `museu`, com senha `museu`, dono de um banco também chamado `museu`. Exemplo no `psql` como superusuário: `CREATE USER museu WITH PASSWORD 'museu'; CREATE DATABASE museu OWNER museu;`
 3. Crie o arquivo de configuração: `cp .env.example .env` (funciona também no terminal do VS Code no Windows). **É obrigatório:** sem ele, o `npm run dev` quebra em algumas versões do Node 22 com o erro `ENOENT: no such file or directory, watch '.../.env'`.
 4. Instale as dependências: `npm install`.
-5. Crie as tabelas e os dados iniciais: `npm run db:reset`.
+5. Crie as tabelas e os dados iniciais: `npm run db:reset`. Para ter também os dados de demonstração: `npm run db:demo`.
 6. Ligue o servidor: `npm run dev`. Ele reinicia sozinho quando um arquivo do servidor é salvo.
 7. Abra `http://localhost:3000`.
 
@@ -28,10 +28,9 @@ No `.env` ficam a porta, o segredo da sessão e o endereço do banco. Os valores
 
 | Script | O que faz |
 | --- | --- |
-| `npm run db:migrar` | Aplica as migrations de `server/db/migrations/` que ainda não rodaram (a tabela `migracoes` guarda quais já rodaram). |
 | `npm run db:seed` | Apaga os dados e insere de novo os dados iniciais de `server/data/seed/` e o administrador. |
 | `npm run db:demo` | Acrescenta os dados de demonstração (script `server/scripts/demo.js`, do M2). |
-| `npm run db:reset` | **Apaga o banco local inteiro** e recria: migrations + seed. Só roda se o banco estiver em `localhost`. Use depois de todo Pull que mudar uma migration. |
+| `npm run db:reset` | **Apaga o banco local inteiro** e recria: roda os arquivos de esquema de `server/db/esquema/` em ordem e depois o seed. Só roda se o banco estiver em `localhost`. Use depois de todo Pull que mudar um arquivo de esquema. |
 
 ### Abrir o banco no VS Code
 
@@ -48,6 +47,10 @@ A senha fica guardada com hash (bcrypt) no servidor, e o login usa sessão com c
 
 Rode `npm run db:reset`. Isso apaga usuários, histórico da conta, favoritos, reservas, sessões e obras criadas no admin, e recria tudo a partir de `server/data/seed/`. O administrador é recriado.
 
+## Cadastro de obras no admin
+
+Em **Admin**, o formulário de obra pede o **endereço da imagem**: um caminho do próprio site (como `/assets/img/obras/noite-estrelada.jpg`) ou um endereço `https://`. A prévia aparece enquanto você digita. O servidor e o banco recusam outros formatos.
+
 ## Estrutura
 
 - `server/src/` — servidor Express
@@ -55,10 +58,10 @@ Rode `npm run db:reset`. Isso apaga usuários, histórico da conta, favoritos, r
   - `modulos/<área>/` — rotas, controller e service de cada área
   - `repositorios/` — único acesso aos dados: consultas SQL ao PostgreSQL
   - `db.js` — conexão com o banco (`consultar`, `consultarUm`, `transacao`)
-  - `middlewares/` — login, upload e tratamento de erros (inclusive os do banco)
-- `server/db/migrations/` — esquema do banco, um arquivo `.sql` por área, aplicados em ordem
+  - `middlewares/` — login e tratamento de erros (inclusive os do banco)
+- `server/db/esquema/` — esquema do banco, um arquivo `.sql` por área, executados em ordem pelo `db:reset`
 - `server/data/seed/` — dados iniciais do acervo e da agenda (versionados)
-- `server/scripts/` — `migrar.js`, `seed.js` e `resetar.js` (scripts `db:*`)
+- `server/scripts/` — `resetar.js`, `seed.js` e `demo.js` (scripts `db:*`)
 - `docker-compose.yml` — banco PostgreSQL de desenvolvimento
 - `client/js/api.js` — único ponto de acesso a dados no front (chama a API)
 - `client/js/components/` — componentes reutilizáveis

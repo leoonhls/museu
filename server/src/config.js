@@ -9,5 +9,4 @@ export const SEGREDO_SESSAO = process.env.SESSION_SECRET || 'segredo-de-desenvol
 export const URL_BANCO = process.env.DATABASE_URL || 'postgres://museu:museu@localhost:5432/museu';
 export const PASTA_CLIENTE = path.join(raiz, 'client');
 export const PASTA_SEED = path.join(raiz, 'server', 'data', 'seed');
-export const PASTA_MIGRATIONS = path.join(raiz, 'server', 'db', 'migrations');
-export const PASTA_UPLOADS = path.join(raiz, 'client', 'assets', 'img', 'uploads');
+export const PASTA_ESQUEMA = path.join(raiz, 'server', 'db', 'esquema');
