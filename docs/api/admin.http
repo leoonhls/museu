@@ -44,16 +44,20 @@ Content-Type: application/json
 ### Excluir obra
 DELETE {{base}}/obras/{{criarObra.response.body.$.id}}
 
-### Enviar imagem (campo "imagem")
-POST {{base}}/uploads
-Content-Type: multipart/form-data; boundary=limite
+### Teste — Endereço da imagem com mais de 300 caracteres (400)
+POST {{base}}/obras
+Content-Type: application/json
 
---limite
-Content-Disposition: form-data; name="imagem"; filename="noite-estrelada.jpg"
-Content-Type: image/jpeg
+{
+  "titulo": "Obra de Teste",
+  "artista_id": 1,
+  "categoria_id": 1,
+  "ano": 1900,
+  "tecnica": "Óleo sobre tela",
+  "descricao": "Uma descrição com mais de vinte caracteres.",
+  "imagem_url": "/assets/img/obras/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.jpg"
+}
 
-< ../../client/assets/img/obras/noite-estrelada.jpg
---limite--
 ### Teste — Título obrigatório
 POST {{base}}/obras
 Content-Type: application/json

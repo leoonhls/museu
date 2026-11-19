@@ -1,12 +1,6 @@
 // Responsável: M1
 import { ErroApi } from '../erros.js';
 
-const MENSAGENS_MULTER = {
-  LIMIT_FILE_SIZE: 'Arquivo grande demais.',
-  LIMIT_UNEXPECTED_FILE: 'Campo de arquivo inesperado.',
-  LIMIT_FILE_COUNT: 'Arquivos demais no envio.',
-};
-
 // Erros do PostgreSQL (err.code) que escaparam dos services. A mensagem original do banco
 // não vai para o cliente: ela pode mostrar nomes de tabelas e colunas.
 const ERROS_BANCO = {
@@ -28,9 +22,6 @@ export function rotaNaoEncontrada(req, res) {
 export function tratarErros(err, req, res, next) {
   if (err instanceof ErroApi) {
     return res.status(err.status).json({ erro: err.message });
-  }
-  if (err.name === 'MulterError') {
-    return res.status(400).json({ erro: MENSAGENS_MULTER[err.code] ?? 'Erro no envio do arquivo.' });
   }
   if (err.type === 'entity.too.large') {
     return res.status(413).json({ erro: 'Corpo da requisição grande demais.' });

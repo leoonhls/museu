@@ -13,7 +13,3 @@ export async function excluirObra(req, res) {
   await service.excluirObra(req.params.id);
   res.status(204).end();
 }
-
-export async function receberUpload(req, res) {
-  res.status(201).json(await service.enviarImagem(req.file));
-}

@@ -17,7 +17,3 @@ npm-debug.log*
 # Temporários
 *.log
 *.tmp
-
-# Uploads (a partir da Entrega 2)
-client/assets/img/uploads/*
-!client/assets/img/uploads/.gitkeep

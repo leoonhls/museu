@@ -61,10 +61,15 @@ async function validarObra(dados) {
   if (!descricao || descricao.length < 20 || descricao.length > 2000) {
     throw requisicaoInvalida('A descrição deve ter de 20 a 2000 caracteres.');
   }
+  // A mesma regra está no banco (CHECK obras_imagem_url_valida em 10_acervo.sql).
   const imagemUrl = texto(dados?.imagem_url);
 
-  if (!imagemUrl || (!imagemUrl.startsWith('/assets/img/') && !imagemUrl.startsWith('https://'))) {
-    throw requisicaoInvalida('Imagem inválida.');
+  if (
+    !imagemUrl ||
+    imagemUrl.length > 300 ||
+    (!imagemUrl.startsWith('/assets/img/') && !imagemUrl.startsWith('https://'))
+  ) {
+    throw requisicaoInvalida('Informe o endereço da imagem (começando com /assets/img/ ou https://).');
   }
   if (dados?.em_exibicao !== undefined && typeof dados.em_exibicao !== 'boolean') {
     throw requisicaoInvalida('Em exibição deve ser verdadeiro ou falso.');
@@ -108,12 +113,4 @@ export async function excluirObra(idTexto) {
   await exposicaoObrasRepo.excluirPorObra(id);
   await favoritosRepo.excluirPorObra(id);
   return await obrasRepo.excluir(id);
-}
-
-export async function enviarImagem(arquivo) {
-  if (!arquivo) {
-    throw requisicaoInvalida('Nenhuma imagem enviada.');
-  }
-
-  return { url: `/assets/img/uploads/${arquivo.filename}` };
 }
