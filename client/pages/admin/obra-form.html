@@ -61,9 +61,17 @@
         </div>
 
         <div>
-          <label for="imagem">Imagem da obra *</label>
-          <input type="file" id="imagem" name="imagem" accept="image/jpeg,image/png,image/webp" />
-          <img id="preview-imagem" alt="Prévia da obra" width="150" hidden />
+          <label for="imagem_url">Endereço da imagem *</label>
+          <input
+            type="text"
+            id="imagem_url"
+            name="imagem_url"
+            required
+            maxlength="300"
+            placeholder="/assets/img/obras/nome.jpg ou https://..."
+          />
+          <img id="previa-imagem" alt="Prévia da imagem" width="150" hidden />
+          <p id="erro-imagem" role="alert" hidden></p>
         </div>
 
         <div>

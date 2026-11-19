@@ -10,7 +10,6 @@ import {
   buscarObra,
   criarObra,
   editarObra,
-  enviarImagem,
 } from '../api.js';
 
 import { mostrarToast } from '../components/toast.js';
@@ -32,14 +31,31 @@ if (usuario) {
     const tecnica = document.querySelector('#tecnica');
     const dimensoes = document.querySelector('#dimensoes');
     const descricao = document.querySelector('#descricao');
-    const campoImagem = document.querySelector('#imagem');
-    const previewImagem = document.querySelector('#preview-imagem');
+    const imagemUrl = document.querySelector('#imagem_url');
+    const previaImagem = document.querySelector('#previa-imagem');
+    const erroImagem = document.querySelector('#erro-imagem');
     const emExibicao = document.querySelector('#em_exibicao');
 
     const parametros = new URLSearchParams(window.location.search);
     const idObra = parametros.get('id');
     const modoEdicao = idObra !== null;
-    let imagemUrlAtual = '';
+
+    // Mostra a prévia do endereço digitado; se a imagem não carregar, avisa abaixo do campo.
+    function atualizarPrevia() {
+      const endereco = imagemUrl.value.trim();
+      erroImagem.hidden = true;
+      erroImagem.textContent = '';
+      previaImagem.hidden = !endereco;
+      if (endereco) previaImagem.src = endereco;
+      else previaImagem.removeAttribute('src');
+    }
+
+    previaImagem.addEventListener('error', () => {
+      if (!imagemUrl.value.trim()) return;
+      previaImagem.hidden = true;
+      erroImagem.textContent = 'Não foi possível carregar a imagem desse endereço.';
+      erroImagem.hidden = false;
+    });
 
     // Preencher as listas de artistas e categorias
     function preencherOpcoes(select, itens) {
@@ -66,11 +82,9 @@ if (usuario) {
           tecnica.value = obra.tecnica;
           dimensoes.value = obra.dimensoes ?? '';
           descricao.value = obra.descricao;
-          imagemUrlAtual = obra.imagem_url ?? '';
+          imagemUrl.value = obra.imagem_url ?? '';
           emExibicao.checked = obra.em_exibicao;
-
-          previewImagem.src = obra.imagem_url;
-          previewImagem.hidden = false;
+          atualizarPrevia();
         } else {
           mostrarToast('Obra não encontrada.', 'erro');
           formulario.hidden = true;
@@ -82,40 +96,13 @@ if (usuario) {
       mensagemErro.hidden = false;
       formulario.querySelector('button[type="submit"]').disabled = true;
     }
-    // Atualizar a prévia da imagem
-    campoImagem.addEventListener('change', () => {
-      const arquivo = campoImagem.files[0];
-
-      if (arquivo) {
-        previewImagem.src = URL.createObjectURL(arquivo);
-        previewImagem.hidden = false;
-      } else {
-        previewImagem.src = imagemUrlAtual;
-        previewImagem.hidden = !imagemUrlAtual;
-      }
-    });
+    imagemUrl.addEventListener('input', atualizarPrevia);
 
     // Cadastrar ou atualizar uma obra
     formulario.addEventListener('submit', async (evento) => {
       evento.preventDefault();
 
       if (formulario.hidden) {
-        return;
-      }
-      const arquivoImagem = campoImagem.files[0];
-      if (!modoEdicao && !arquivoImagem) {
-        mostrarToast('Selecione uma imagem para cadastrar a obra.', 'erro');
-        return;
-      }
-      if (
-        arquivoImagem &&
-        !['image/jpeg', 'image/png', 'image/webp'].includes(arquivoImagem.type)
-      ) {
-        mostrarToast('Selecione uma imagem JPEG, PNG ou WebP.', 'erro');
-        return;
-      }
-      if (arquivoImagem && arquivoImagem.size > 2 * 1024 * 1024) {
-        mostrarToast('A imagem deve ter no máximo 2 MB.', 'erro');
         return;
       }
       const dadosObra = {
@@ -126,14 +113,11 @@ if (usuario) {
         tecnica: tecnica.value.trim(),
         dimensoes: dimensoes.value.trim(),
         descricao: descricao.value.trim(),
-        imagem_url: imagemUrlAtual,
+        imagem_url: imagemUrl.value.trim(),
         em_exibicao: emExibicao.checked,
       };
       botaoSalvar.disabled = true;
       try {
-        if (arquivoImagem) {
-          dadosObra.imagem_url = await enviarImagem(arquivoImagem);
-        }
         if (modoEdicao) {
           await editarObra(Number(idObra), dadosObra);
           mostrarToast('Obra atualizada com sucesso!', 'sucesso');

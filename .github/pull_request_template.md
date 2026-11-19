@@ -34,7 +34,7 @@ Closes #
 
 ### Entrega 3
 
-- [ ] `npm run db:reset` roda do zero sem erro com a minha migration
+- [ ] `npm run db:reset` roda do zero sem erro com o meu arquivo de esquema
 - [ ] Todo SQL usa parâmetros (`$1`, `$2`...), sem concatenar valores
 - [ ] Testei as consultas no SQLTools (`docs/sql/<área>.sql`)
 - [ ] Testei no SQLTools que as minhas restrições recusam dado errado

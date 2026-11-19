@@ -1,4 +1,4 @@
--- Responsável: M1
+-- Esquema da área extensões (responsável: M1). Para mudar: edite este arquivo e rode npm run db:reset.
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
 -- O museu funciona no horário de Brasília: CURRENT_DATE, LOCALTIMESTAMP e now()

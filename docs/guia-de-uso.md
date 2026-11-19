@@ -94,8 +94,8 @@ Quem abre uma página de login sem estar logado vai para o **Entrar** e, depois 
 2. Em **Admin**, use a busca e a paginação da tabela.
 3. Clique em **+ Nova obra** e preencha:
    - título, artista, categoria, ano, técnica e descrição (mínimo de 20 caracteres);
-   - imagem: escolha um arquivo JPG, PNG ou WebP de até 2 MB. A prévia aparece na hora.
-   Ao salvar, a imagem é enviada ao servidor, você volta para a tabela e a obra aparece no Acervo.
+   - endereço da imagem: um caminho do site, como `/assets/img/obras/noite-estrelada.jpg`, ou um endereço `https://`. A prévia aparece enquanto você digita.
+   Ao salvar, você volta para a tabela e a obra aparece no Acervo.
 4. Clique em **Editar** numa obra, mude o título e salve.
 5. Clique em **Excluir** e confirme. A obra some do Acervo, dos favoritos de quem a tinha e das exposições.
 6. As rotas do Admin são protegidas no servidor: chamadas à API sem login respondem 401 e, com login de visitante, 403.
@@ -125,6 +125,6 @@ Cada área do servidor tem um arquivo em `docs/api/` com requisições de teste 
 | Conta | `POST /api/auth/cadastro`, `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`, `GET/PUT /api/auth/perfil`, `GET /api/auth/historico` |
 | Favoritos | `GET /api/favoritos`, `POST` e `DELETE /api/favoritos/:obraId` |
 | Reservas | `POST /api/reservas`, `GET /api/reservas/minhas`, `DELETE /api/reservas/:id` |
-| Admin | `POST /api/obras`, `PUT` e `DELETE /api/obras/:id`, `POST /api/uploads` |
+| Admin | `POST /api/obras`, `PUT` e `DELETE /api/obras/:id` |
 
 Os erros respondem com o status HTTP correspondente (400, 401, 403, 404 ou 409) e um JSON `{ "erro": "mensagem" }`.
