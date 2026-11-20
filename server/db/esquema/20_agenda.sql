@@ -7,12 +7,13 @@ CREATE TABLE exposicoes (
   data_inicio date NOT NULL,
   data_fim    date NOT NULL,
   sala        text,
-  imagem_url  text
+  imagem_url  text,
+  CONSTRAINT exposicoes_periodo_valido CHECK (data_fim >= data_inicio)
 );
 
 CREATE TABLE exposicao_obras (
-  exposicao_id integer NOT NULL REFERENCES exposicoes (id),
-  obra_id      integer NOT NULL REFERENCES obras (id),
+  exposicao_id integer NOT NULL REFERENCES exposicoes (id) ON DELETE CASCADE,
+  obra_id      integer NOT NULL REFERENCES obras (id) ON DELETE CASCADE,
   PRIMARY KEY (exposicao_id, obra_id)
 );
 
@@ -23,6 +24,8 @@ CREATE TABLE eventos (
   data_hora    timestamp NOT NULL,
   capacidade   integer NOT NULL,
   preco        numeric(10, 2) NOT NULL DEFAULT 0,
-  exposicao_id integer REFERENCES exposicoes (id),
-  imagem_url   text
+  exposicao_id integer REFERENCES exposicoes (id) ON DELETE SET NULL,
+  imagem_url   text,
+  CONSTRAINT eventos_capacidade_valida CHECK (capacidade > 0),
+  CONSTRAINT eventos_preco_valido CHECK (preco >= 0)
 );
