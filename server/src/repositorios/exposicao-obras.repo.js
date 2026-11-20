@@ -2,9 +2,15 @@
 import { comoId, consultar } from '../db.js';
 
 export async function listarPorExposicao(exposicaoId) {
-  return consultar('SELECT * FROM exposicao_obras WHERE exposicao_id = $1 ORDER BY obra_id', [
-    comoId(exposicaoId),
-  ]);
+  return consultar(
+    `SELECT o.*, a.nome AS artista_nome
+       FROM exposicao_obras eo
+       JOIN obras o ON o.id = eo.obra_id
+       JOIN artistas a ON a.id = o.artista_id
+      WHERE eo.exposicao_id = $1
+      ORDER BY o.titulo`,
+    [comoId(exposicaoId)],
+  );
 }
 
 export async function listarPorObra(obraId) {
