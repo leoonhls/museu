@@ -3,7 +3,6 @@ import * as obrasRepo from '../../repositorios/obras.repo.js';
 import * as artistasRepo from '../../repositorios/artistas.repo.js';
 import * as exposicoesRepo from '../../repositorios/exposicoes.repo.js';
 import * as eventosRepo from '../../repositorios/eventos.repo.js';
-import * as reservasRepo from '../../repositorios/reservas.repo.js';
 
 export async function listarDestaques() {
   const [obras, artistas, exposicoes, eventos] = await Promise.all([
@@ -42,16 +41,7 @@ export async function listarDestaques() {
   const eventosFuturos = eventos.filter((e) => new Date(e.data_hora) > agora);
   eventosFuturos.sort((a, b) => new Date(a.data_hora) - new Date(b.data_hora));
 
-  const eventosComVagas = await Promise.all(
-    eventosFuturos.slice(0, 3).map(async (evento) => {
-      const ingressosVendidos = await reservasRepo.somarIngressosPorEvento(evento.id);
-      const vagas_restantes = Math.max(0, evento.capacidade - ingressosVendidos);
-      return {
-        ...evento,
-        vagas_restantes,
-      };
-    }),
-  );
+  const eventosComVagas = eventosFuturos.slice(0, 3);
 
   return {
     exposicao_atual,
