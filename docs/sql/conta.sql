@@ -5,6 +5,13 @@ SELECT id, nome, email, papel, criado_em FROM usuarios LIMIT 5;
 
 SELECT * FROM favoritos ORDER BY criado_em DESC LIMIT 5;
 
+-- Sessões ativas associadas a usuários; não exibe o sid nem o conteúdo da sessão.
+SELECT u.nome, u.email, s.expire
+  FROM sessoes s
+  JOIN usuarios u ON u.id = (s.sess ->> 'usuarioId')::int
+ WHERE s.expire > now()
+ ORDER BY s.expire DESC;
+
 -- Testes negativos: descomente e execute um INSERT por vez; cada um deve falhar.
 -- CHECK usuarios_papel_valido:
 -- INSERT INTO usuarios (nome, email, senha_hash, papel)

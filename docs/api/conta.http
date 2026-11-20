@@ -56,7 +56,7 @@ Content-Type: application/json
 POST {{base}}/auth/cadastro
 Content-Type: application/json
 
-{ "nome": "Administrador", "email": "ADMIN@MUSEU.COM", "senha": "{{senhaTeste}}" }
+{ "nome": "Administrador", "email": "ADMIN@museu.com", "senha": "{{senhaTeste}}" }
 
 ### Cadastro válido (201); papel enviado é ignorado, resposta não inclui senha_hash
 POST {{base}}/auth/cadastro
