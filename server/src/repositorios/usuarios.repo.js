@@ -10,7 +10,7 @@ export async function buscarPorId(id) {
 
 export async function buscarPorEmail(email) {
   const procurado = String(email).trim().toLowerCase();
-  return consultarUm('SELECT * FROM usuarios WHERE email = $1', [procurado]);
+  return consultarUm('SELECT * FROM usuarios WHERE lower(email) = lower($1)', [procurado]);
 }
 
 export async function criar(dados) {
