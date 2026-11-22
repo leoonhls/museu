@@ -1,7 +1,5 @@
 // Responsável: M7 — veja a seção "M7" no Guia da Entrega 2
 import bcrypt from 'bcryptjs';
-import * as artistasRepo from '../../repositorios/artistas.repo.js';
-import * as categoriasRepo from '../../repositorios/categorias.repo.js';
 import * as favoritosRepo from '../../repositorios/favoritos.repo.js';
 import * as historicoRepo from '../../repositorios/historico-conta.repo.js';
 import * as obrasRepo from '../../repositorios/obras.repo.js';
@@ -63,17 +61,19 @@ export async function cadastrar(dados = {}) {
     throw requisicaoInvalida('A senha deve ter pelo menos 8 caracteres, com letras e números.');
   }
 
-  if (await usuariosRepo.buscarPorEmail(email)) {
-    throw conflito('Este e-mail já está cadastrado.');
+  let usuario;
+  try {
+    usuario = await usuariosRepo.criar({
+      nome,
+      email,
+      senha_hash: await bcrypt.hash(senha, 10),
+      papel: 'visitante',
+      perfil: perfilNormalizado(),
+    });
+  } catch (erro) {
+    if (erro.code === '23505') throw conflito('Este e-mail já está cadastrado.');
+    throw erro;
   }
-
-  const usuario = await usuariosRepo.criar({
-    nome,
-    email,
-    senha_hash: await bcrypt.hash(senha, 10),
-    papel: 'visitante',
-    perfil: perfilNormalizado(),
-  });
   await registrarHistorico(usuario.id, 'cadastro', 'Conta criada.');
   return semSenha(usuario);
 }
@@ -169,27 +169,7 @@ export async function listarHistorico(usuarioId) {
 }
 
 export async function listarFavoritos(usuarioId) {
-  const [favoritos, obras, artistas, categorias] = await Promise.all([
-    favoritosRepo.listarPorUsuario(usuarioId),
-    obrasRepo.listarTodas(),
-    artistasRepo.listarTodos(),
-    categoriasRepo.listarTodas(),
-  ]);
-  const obrasPorId = new Map(obras.map((obra) => [obra.id, obra]));
-  const artistasPorId = new Map(artistas.map((artista) => [artista.id, artista]));
-  const categoriasPorId = new Map(categorias.map((categoria) => [categoria.id, categoria]));
-
-  return favoritos.flatMap(({ obra_id }) => {
-    const obra = obrasPorId.get(obra_id);
-    if (!obra) return [];
-    return [
-      {
-        ...obra,
-        artista_nome: artistasPorId.get(obra.artista_id)?.nome ?? null,
-        categoria_nome: categoriasPorId.get(obra.categoria_id)?.nome ?? null,
-      },
-    ];
-  });
+  return favoritosRepo.listarPorUsuario(usuarioId);
 }
 
 function lerIdObra(texto) {
@@ -199,15 +179,17 @@ function lerIdObra(texto) {
 }
 
 export async function favoritar(usuarioId, obraIdTexto) {
-  const obra = await obrasRepo.buscarPorId(lerIdObra(obraIdTexto));
-  if (!obra) throw naoEncontrado('Obra não encontrada.');
-  const favorito = await favoritosRepo.adicionar(usuarioId, obra.id);
+  const obraId = lerIdObra(obraIdTexto);
+  let favorito;
+  try {
+    favorito = await favoritosRepo.adicionar(usuarioId, obraId);
+  } catch (erro) {
+    if (erro.code === '23503') throw naoEncontrado('Obra não encontrada.');
+    throw erro;
+  }
   if (favorito.criado) {
-    await registrarHistorico(
-      usuarioId,
-      'favorito',
-      `Obra adicionada aos favoritos: ${obra.titulo}.`,
-    );
+    const obra = await obrasRepo.buscarPorId(obraId);
+    await registrarHistorico(usuarioId, 'favorito', `Obra adicionada aos favoritos: ${obra.titulo}.`);
   }
 }
 
