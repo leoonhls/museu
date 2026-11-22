@@ -1,19 +1,25 @@
+// Responsável: M6 — teste de concorrência das reservas de evento.
+// Uso: npm run db:reset, npm run dev e, em outro terminal, node server/scripts/teste-lotacao.js
+// Espera o evento 2 do seed com as 5 vagas livres: 10 pedidos simultâneos, 5 aceitos e 5 recusados.
 const BASE = 'http://localhost:3000/api';
 
 const EMAIL = 'visitante.m6@teste.com';
 const SENHA = 'Museu123';
 const EVENTO_ID = 2;
 
-// Faz login e captura o cookie da sessão.
+// Faz login (cadastrando o usuário de teste na primeira vez) e captura o cookie da sessão.
 async function obterCookie() {
-  const resposta = await fetch(`${BASE}/auth/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email: EMAIL,
-      senha: SENHA,
-    }),
-  });
+  const enviar = (rota, corpo) =>
+    fetch(`${BASE}/auth/${rota}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(corpo),
+    });
+
+  let resposta = await enviar('login', { email: EMAIL, senha: SENHA });
+  if (resposta.status === 401) {
+    resposta = await enviar('cadastro', { nome: 'Visitante M6', email: EMAIL, senha: SENHA });
+  }
 
   if (!resposta.ok) {
     throw new Error(`Falha no login: HTTP ${resposta.status} - ${await resposta.text()}`);

@@ -42,33 +42,24 @@ ORDER BY indexname;
 -- Cada erro esperado é capturado pelo bloco EXCEPTION.
 -- Nenhum registro inválido permanece no banco.
 
--- 2.1 Código duplicado.
+-- 2.1 Código duplicado (insere uma reserva de teste e repete o código;
+-- o erro desfaz as duas inserções).
 DO $$
 DECLARE
-  codigo_existente text;
   usuario_existente integer;
 BEGIN
-  SELECT codigo INTO codigo_existente
-  FROM reservas
-  LIMIT 1;
-
   SELECT id INTO usuario_existente
   FROM usuarios
   LIMIT 1;
-
-  IF codigo_existente IS NULL OR usuario_existente IS NULL THEN
-    RAISE EXCEPTION 'É necessário haver ao menos uma reserva e um usuário.';
-  END IF;
 
   BEGIN
     INSERT INTO reservas (
       codigo, usuario_id, data_visita,
       qtd_inteira, qtd_meia, valor_total, status
     )
-    VALUES (
-      codigo_existente, usuario_existente, CURRENT_DATE,
-      1, 0, 0, 'confirmada'
-    );
+    VALUES
+      ('TESTE-DUPLICADO', usuario_existente, CURRENT_DATE, 1, 0, 0, 'confirmada'),
+      ('TESTE-DUPLICADO', usuario_existente, CURRENT_DATE, 1, 0, 0, 'confirmada');
 
     RAISE EXCEPTION 'FALHA: código duplicado foi aceito.';
   EXCEPTION

@@ -32,21 +32,6 @@ export async function buscarPorId(id) {
   return consultarUm('SELECT * FROM reservas WHERE id = $1', [comoId(id)]);
 }
 
-export async function buscarPorCodigo(codigo) {
-  return consultarUm('SELECT * FROM reservas WHERE codigo = $1', [codigo]);
-}
-
-// Soma inteiras + meias das reservas confirmadas do evento.
-export async function somarIngressosPorEvento(eventoId) {
-  const { total } = await consultarUm(
-    `SELECT COALESCE(SUM(qtd_inteira + qtd_meia), 0) AS total
-       FROM reservas
-      WHERE evento_id = $1 AND status = 'confirmada'`,
-    [comoId(eventoId)],
-  );
-  return total;
-}
-
 export async function criar(dados) {
   return consultarUm(INSERIR, valores(dados));
 }
@@ -83,15 +68,8 @@ export async function criarComLimite(dados) {
   });
 }
 
-// Devolve a reserva atualizada, ou null se não existir.
-export async function atualizarStatus(id, status) {
-  return consultarUm('UPDATE reservas SET status = $2 WHERE id = $1 RETURNING *', [
-    comoId(id),
-    status,
-  ]);
-}
-
-// Cancela somente reservas confirmadas, pertencentes ao usuário e ainda válidas.
+// Cancela somente reservas confirmadas, do usuário e que ainda não aconteceram
+// (visita de hoje em diante; reserva de evento só antes do horário do evento).
 export async function cancelarSePermitido(id, usuarioId) {
   return consultarUm(
     `UPDATE reservas
@@ -100,6 +78,10 @@ export async function cancelarSePermitido(id, usuarioId) {
         AND usuario_id = $2
         AND status = 'confirmada'
         AND data_visita >= CURRENT_DATE
+        AND (
+          evento_id IS NULL
+          OR EXISTS (SELECT 1 FROM eventos ev WHERE ev.id = reservas.evento_id AND ev.data_hora > LOCALTIMESTAMP)
+        )
       RETURNING *`,
     [comoId(id), comoId(usuarioId)],
   );
