@@ -25,7 +25,7 @@ export async function listarComVagas({ de = null, ate = null, limite = null, exp
          WHERE status = 'confirmada'
          GROUP BY evento_id
       ) r ON r.evento_id = ev.id
-     WHERE ev.data_hora >= COALESCE($1::date, LOCALTIMESTAMP)
+     WHERE ev.data_hora >= GREATEST(COALESCE($1::date, LOCALTIMESTAMP), LOCALTIMESTAMP)
        AND ($2::date IS NULL OR ev.data_hora < $2::date + 1)
        AND ($3::integer IS NULL OR ev.exposicao_id = $3)
      ORDER BY ev.data_hora`;
