@@ -5,8 +5,25 @@ import { requisicaoInvalida, naoEncontrado } from '../../erros.js';
 import * as obrasRepo from '../../repositorios/obras.repo.js';
 import * as artistasRepo from '../../repositorios/artistas.repo.js';
 import * as categoriasRepo from '../../repositorios/categorias.repo.js';
-import * as exposicaoObrasRepo from '../../repositorios/exposicao-obras.repo.js';
-import * as favoritosRepo from '../../repositorios/favoritos.repo.js';
+
+function traduzirErroPostgres(erro) {
+  if (erro.code === '23503') {
+    throw requisicaoInvalida('Artista ou categoria informado não existe.');
+  }
+
+  if (erro.code === '23514') {
+    const mensagens = {
+      obras_titulo_tamanho: 'O título deve ter entre 1 e 150 caracteres.',
+      obras_ano_valido: 'O ano da obra deve ser maior que zero.',
+      obras_descricao_tamanho: 'A descrição deve ter entre 20 e 2000 caracteres.',
+      obras_imagem_url_valida: 'O endereço da imagem é inválido.',
+    };
+
+    throw requisicaoInvalida(mensagens[erro.constraint] || 'Os dados da obra são inválidos.');
+  }
+
+  throw erro;
+}
 
 // Texto sem espaços nas pontas; qualquer outro tipo (número, objeto) vira ''.
 const texto = (valor) => (typeof valor === 'string' ? valor.trim() : '');
@@ -69,7 +86,9 @@ async function validarObra(dados) {
     imagemUrl.length > 300 ||
     (!imagemUrl.startsWith('/assets/img/') && !imagemUrl.startsWith('https://'))
   ) {
-    throw requisicaoInvalida('Informe o endereço da imagem (começando com /assets/img/ ou https://).');
+    throw requisicaoInvalida(
+      'Informe o endereço da imagem (começando com /assets/img/ ou https://).',
+    );
   }
   if (dados?.em_exibicao !== undefined && typeof dados.em_exibicao !== 'boolean') {
     throw requisicaoInvalida('Em exibição deve ser verdadeiro ou falso.');
@@ -91,26 +110,35 @@ async function validarObra(dados) {
 }
 export async function criarObra(dados) {
   const obraValidada = await validarObra(dados);
-  return await obrasRepo.criar(obraValidada);
+
+  try {
+    return await obrasRepo.criar(obraValidada);
+  } catch (erro) {
+    traduzirErroPostgres(erro);
+  }
 }
 
 export async function editarObra(idTexto, dados) {
   const id = lerId(idTexto);
-  const obraExistente = await obrasRepo.buscarPorId(id);
-  if (!obraExistente) {
-    throw naoEncontrado('Obra não encontrada.');
-  }
   const obraValidada = await validarObra(dados);
 
-  return await obrasRepo.atualizar(id, obraValidada);
+  try {
+    const obraAtualizada = await obrasRepo.atualizar(id, obraValidada);
+
+    if (!obraAtualizada) {
+      throw naoEncontrado('Obra não encontrada.');
+    }
+
+    return obraAtualizada;
+  } catch (erro) {
+    traduzirErroPostgres(erro);
+  }
 }
+
 export async function excluirObra(idTexto) {
-  const id = lerId(idTexto);
-  const obraExistente = await obrasRepo.buscarPorId(id);
-  if (!obraExistente) {
+  // Vínculos com exposições e favoritos saem sozinhos (ON DELETE CASCADE no esquema).
+  const excluida = await obrasRepo.excluir(lerId(idTexto));
+  if (!excluida) {
     throw naoEncontrado('Obra não encontrada.');
   }
-  await exposicaoObrasRepo.excluirPorObra(id);
-  await favoritosRepo.excluirPorObra(id);
-  return await obrasRepo.excluir(id);
 }
