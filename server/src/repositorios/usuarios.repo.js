@@ -1,7 +1,7 @@
 // Responsável: M7 — veja a seção "M7" no Guia da Entrega 3
 // Devolve o usuário completo, com senha_hash: só o módulo conta usa este repositório,
 // e o service dele remove o campo antes de responder.
-// TODO (M7): e-mail único garantido pelo banco (UNIQUE) e tratamento do erro 23505.
+// E-mail único garantido pelo índice usuarios_email_unico; o service traduz a violação 23505.
 import { comoId, consultarUm } from '../db.js';
 
 export async function buscarPorId(id) {
@@ -10,7 +10,7 @@ export async function buscarPorId(id) {
 
 export async function buscarPorEmail(email) {
   const procurado = String(email).trim().toLowerCase();
-  return consultarUm('SELECT * FROM usuarios WHERE email = $1', [procurado]);
+  return consultarUm('SELECT * FROM usuarios WHERE lower(email) = lower($1)', [procurado]);
 }
 
 export async function criar(dados) {
