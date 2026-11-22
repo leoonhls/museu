@@ -188,7 +188,8 @@ export async function favoritar(usuarioId, obraIdTexto) {
     throw erro;
   }
   if (favorito.criado) {
-    await registrarHistorico(usuarioId, 'favorito', `Obra adicionada aos favoritos: ${obraId}.`);
+    const obra = await obrasRepo.buscarPorId(obraId);
+    await registrarHistorico(usuarioId, 'favorito', `Obra adicionada aos favoritos: ${obra.titulo}.`);
   }
 }
 
