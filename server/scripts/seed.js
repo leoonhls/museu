@@ -1,4 +1,4 @@
-// Responsável: M2 — versão mínima do setup da Entrega 3 (veja a seção "M2" do guia)
+// Responsável: M2 — Seed, dados de demonstração e destaques (Entrega 3)
 // Coloca no banco os dados iniciais de server/data/seed/ e o usuário admin.
 // Uso: npm run db:seed (o npm run db:reset já roda este script)
 import fs from 'node:fs/promises';
@@ -11,18 +11,35 @@ import { pool, transacao } from '../src/db.js';
 const SENHA_ADMIN = process.env.SEED_ADMIN_SENHA || 'admin123';
 
 // Na ordem das chaves estrangeiras: quem é referenciado entra antes.
-// Tabelas e colunas são fixas aqui; o SQL nunca usa nomes vindos dos arquivos JSON.
+// Nomes de tabela vêm de lista fixa aqui; o SQL nunca usa nomes vindos dos arquivos JSON.
 const TABELAS = [
   { nome: 'categorias', colunas: ['id', 'nome'] },
   {
     nome: 'artistas',
-    colunas: ['id', 'nome', 'nacionalidade', 'ano_nascimento', 'ano_falecimento', 'biografia', 'foto_url'],
+    colunas: [
+      'id',
+      'nome',
+      'nacionalidade',
+      'ano_nascimento',
+      'ano_falecimento',
+      'biografia',
+      'foto_url',
+    ],
   },
   {
     nome: 'obras',
     colunas: [
-      'id', 'titulo', 'artista_id', 'categoria_id', 'ano', 'tecnica', 'dimensoes',
-      'descricao', 'imagem_url', 'em_exibicao', 'criado_em',
+      'id',
+      'titulo',
+      'artista_id',
+      'categoria_id',
+      'ano',
+      'tecnica',
+      'dimensoes',
+      'descricao',
+      'imagem_url',
+      'em_exibicao',
+      'criado_em',
     ],
   },
   {
@@ -32,13 +49,63 @@ const TABELAS = [
   { nome: 'exposicao_obras', colunas: ['exposicao_id', 'obra_id'] },
   {
     nome: 'eventos',
-    colunas: ['id', 'titulo', 'descricao', 'data_hora', 'capacidade', 'preco', 'exposicao_id', 'imagem_url'],
+    colunas: [
+      'id',
+      'titulo',
+      'descricao',
+      'data_hora',
+      'capacidade',
+      'preco',
+      'exposicao_id',
+      'imagem_url',
+    ],
   },
 ];
 
 // Tabelas com coluna id: a sequência precisa continuar depois do maior id do seed,
 // senão o próximo INSERT sem id colide com um id que já existe.
 const COM_ID = ['categorias', 'artistas', 'obras', 'exposicoes', 'eventos', 'usuarios'];
+
+function traduzirErroTabela(nomeTabela, erro) {
+  const arquivo = `${nomeTabela}.json`;
+
+  if (erro.code === '23503') {
+    if (nomeTabela === 'obras') {
+      return `Em ${arquivo} há uma obra com artista_id ou categoria_id que não existe.`;
+    }
+    return `Em ${arquivo} há uma referência (chave estrangeira) que não existe.`;
+  }
+
+  if (erro.code === '23514' || erro.code === '23502') {
+    const regra = erro.constraint || erro.code;
+    return `Em ${arquivo} há um valor que não respeita a regra ${regra}.`;
+  }
+
+  if (erro.code === '23505') {
+    return `Em ${arquivo} há id repetido.`;
+  }
+
+  return `Falha ao inserir dados de ${arquivo}: ${erro.message}`;
+}
+
+async function inserirTabela(sql, nomeTabela, colunas, linhas) {
+  if (!Array.isArray(linhas) || linhas.length === 0) return 0;
+
+  // Lista as colunas explicitamente: colunas novas (geradas, com default) não quebram o seed.
+  const lista = colunas.join(', ');
+  try {
+    await sql(
+      `INSERT INTO ${nomeTabela} (${lista})
+       SELECT ${lista} FROM json_populate_recordset(NULL::${nomeTabela}, $1)`,
+      [JSON.stringify(linhas)],
+    );
+    return linhas.length;
+  } catch (erro) {
+    const mensagem = traduzirErroTabela(nomeTabela, erro);
+    const detalhe = erro.detail ? ` Detalhe: ${erro.detail}` : '';
+    throw new Error(`${mensagem}${detalhe}`, { cause: erro });
+  }
+}
 
 export async function semear() {
   const resumo = {};
@@ -54,15 +121,7 @@ export async function semear() {
 
     for (const { nome, colunas } of TABELAS) {
       const linhas = JSON.parse(await fs.readFile(path.join(PASTA_SEED, `${nome}.json`), 'utf8'));
-      const marcadores = colunas.map((_, i) => `$${i + 1}`).join(', ');
-      const texto = `INSERT INTO ${nome} (${colunas.join(', ')}) VALUES (${marcadores})`;
-      for (const linha of linhas) {
-        await sql(
-          texto,
-          colunas.map((coluna) => linha[coluna] ?? null),
-        );
-      }
-      resumo[nome] = linhas.length;
+      resumo[nome] = await inserirTabela(sql, nome, colunas, linhas);
     }
 
     await sql('INSERT INTO usuarios (nome, email, senha_hash, papel) VALUES ($1, $2, $3, $4)', [
@@ -91,7 +150,13 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   try {
     await semear();
   } catch (erro) {
-    console.error(`Falha no seed: ${erro.code === 'ECONNREFUSED' ? 'banco desligado (docker compose up -d)' : erro.message}`);
+    console.error(
+      `Falha no seed: ${
+        erro.code === 'ECONNREFUSED'
+          ? 'não foi possível conectar ao PostgreSQL (verifique se o container do Docker ou o serviço local do PostgreSQL está rodando e o .env)'
+          : erro.message
+      }`,
+    );
     process.exitCode = 1;
   } finally {
     await pool.end();
