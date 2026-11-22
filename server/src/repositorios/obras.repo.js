@@ -26,7 +26,7 @@ export async function buscarDetalhe(id) {
   if (!obra) return null;
 
   const exposicoes = await consultar(
-    `SELECT e.id, e.titulo, e.data_inicio, e.data_fim
+    `SELECT e.*
        FROM exposicoes e
        JOIN exposicao_obras eo ON eo.exposicao_id = e.id
       WHERE eo.obra_id = $1
