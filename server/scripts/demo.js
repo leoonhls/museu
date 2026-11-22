@@ -1,6 +1,6 @@
 // Responsável: M2 — dados de demonstração da Entrega 3
 // Acrescenta dados de demonstração ao banco depois do npm run db:reset.
-// Uso: npm run db:demo (combinar script no package.json com o M1)
+// Uso: npm run db:demo (rode depois de npm run db:reset; não é idempotente)
 import { fileURLToPath } from 'node:url';
 import bcrypt from 'bcryptjs';
 import { pool, transacao } from '../src/db.js';
@@ -48,68 +48,72 @@ export async function semearDemo() {
       }
     }
 
-    // 3. Insere reservas confirmadas em eventos futuros (deixando um quase lotado)
-    //    e 1 reserva cancelada
-    const eventosFuturos = await sql(
-      `SELECT id, capacidade, preco
-       FROM eventos
-       WHERE data_hora >= LOCALTIMESTAMP
-       ORDER BY data_hora ASC, id ASC`,
+    // 3. Reservas em eventos futuros: o primeiro fica quase lotado (1 vaga),
+    //    o segundo recebe 1 inteira + 1 meia e o terceiro tem 1 reserva cancelada.
+    //    Cada reserva aceita no máximo 10 ingressos (reservas_total_valido),
+    //    então o "quase lotado" é dividido em várias reservas.
+    const eventos = await sql(
+      `SELECT ev.id, ev.preco, ev.data_hora::date AS data,
+              ev.capacidade - COALESCE(SUM(r.qtd_inteira + r.qtd_meia), 0) AS vagas
+       FROM eventos ev
+       LEFT JOIN reservas r ON r.evento_id = ev.id AND r.status = 'confirmada'
+       WHERE ev.data_hora >= LOCALTIMESTAMP
+       GROUP BY ev.id
+       ORDER BY ev.data_hora ASC, ev.id ASC
+       LIMIT 3`,
     );
 
-    if (eventosFuturos.length > 0) {
-      const eventoQuaseLotado = eventosFuturos[0];
-      const capacidade = Number(eventoQuaseLotado.capacidade) || 1;
-      const qtdQuaseLotado = Math.max(1, capacidade - 1);
-      const precoPrimeiro = Number(eventoQuaseLotado.preco) || 0;
-
-      // Reserva confirmada deixando o primeiro evento futuro quase lotado (1 vaga restante)
-      await sql(
+    let seq = 0;
+    const reservar = (evento, usuarioId, inteira, meia, status = 'confirmada') =>
+      sql(
         `INSERT INTO reservas (
            codigo, usuario_id, evento_id, data_visita, qtd_inteira, qtd_meia, valor_total, status
          )
-         VALUES ($1, $2, $3, CURRENT_DATE, $4, 0, $5, 'confirmada')`,
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
         [
-          'DEMO-CONF-001',
-          visitantes[0].id,
-          eventoQuaseLotado.id,
-          qtdQuaseLotado,
-          qtdQuaseLotado * precoPrimeiro,
+          `DEMO-${String(++seq).padStart(3, '0')}`,
+          usuarioId,
+          evento.id,
+          evento.data,
+          inteira,
+          meia,
+          Number(evento.preco) * (inteira + meia / 2),
+          status,
         ],
       );
 
-      // Segunda reserva confirmada em evento futuro
-      const segundoEvento = eventosFuturos[1] ?? eventoQuaseLotado;
-      const precoSegundo = Number(segundoEvento.preco) || 0;
-      await sql(
-        `INSERT INTO reservas (
-           codigo, usuario_id, evento_id, data_visita, qtd_inteira, qtd_meia, valor_total, status
-         )
-         VALUES ($1, $2, $3, CURRENT_DATE, 1, 1, $4, 'confirmada')`,
-        ['DEMO-CONF-002', visitantes[1].id, segundoEvento.id, precoSegundo * 1.5],
-      );
+    if (eventos.length > 0) {
+      const [quaseLotado] = eventos;
+      let restante = Number(quaseLotado.vagas) - 1;
+      for (let i = 0; restante > 0; i++) {
+        const qtd = Math.min(10, restante);
+        await reservar(quaseLotado, visitantes[i % visitantes.length].id, qtd, 0);
+        restante -= qtd;
+      }
 
-      // 1 reserva cancelada em evento futuro
-      const eventoCancelada = eventosFuturos[2] ?? segundoEvento;
-      const precoCancelada = Number(eventoCancelada.preco) || 0;
-      await sql(
-        `INSERT INTO reservas (
-           codigo, usuario_id, evento_id, data_visita, qtd_inteira, qtd_meia, valor_total, status
-         )
-         VALUES ($1, $2, $3, CURRENT_DATE, 1, 0, $4, 'cancelada')`,
-        ['DEMO-CANC-001', visitantes[2].id, eventoCancelada.id, precoCancelada],
-      );
+      const segundo = eventos[1] ?? quaseLotado;
+      await reservar(segundo, visitantes[1].id, 1, 1);
+
+      const terceiro = eventos[2] ?? segundo;
+      await reservar(terceiro, visitantes[2].id, 1, 0, 'cancelada');
     }
   });
 
   console.log('Dados de demonstração inseridos com sucesso.');
+  console.log(`Logins de visitante: ${VISITANTES.map((v) => v.email).join(', ')} (senha ${SENHA_VISITANTE})`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   try {
     await semearDemo();
   } catch (erro) {
-    console.error(`Falha no demo: ${erro.message}`);
+    console.error(
+      `Falha no demo: ${
+        erro.code === '23505'
+          ? 'os dados de demonstração já existem (rode npm run db:reset antes)'
+          : erro.message
+      }`,
+    );
     process.exitCode = 1;
   } finally {
     await pool.end();

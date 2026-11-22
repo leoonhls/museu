@@ -88,12 +88,15 @@ function traduzirErroTabela(nomeTabela, erro) {
   return `Falha ao inserir dados de ${arquivo}: ${erro.message}`;
 }
 
-async function inserirTabela(sql, nomeTabela, linhas) {
+async function inserirTabela(sql, nomeTabela, colunas, linhas) {
   if (!Array.isArray(linhas) || linhas.length === 0) return 0;
 
+  // Lista as colunas explicitamente: colunas novas (geradas, com default) não quebram o seed.
+  const lista = colunas.join(', ');
   try {
     await sql(
-      `INSERT INTO ${nomeTabela} SELECT * FROM json_populate_recordset(NULL::${nomeTabela}, $1)`,
+      `INSERT INTO ${nomeTabela} (${lista})
+       SELECT ${lista} FROM json_populate_recordset(NULL::${nomeTabela}, $1)`,
       [JSON.stringify(linhas)],
     );
     return linhas.length;
@@ -116,9 +119,9 @@ export async function semear() {
       `TRUNCATE ${TABELAS.map((t) => t.nome).join(', ')}, usuarios, sessoes RESTART IDENTITY CASCADE`,
     );
 
-    for (const { nome } of TABELAS) {
+    for (const { nome, colunas } of TABELAS) {
       const linhas = JSON.parse(await fs.readFile(path.join(PASTA_SEED, `${nome}.json`), 'utf8'));
-      resumo[nome] = await inserirTabela(sql, nome, linhas);
+      resumo[nome] = await inserirTabela(sql, nome, colunas, linhas);
     }
 
     await sql('INSERT INTO usuarios (nome, email, senha_hash, papel) VALUES ($1, $2, $3, $4)', [
@@ -150,7 +153,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     console.error(
       `Falha no seed: ${
         erro.code === 'ECONNREFUSED'
-          ? 'não foi possível conectar ao PostgreSQL local (verifique o serviço postgresql-x64-16 e o .env)'
+          ? 'não foi possível conectar ao PostgreSQL (verifique se o container do Docker ou o serviço local do PostgreSQL está rodando e o .env)'
           : erro.message
       }`,
     );
