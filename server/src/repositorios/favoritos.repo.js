@@ -35,7 +35,3 @@ export async function remover(usuarioId, obraId) {
   );
   return linhas.length > 0;
 }
-
-export async function excluirPorObra(obraId) {
-  await consultar('DELETE FROM favoritos WHERE obra_id = $1', [comoId(obraId)]);
-}

@@ -18,7 +18,3 @@ export async function listarPorObra(obraId) {
     comoId(obraId),
   ]);
 }
-
-export async function excluirPorObra(obraId) {
-  await consultar('DELETE FROM exposicao_obras WHERE obra_id = $1', [comoId(obraId)]);
-}

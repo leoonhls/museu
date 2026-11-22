@@ -5,8 +5,7 @@ import { requisicaoInvalida, naoEncontrado } from '../../erros.js';
 import * as obrasRepo from '../../repositorios/obras.repo.js';
 import * as artistasRepo from '../../repositorios/artistas.repo.js';
 import * as categoriasRepo from '../../repositorios/categorias.repo.js';
-import * as exposicaoObrasRepo from '../../repositorios/exposicao-obras.repo.js';
-import * as favoritosRepo from '../../repositorios/favoritos.repo.js';
+
 function traduzirErroPostgres(erro) {
   if (erro.code === '23503') {
     throw requisicaoInvalida('Artista ou categoria informado não existe.');
@@ -25,6 +24,7 @@ function traduzirErroPostgres(erro) {
 
   throw erro;
 }
+
 // Texto sem espaços nas pontas; qualquer outro tipo (número, objeto) vira ''.
 const texto = (valor) => (typeof valor === 'string' ? valor.trim() : '');
 
@@ -136,12 +136,9 @@ export async function editarObra(idTexto, dados) {
 }
 
 export async function excluirObra(idTexto) {
-  const id = lerId(idTexto);
-  const obraExistente = await obrasRepo.buscarPorId(id);
-  if (!obraExistente) {
+  // Vínculos com exposições e favoritos saem sozinhos (ON DELETE CASCADE no esquema).
+  const excluida = await obrasRepo.excluir(lerId(idTexto));
+  if (!excluida) {
     throw naoEncontrado('Obra não encontrada.');
   }
-  await exposicaoObrasRepo.excluirPorObra(id);
-  await favoritosRepo.excluirPorObra(id);
-  return await obrasRepo.excluir(id);
 }
