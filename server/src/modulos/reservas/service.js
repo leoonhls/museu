@@ -11,17 +11,13 @@ import { PRECO_INTEIRA, MAX_INGRESSOS, DIAS_ANTECEDENCIA_MAX, DIA_FECHADO } from
 
 const CARACTERES_CODIGO = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
-// Gera um código de reserva no formato MUS-XXXXX.
-async function gerarCodigoReserva() {
-  let codigo;
+// Sorteia um código de reserva no formato MUS-XXXXX.
+function sortearCodigoReserva() {
+  let codigo = 'MUS-';
 
-  do {
-    codigo = 'MUS-';
-
-    for (let i = 0; i < 5; i++) {
-      codigo += CARACTERES_CODIGO[crypto.randomInt(CARACTERES_CODIGO.length)];
-    }
-  } while (await reservasRepo.buscarPorCodigo(codigo));
+  for (let i = 0; i < 5; i++) {
+    codigo += CARACTERES_CODIGO[crypto.randomInt(CARACTERES_CODIGO.length)];
+  }
 
   return codigo;
 }
@@ -109,7 +105,6 @@ export async function criarReserva(usuarioId, dados = {}) {
 
   const valor_total =
     Math.round((qtd_inteira * valorBase + (qtd_meia * valorBase) / 2) * 100) / 100;
-
   const dadosReserva = {
     usuario_id: Number(usuarioId),
     evento_id: evento ? evento.id : null,
@@ -117,14 +112,30 @@ export async function criarReserva(usuarioId, dados = {}) {
     qtd_inteira,
     qtd_meia,
     valor_total,
-    codigo: await gerarCodigoReserva(),
   };
 
-  if (evento) {
-    return reservasRepo.criarComLimite(dadosReserva, evento.capacidade);
+  for (let tentativa = 1; tentativa <= 5; tentativa++) {
+    try {
+      const dadosComCodigo = {
+        ...dadosReserva,
+        codigo: sortearCodigoReserva(),
+      };
+
+      if (evento) {
+        return await reservasRepo.criarComLimite(dadosComCodigo);
+      }
+
+      return await reservasRepo.criar(dadosComCodigo);
+    } catch (erro) {
+      if (erro.code === '23505' && erro.constraint === 'reservas_codigo_unico') {
+        continue;
+      }
+
+      throw erro;
+    }
   }
 
-  return reservasRepo.criar(dadosReserva);
+  throw new Error('Não foi possível gerar um código de reserva.');
 }
 
 export async function minhasReservas(usuarioId) {
@@ -152,6 +163,12 @@ export async function minhasReservas(usuarioId) {
 }
 
 export async function cancelarReserva(usuarioId, reservaId) {
+  const reservaCancelada = await reservasRepo.cancelarSePermitido(reservaId, usuarioId);
+
+  if (reservaCancelada) {
+    return reservaCancelada;
+  }
+
   const reserva = await reservasRepo.buscarPorId(reservaId);
 
   if (!reserva || reserva.usuario_id !== Number(usuarioId)) {
@@ -175,5 +192,5 @@ export async function cancelarReserva(usuarioId, reservaId) {
     throw requisicaoInvalida('Esta reserva já aconteceu.');
   }
 
-  return reservasRepo.atualizarStatus(reservaId, 'cancelada');
+  throw requisicaoInvalida('Não foi possível cancelar esta reserva.');
 }
