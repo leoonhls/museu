@@ -2,10 +2,11 @@
 import { consultar, consultarUm } from '../db.js';
 import * as eventosRepo from './eventos.repo.js';
 
-// Exposição atual: a que termina primeiro, caso haja mais de uma
+// Exposição atual: a que termina primeiro, caso haja mais de uma.
+// O status vai na resposta, como em GET /api/exposicoes e na Entrega 2.
 export async function buscarExposicaoAtual() {
   return consultarUm(
-    `SELECT *
+    `SELECT *, 'atual' AS status
      FROM exposicoes
      WHERE CURRENT_DATE BETWEEN data_inicio AND data_fim
      ORDER BY data_fim ASC, id ASC

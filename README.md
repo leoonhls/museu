@@ -6,7 +6,7 @@ Projeto acadêmico: site de um museu de artes, feito em três entregas.
 | --- | --- | --- |
 | 1 | Front-end com HTML, CSS e JavaScript; dados em `client/data/` e `localStorage` | concluída |
 | 2 | Backend com Node.js e Express; API REST em `/api` e dados em arquivos JSON | concluída |
-| 3 | Banco de dados PostgreSQL 16; esquema em SQL, repositórios em SQL e sessões no banco | em andamento |
+| 3 | Banco de dados PostgreSQL 16; esquema em SQL, repositórios em SQL e sessões no banco | concluída |
 
 ## Como rodar (Entrega 3)
 

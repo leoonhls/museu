@@ -31,7 +31,7 @@ O Live Server não é mais usado: por ele, as chamadas à API não funcionam.
 
 - Ao criar a conta, o visitante já entra logado.
 - As contas ficam no servidor: a mesma conta funciona em qualquer navegador.
-- A senha é guardada com hash (bcrypt) e o login usa sessão com cookie `httpOnly`. As sessões ficam na memória do servidor: ao reiniciá-lo, é preciso entrar de novo.
+- A senha é guardada com hash (bcrypt) e o login usa sessão com cookie `httpOnly`. As sessões ficam no banco: o login continua valendo mesmo se o servidor for reiniciado.
 - O servidor confere tudo de novo, mesmo o que o formulário já validou. Preço, papel de administrador e dono da reserva nunca vêm do navegador.
 
 ## 3. Mapa do site
@@ -112,6 +112,8 @@ Quem abre uma página de login sem estar logado vai para o **Entrar** e, depois 
 | Reserva de evento | a data é a do evento; precisa ter vagas e o evento não pode ter passado |
 
 **Zerar os dados de teste:** rode `npm run db:reset`. Isso apaga contas, favoritos, reservas e obras criadas no Admin, e recria o administrador.
+
+**Dados de demonstração (opcional):** depois do `db:reset`, rode `npm run db:demo` para o site parecer em uso. Ele cria três visitantes (`ana@museu.com`, `bruno@museu.com` e `carla@museu.com`, senha `visitante1`) com favoritos e reservas. A "Visita guiada: Luz e Cor" fica com 1 vaga e a "Oficina de desenho para iniciantes" com 3. Os roteiros acima contam as vagas sem o `db:demo`: para refazê-los, rode `npm run db:reset` de novo.
 
 ## 8. Testar a API
 
