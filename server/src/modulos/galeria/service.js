@@ -1,4 +1,4 @@
-// Responsável: M3 — veja a seção "M3" no Guia da Entrega 2
+// Responsável: M3 — veja a seção "M3" no Guia da Entrega 2 (validação; continua igual na Entrega 3)
 import { buscarComFiltros, POR_PAGINA } from '../../repositorios/busca-obras.repo.js';
 import { requisicaoInvalida } from '../../erros.js';
 
